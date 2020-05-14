@@ -1,0 +1,77 @@
+name: Production build
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.3.1'
+      - name: Yarn install - Root
+        run: |
+          yarn install
+      - name: Yarn install - Client
+        working-directory: client
+        run: |
+          yarn install
+      - name: Yarn install - Serverless
+        working-directory: serverless
+        run: |
+          yarn install
+      - name: Tests
+        run: |
+          yarn test
+  build-frontend:
+    needs: [run-tests]
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: client
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.3.1'
+      - name: Yarn install
+        run: |
+          yarn install
+      - name: Build
+        run: |
+          yarn build
+          #    - name: Deploy to S3
+          #      uses: jakejarvis/s3-sync-action@master
+          #      with:
+          #        args: --acl public-read --delete
+          #      env:
+          #        AWS_S3_BUCKET: ${{ secrets.AWS_PRODUCTION_BUCKET_NAME }}
+          #        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          #        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          #        AWS_REGION: ${{ secrets.AWS_REGION }}
+          #        SOURCE_DIR: "frontend/build"
+          #   deploy-backend:
+          #     runs-on: ubuntu-latest
+          #     defaults:
+          #       run:
+          #         working-directory: backend
+          #     steps:
+          #     - uses: actions/checkout@master
+          #     - name: Use Node.js
+          #       uses: actions/setup-node@v1
+          #       with:
+          #         node-version: "12.3.1"
+          #     - name: serverless deploy
+          #       working-directory: backend
+          #       env:
+          #         AWS_ACCESS_KEY_ID: ${{ secrets.SERVERLESS_AWS_ACCESS_KEY_ID }}
+          #         AWS_SECRET_ACCESS_KEY: ${{ secrets.SERVERLESS_AWS_SECRET_ACCESS_KEY }}
+          #       run: |
+          #         npx serverless deploy
