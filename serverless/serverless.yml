@@ -5,8 +5,8 @@ provider:
   stage: ${opt:stage, 'dev'}
   region: eu-west-2
 plugins:
-  - serverless-offline
   - serverless-plugin-typescript
+  - serverless-offline
   - serverless-jest-plugin
 functions:
   upload:
