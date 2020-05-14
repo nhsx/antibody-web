@@ -1,0 +1,37 @@
+service: serverless
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: ${opt:stage, 'dev'}
+  region: eu-west-2
+plugins:
+  - serverless-offline
+functions:
+  upload:
+    handler: handler.upload
+    events:
+      - http: POST upload
+    environment:
+      UPLOAD_BUCKET: ${opt:stage, 'dev'}-covid19-antibody-uk
+      DYNAMO_TABLE: ${opt:stage, 'dev'}-covid19-antibody-uk
+resources:
+  Resources:
+    S3:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${opt:stage, 'dev'}-covid19-antibody-uk
+    DynamoDB:
+      Type: AWS::DynamoDB::Table
+      Properties: 
+        AttributeDefinitions:
+          - 
+            AttributeName: guid
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: guid
+            KeyType: HASH
+        TableName: ${opt:stage, 'dev'}-covid19-antibody-uk
+        ProvisionedThroughput:
+          ReadCapacityUnits: 2
+          WriteCapacityUnits: 2
