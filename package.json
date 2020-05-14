@@ -7,6 +7,9 @@
     "prettier": "2.0.5",
     "pretty-quick": "^2.0.1"
   },
+  "scripts": {
+    "test": "npm --prefix client run test -- --watch-all=false && npm --prefix serverless run test"
+  },
   "husky": {
     "hooks": {
       "pre-commit": "pretty-quick --staged"

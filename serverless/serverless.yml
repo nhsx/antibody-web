@@ -6,9 +6,11 @@ provider:
   region: eu-west-2
 plugins:
   - serverless-offline
+  - serverless-plugin-typescript
+  - serverless-jest-plugin
 functions:
   upload:
-    handler: handler.upload
+    handler: handlers/upload.handler
     events:
       - http: POST upload
     environment:
@@ -22,14 +24,12 @@ resources:
         BucketName: ${opt:stage, 'dev'}-covid19-antibody-uk
     DynamoDB:
       Type: AWS::DynamoDB::Table
-      Properties: 
+      Properties:
         AttributeDefinitions:
-          - 
-            AttributeName: guid
+          - AttributeName: guid
             AttributeType: S
         KeySchema:
-          -
-            AttributeName: guid
+          - AttributeName: guid
             KeyType: HASH
         TableName: ${opt:stage, 'dev'}-covid19-antibody-uk
         ProvisionedThroughput:
