@@ -30,6 +30,7 @@ jobs:
         run: |
           yarn test
   build-frontend:
+    needs: [run-tests]
     runs-on: ubuntu-latest
     defaults:
       run:
