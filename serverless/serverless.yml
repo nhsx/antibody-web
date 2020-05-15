@@ -35,3 +35,68 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 2
           WriteCapacityUnits: 2
+    ClientS3:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${opt:stage, 'dev'}-covid19-antibody-uk-client
+        WebsiteConfiguration:
+          IndexDocument: index.html
+    ClientCloudFrontAccessIdentity:
+      Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+      Properties:
+        CloudFrontOriginAccessIdentityConfig:
+          Comment: 'covid19-antibody-uk-client-oai'
+    ClientBucketPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        Bucket:
+          Ref: 'ClientS3'
+        PolicyDocument:
+          Statement:
+            - Action:
+                - 's3:GetObject'
+              Effect: 'Allow'
+              Principal:
+                CanonicalUser: !GetAtt
+                  - ClientCloudFrontAccessIdentity
+                  - S3CanonicalUserId
+              Resource: !Join
+                - ''
+                - - 'arn:aws:s3:::'
+                  - Ref: 'ClientS3'
+                  - '/*'
+    ClientCloudFrontDistribution:
+      Type: AWS::CloudFront::Distribution
+      Properties:
+        DistributionConfig:
+          CustomErrorResponses:
+            - ErrorCachingMinTTL: 0
+              ErrorCode: 403
+              ResponseCode: 200
+              ResponsePagePath: '/index.html'
+            - ErrorCachingMinTTL: 0
+              ErrorCode: 404
+              ResponseCode: 200
+              ResponsePagePath: '/index.html'
+          DefaultCacheBehavior:
+            DefaultTTL: 0
+            MaxTTL: 0
+            MinTTL: 0
+            TargetOriginId: ClientS3Origin
+            ForwardedValues:
+              QueryString: 'false'
+              Cookies:
+                Forward: none
+            ViewerProtocolPolicy: allow-all
+          DefaultRootObject: 'index.html'
+          Enabled: 'true'
+          Origins:
+            - DomainName: !GetAtt
+                - ClientS3
+                - DomainName
+              Id: ClientS3Origin
+              S3OriginConfig:
+                OriginAccessIdentity: !Join
+                  - ''
+                  - - 'origin-access-identity/cloudfront/'
+                    - Ref: ClientCloudFrontAccessIdentity
