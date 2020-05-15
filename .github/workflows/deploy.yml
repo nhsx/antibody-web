@@ -57,6 +57,9 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '12.3.1'
+      - name: Yarn install
+        run: |
+          yarn install
       - name: serverless deploy
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.SERVERLESS_AWS_ACCESS_KEY_ID }}
