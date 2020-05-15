@@ -12,7 +12,10 @@ functions:
   upload:
     handler: handlers/upload.handler
     events:
-      - http: POST upload
+      - http:
+          method: POST
+          path: upload
+          cors: true
     environment:
       UPLOAD_BUCKET: ${opt:stage, 'dev'}-covid19-antibody-uk
       DYNAMO_TABLE: ${opt:stage, 'dev'}-covid19-antibody-uk

@@ -14,8 +14,8 @@ module.exports.handler = async (event: any) => {
   ['UPLOAD_BUCKET', 'DYNAMO_TABLE'].forEach((p) => {
     if (!process.env[p]) {
       return {
-        status: 500,
-        error: `Internal error: missing environment variables`,
+        statusCode: 500,
+        body: { error: `Internal error: missing environment variables` },
       };
     }
   });
@@ -34,12 +34,14 @@ module.exports.handler = async (event: any) => {
     decodedImage = Buffer.from(encodedImage, 'base64');
   } catch (error) {
     return {
-      status: 400,
-      error: `Failed to decode a base64 image from body.${IMAGE_FIELD}`,
+      statusCode: 400,
+      body: {
+        error: `Failed to decode a base64 image from body.${IMAGE_FIELD}`,
+      },
     };
   }
 
-  const filePath = `rdt-images/${guid}` + '.jpg';
+  const filePath = `rdt-images/${guid}` + '.png';
 
   // Prepare the S3 Insert
   const s3PutReq: AWS.S3.PutObjectRequest = {
@@ -84,6 +86,10 @@ module.exports.handler = async (event: any) => {
     // Return our s3 response and dynamo inserted item to the user
     return {
       statusCode: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true,
+      },
       body: JSON.stringify({
         s3: s3Response,
         dynamo: dynamoPutReq,
@@ -91,6 +97,7 @@ module.exports.handler = async (event: any) => {
     };
   } catch (error) {
     {
+      console.log('Error:', error);
       return error;
     }
   }

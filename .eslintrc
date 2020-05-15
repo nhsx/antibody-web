@@ -1,7 +1,17 @@
 {
   "extends": "react-app",
-  "plugins": ["prettier"],
+  "plugins": ["prettier", "react-hooks"],
+
   "rules": {
-    "prettier/prettier": "error"
+    "prettier/prettier": "error",
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "error",
+    "prefer-const": [
+      "error",
+      {
+        "destructuring": "any",
+        "ignoreReadBeforeAssign": false
+      }
+    ]
   }
 }

@@ -1,6 +1,4 @@
 {
-  "compilerOptions": {
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true
-  }
+  "compilerOptions": {},
+  "exclude": ["node_modules"]
 }
