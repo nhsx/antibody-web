@@ -1,0 +1,83 @@
+openapi: '3.0.0'
+info:
+  title: Covid19 Antibody Test Upload API
+  version: 1.0.0
+paths:
+  /upload:
+    post:
+      summary: Upload a picture of an RDT result
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rdt_image:
+                  type: string #Base64 encoded image
+                  example: 'R0lGODlhPQ=='
+      responses:
+        '200':
+          description: An object containing the S3 upload information and the inserted dynamo object
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  s3:
+                    ETag: '"03438049b602d653d06f892d1991c60a"'
+                    Location: https://dev-covid19-antibody-uk.s3.eu-west-2.amazonaws.com/rdt-images/560b2f26-b101-4957-a0e9-7e69afb26045.jpg
+                    key: rdt-images/560b2f26-b101-4957-a0e9-7e69afb26045.jpg
+                    Key: rdt-images/560b2f26-b101-4957-a0e9-7e69afb26045.jpg
+                    Bucket: dev-covid19-antibody-uk
+                  dynamo:
+                    TableName: dev-covid19-antibody-uk
+                    Item:
+                      guid:
+                        S: 560b2f26-b101-4957-a0e9-7e69afb26045
+                      image_url:
+                        S: https://dev-covid19-antibody-uk.s3.eu-west-2.amazonaws.com/rdt-images/560b2f26-b101-4957-a0e9-7e69afb26045.jpg
+                properties:
+                  s3:
+                    type: object
+                    properties:
+                      Location:
+                        type: string
+                      ETag:
+                        type: string
+                      key:
+                        type: string
+                        example:
+                      Key:
+                        type: string
+                        example:
+                      Bucket:
+                        type: string
+                        example:
+                  dynamo:
+                    type: object
+                    properties:
+                      TableName:
+                        type: string
+                      Item:
+                        type: object
+                        properties:
+                          guid:
+                            type: object
+                            properties:
+                              S:
+                                type: string
+                          image_url:
+                            type: object
+                            properties:
+                              S:
+                                type: string
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string

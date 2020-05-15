@@ -2,8 +2,6 @@
 import { DynamoDB, S3 } from 'aws-sdk';
 import { v4 as uuid } from 'uuid';
 
-// get reference to S3 client
-
 // Local consts
 const IMAGE_FIELD = 'rdt_image';
 
@@ -11,10 +9,14 @@ module.exports.handler = async (event: any) => {
   // Initialise our services
   const s3 = new S3();
   const dynamo = new DynamoDB();
+
   // Pull out our environment variables
   ['UPLOAD_BUCKET', 'DYNAMO_TABLE'].forEach((p) => {
     if (!process.env[p]) {
-      throw new Error(`Environment variable ${p} not supplied`);
+      return {
+        status: 500,
+        error: `Internal error: missing environment variables`,
+      };
     }
   });
 
@@ -24,14 +26,17 @@ module.exports.handler = async (event: any) => {
   // Create our unique identifier for now (this will be supplied eventually)
   const guid: string = uuid();
 
-  // Decode our base64 image from the body
+  // Decode our base64 image.
   let encodedImage: string, decodedImage: Buffer;
 
   try {
     encodedImage = JSON.parse(event.body)[IMAGE_FIELD];
     decodedImage = Buffer.from(encodedImage, 'base64');
   } catch (error) {
-    throw new Error(`Failed to decode a base64 image from body.${IMAGE_FIELD}`);
+    return {
+      status: 400,
+      error: `Failed to decode a base64 image from body.${IMAGE_FIELD}`,
+    };
   }
 
   const filePath = `rdt-images/${guid}` + '.jpg';
@@ -67,7 +72,7 @@ module.exports.handler = async (event: any) => {
       console.log('Dynamo record inserted:', dynamoResponse);
     } catch (error) {
       //Dynamo insert has failed, undo our S3 insert as this will be detached data
-      console.log('insert failed, deleting');
+      console.log(`Dynamo put failed, deleting ${filePath} from S3`);
       const s3DelReq: AWS.S3.DeleteObjectRequest = {
         Bucket: UPLOAD_BUCKET,
         Key: filePath,
