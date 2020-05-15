@@ -1,8 +1,6 @@
 name: Production build
 
 on:
-  push:
-    branches: [master]
   pull_request:
     branches: [master]
 
@@ -31,7 +29,6 @@ jobs:
           yarn test
   build-frontend:
     needs: [run-tests]
-    if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -48,31 +45,3 @@ jobs:
       - name: Build
         run: |
           yarn build
-          #    - name: Deploy to S3
-          #      uses: jakejarvis/s3-sync-action@master
-          #      with:
-          #        args: --acl public-read --delete
-          #      env:
-          #        AWS_S3_BUCKET: ${{ secrets.AWS_PRODUCTION_BUCKET_NAME }}
-          #        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          #        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          #        AWS_REGION: ${{ secrets.AWS_REGION }}
-          #        SOURCE_DIR: "frontend/build"
-          #   deploy-backend:
-          #     runs-on: ubuntu-latest
-          #     defaults:
-          #       run:
-          #         working-directory: backend
-          #     steps:
-          #     - uses: actions/checkout@master
-          #     - name: Use Node.js
-          #       uses: actions/setup-node@v1
-          #       with:
-          #         node-version: "12.3.1"
-          #     - name: serverless deploy
-          #       working-directory: backend
-          #       env:
-          #         AWS_ACCESS_KEY_ID: ${{ secrets.SERVERLESS_AWS_ACCESS_KEY_ID }}
-          #         AWS_SECRET_ACCESS_KEY: ${{ secrets.SERVERLESS_AWS_SECRET_ACCESS_KEY }}
-          #       run: |
-          #         npx serverless deploy
