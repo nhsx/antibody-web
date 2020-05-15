@@ -31,6 +31,7 @@ jobs:
           yarn test
   build-frontend:
     needs: [run-tests]
+    if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     defaults:
       run:
