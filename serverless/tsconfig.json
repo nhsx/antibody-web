@@ -7,7 +7,12 @@
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "moduleResolution": "node",
-    "emitDecoratorMetadata": true
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "sourceMap": true,
+    "noImplicitThis": true,
+    "noImplicitAny": true
   },
   "exclude": ["node_modules"]
 }
