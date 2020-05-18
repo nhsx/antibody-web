@@ -2,7 +2,6 @@ import React from 'react';
 import { DashboardRoute, ROUTES } from 'routes/routes';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
-
 import PageNotFound from 'components/PageNotFound/PageNotFound';
 
 const App = () => {

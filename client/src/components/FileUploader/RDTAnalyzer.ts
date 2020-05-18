@@ -68,7 +68,7 @@ const getDataType = (
   model: tf.GraphModel
 ): tf.backend_util.TypedArray => {
   return modelDataOutput[
-    model.outputs.findIndex((item: any): boolean => {
+    model.outputs.findIndex((item): boolean => {
       return item.name === dataType;
     })
   ];

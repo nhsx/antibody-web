@@ -111,7 +111,6 @@ export default (props: TimerProps) => {
         clearTimeout(timeoutKey);
       };
     }
-    return () => {};
   });
 
   let label;

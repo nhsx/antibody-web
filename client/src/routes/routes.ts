@@ -5,7 +5,7 @@
 import Home from 'components/Home/Home';
 import TestRunSteps from 'components/TestRun/TestRunSteps';
 
-export interface seoDefinition {
+export interface SeoDefinition {
   title: string;
   description: string;
 }
@@ -13,7 +13,7 @@ export interface DashboardRoute {
   path: string;
   exact: boolean;
   navTitle?: string;
-  seo: seoDefinition;
+  seo: SeoDefinition;
   component: React.ComponentClass<any, any> | React.FunctionComponent<any>;
 }
 

@@ -124,7 +124,7 @@ const TestStripCamera = (props: {
     const token = setTimeout(async () => {
       if (track) {
         const capture = new ImageCapture(track);
-        let frame: any;
+        let frame;
         try {
           frame = await capture.grabFrame();
 

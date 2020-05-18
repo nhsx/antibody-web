@@ -23,14 +23,14 @@ const useStyle = makeStyles((theme: Theme) =>
   })
 );
 
-export interface interfaceTimedStepProps {
+export interface InterfaceTimedStepProps {
   duration: number;
   //testRunUID: string;
   setStepReady: (ready: boolean) => void;
   description: string;
 }
 
-export default (props: interfaceTimedStepProps) => {
+export default (props: InterfaceTimedStepProps) => {
   const { duration, setStepReady, description } = props;
 
   const { step } = useParams();

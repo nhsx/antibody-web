@@ -4,7 +4,7 @@
 // can be found in the LICENSE file distributed with this file.
 import { Theme, createStyles, makeStyles } from '@material-ui/core';
 
-interface cxParameter {
+interface CxParameter {
   [key: string]: boolean;
 }
 
@@ -19,10 +19,10 @@ interface cxParameter {
 // - cx ("a e", {a: true, b: false, c: false, d: true, e: false}, "c", ["b"], {a: false} )
 // -> "b c d"
 export const cx = (
-  ...args: Array<cxParameter | Array<string> | string>
+  ...args: Array<CxParameter | Array<string> | string>
 ): string => {
   let allClasses = {};
-  args.forEach((obj: cxParameter | Array<string> | string) => {
+  args.forEach((obj: CxParameter | Array<string> | string) => {
     if (typeof obj === 'string') {
       obj = obj.split(' ');
     }

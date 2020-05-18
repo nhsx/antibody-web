@@ -1,11 +1,16 @@
 'use strict';
 import { DynamoDB, S3 } from 'aws-sdk';
 import { v4 as uuid } from 'uuid';
+import {
+  APIGatewayProxyEvent,
+  Context,
+  APIGatewayProxyResult,
+} from 'aws-lambda';
 
 // Local consts
 const IMAGE_FIELD = 'rdt_image';
 
-module.exports.handler = async (event: any) => {
+module.exports.handler = async (event: any): Promise<APIGatewayProxyResult> => {
   // Initialise our services
   const s3 = new S3();
   const dynamo = new DynamoDB();
@@ -15,7 +20,9 @@ module.exports.handler = async (event: any) => {
     if (!process.env[p]) {
       return {
         statusCode: 500,
-        body: { error: `Internal error: missing environment variables` },
+        body: JSON.stringify({
+          error: `Internal error: missing environment variables`,
+        }),
       };
     }
   });
@@ -30,14 +37,14 @@ module.exports.handler = async (event: any) => {
   let encodedImage: string, decodedImage: Buffer;
 
   try {
-    encodedImage = JSON.parse(event.body)[IMAGE_FIELD];
-    decodedImage = Buffer.from(encodedImage, 'base64');
+    encodedImage = JSON.parse(event.body)[IMAGE_FIELD] as string;
+    decodedImage = Buffer.from(encodedImage as string, 'base64');
   } catch (error) {
     return {
       statusCode: 400,
-      body: {
+      body: JSON.stringify({
         error: `Failed to decode a base64 image from body.${IMAGE_FIELD}`,
-      },
+      }),
     };
   }
 
@@ -81,9 +88,9 @@ module.exports.handler = async (event: any) => {
     await s3.deleteObject(s3DelReq).promise();
     return {
       statusCode: 500,
-      body: {
+      body: JSON.stringify({
         error: `Failed to save patient record`,
-      },
+      }),
     };
   }
 

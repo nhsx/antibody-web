@@ -4,17 +4,27 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^2.33.0",
     "@typescript-eslint/parser": "^2.33.0",
+    "eslint": "^6.6.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-import-resolver-typescript": "^2.0.0",
+    "eslint-plugin-json": "^2.1.1",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-prettier": "^3.1.3",
     "husky": "^4.2.5",
-    "prettier": "2.0.5",
-    "pretty-quick": "^2.0.1"
+    "prettier": "^2.0.5",
+    "pretty-quick": "^2.0.1",
+    "typescript": "^3.9.2"
   },
   "scripts": {
-    "test": "npm --prefix client run test -- --watch-all=false && npm --prefix serverless run test"
+    "test": "npm --prefix client run test -- --watch-all=false && npm --prefix serverless run test",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "pretty-quick --staged"
+      "pre-commit": "npm run lint && pretty-quick --staged"
     }
+  },
+  "dependencies": {
+    "eslint-plugin-react-hooks": "^4.0.2"
   }
 }

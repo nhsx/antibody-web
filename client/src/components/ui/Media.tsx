@@ -23,7 +23,7 @@ export default (props: MediaProps) => {
   const { image, children } = props;
   const classes = useMediaStyles();
 
-  let mediaIcon = null;
+  let mediaIcon;
   if (image) {
     mediaIcon = <figure className="media-left">{image}</figure>;
   }

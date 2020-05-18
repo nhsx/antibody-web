@@ -12,8 +12,6 @@ import { ContinueButton } from 'components/ui/Buttons';
 import PageContent from '../ui/PageContent';
 import TestRunHeader from './TestRunHeader';
 
-const test = 't';
-
 const testRunStepStyle = makeStyles((theme: Theme) =>
   createStyles({
     testRunButtons: {
@@ -72,7 +70,7 @@ export default () => {
     currentStepName: step,
   });
 
-  let nextButton = null;
+  let nextButton;
   const nextPath = nextDefaultStep
     ? `/testrunsteps/${testRunUID}/${nextDefaultStep}`
     : undefined;
