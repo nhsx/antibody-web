@@ -50,55 +50,53 @@ module.exports.handler = async (event: any) => {
     Key: filePath,
   };
 
+  // Send to S3
+  const s3Response = await s3.upload(s3PutReq).promise();
+  const { Location: image_url } = s3Response;
+  console.log(`Image uploaded to ${image_url}`);
+
+  // Once we have the item's s3 location, prepare our put into dynamo
+  let dynamoPutReq: AWS.DynamoDB.PutItemInput,
+    dynamoResponse: AWS.DynamoDB.PutItemOutput;
+
   try {
-    // Send to S3
-    const s3Response = await s3.upload(s3PutReq).promise();
-    const { Location: image_url } = s3Response;
-    console.log(`Image uploaded to ${image_url}`);
-
-    // Once we have the item's s3 location, prepare our put into dynamo
-    let dynamoPutReq: AWS.DynamoDB.PutItemInput,
-      dynamoResponse: AWS.DynamoDB.PutItemOutput;
-
-    try {
-      dynamoPutReq = {
-        TableName: DYNAMO_TABLE,
-        Item: {
-          guid: { S: guid },
-          image_url: { S: image_url },
-        },
-      };
-
-      console.log('putting into dynamo', dynamoPutReq);
-      dynamoResponse = await dynamo.putItem(dynamoPutReq).promise();
-      console.log('Dynamo record inserted:', dynamoResponse);
-    } catch (error) {
-      //Dynamo insert has failed, undo our S3 insert as this will be detached data
-      console.log(`Dynamo put failed, deleting ${filePath} from S3`);
-      const s3DelReq: AWS.S3.DeleteObjectRequest = {
-        Bucket: UPLOAD_BUCKET,
-        Key: filePath,
-      };
-      await s3.deleteObject(s3DelReq).promise();
-      return error;
-    }
-
-    // Return our s3 response and dynamo inserted item to the user
-    return {
-      statusCode: 200,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': true,
+    dynamoPutReq = {
+      TableName: DYNAMO_TABLE,
+      Item: {
+        guid: { S: guid },
+        image_url: { S: image_url },
       },
-      body: JSON.stringify({
-        s3: s3Response,
-        dynamo: dynamoPutReq,
-      }),
     };
+
+    console.log('putting into dynamo', dynamoPutReq);
+    dynamoResponse = await dynamo.putItem(dynamoPutReq).promise();
+    console.log('Dynamo record inserted:', dynamoResponse);
   } catch (error) {
-    {
-      console.log('Error:', error);
-      return error;
-    }
+    //Dynamo insert has failed, undo our S3 insert as this will be detached data
+    console.log(`Dynamo put failed, deleting ${filePath} from S3`);
+    const s3DelReq: AWS.S3.DeleteObjectRequest = {
+      Bucket: UPLOAD_BUCKET,
+      Key: filePath,
+    };
+    await s3.deleteObject(s3DelReq).promise();
+    return {
+      statusCode: 500,
+      body: {
+        error: `Failed to save patient record`,
+      },
+    };
   }
+
+  // Return our s3 response and dynamo inserted item to the user
+  return {
+    statusCode: 200,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': true,
+    },
+    body: JSON.stringify({
+      s3: s3Response,
+      dynamo: dynamoPutReq,
+    }),
+  };
 };

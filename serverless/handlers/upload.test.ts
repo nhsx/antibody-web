@@ -17,10 +17,14 @@ const lambdaWrapper = jestPlugin.lambdaWrapper;
 const wrapped = lambdaWrapper.wrap(mod, { handler: 'handler' });
 
 describe('upload', () => {
-  it('should throw an error if no body.rdt_image is supplied ', () => {
-    expect(() => {
-      return wrapped.run({});
-    }).rejects.toThrow('Failed to decode');
+  it('should throw an error if no body.rdt_image is supplied ', async () => {
+    const result = await wrapped.run({});
+
+    expect(result).toMatchObject({
+      body: expect.objectContaining({
+        error: expect.stringMatching('Failed to decode'),
+      }),
+    });
   });
 
   it('should upload to the bucket provided in the env vars', async () => {
@@ -64,8 +68,6 @@ describe('upload', () => {
         }),
       })
       .then(() => {
-        console.log(mockDynamoPut.mock);
-
         expect(mockDynamoPut).toBeCalledWith(
           expect.objectContaining({
             TableName: process.env.DYNAMO_TABLE,
