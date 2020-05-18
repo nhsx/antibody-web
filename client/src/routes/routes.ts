@@ -4,6 +4,7 @@
 // can be found in the LICENSE file distributed with this file.
 import Home from 'components/Home/Home';
 import TestRunSteps from 'components/TestRun/TestRunSteps';
+import NewTestRun from 'components/TestRun/NewTestRun';
 
 export interface seoDefinition {
   title: string;
@@ -28,8 +29,17 @@ export const ROUTE_DEFINITIONS: { [key: string]: DashboardRoute } = {
     },
     component: Home,
   },
+  NEW_TEST_RUN: {
+    path: '/test',
+    exact: true,
+    seo: {
+      title: 'Start a new test run',
+      description: 'Page for starting a new test run',
+    },
+    component: NewTestRun,
+  },
   PERFORMTEST: {
-    path: '/test/:testRunUID/:step',
+    path: '/testrunsteps/:testRunUID/:step',
     exact: false,
     seo: {
       title: 'Perform a test',

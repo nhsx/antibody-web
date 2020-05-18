@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { START_STEP, UNSET_PROFILE_ID } from './TestRunConstants';
+import { START_STEP } from './TestRunConstants';
 import { v4 as uuid } from 'uuid';
 import { ROUTE_DEFINITIONS } from 'routes/routes';
 import { Redirect } from 'react-router-dom';

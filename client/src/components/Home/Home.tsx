@@ -3,17 +3,24 @@
 // Use of this source code is governed by an LGPL-3.0 license that
 // can be found in the LICENSE file distributed with this file.
 import PageContent from '../ui/PageContent';
-import PageHeader from '../ui/PageHeader';
 import React from 'react';
+import { Link } from 'react-router-dom';
+import { Header } from 'nhsuk-react-components';
 
 export default () => {
   return (
     <PageContent>
-      <PageHeader
-        title="Welcome to the Covid19 Antibody Testing App"
-        subtitle="Let's get started by choosing an option below."
-      />
-      <div className="container"></div>
+      <Header transactional>
+        <Header.Container>
+          <Header.Logo href="/" />
+          <Header.ServiceName href="/">
+            Take an COVID-19 Antibody Test
+          </Header.ServiceName>
+        </Header.Container>
+      </Header>
+      <div className="container">
+        <Link to="/test">Start new test</Link>
+      </div>
     </PageContent>
   );
 };
