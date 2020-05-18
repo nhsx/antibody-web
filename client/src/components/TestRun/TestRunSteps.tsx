@@ -4,11 +4,16 @@
 // can be found in the LICENSE file distributed with this file.
 import '../../style/sassStyle';
 
-import { FORMID, TESTRUN_STEPS, getNextDefaultStep } from './TestRunConstants';
+import {
+  FORMID,
+  TESTRUN_STEPS,
+  getNextDefaultStep,
+  getPreviousStep,
+} from './TestRunConstants';
 import { Link, useParams } from 'react-router-dom';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Theme, createStyles, makeStyles } from '@material-ui/core';
-import { Header, Container, Row, Col } from 'nhsuk-react-components';
+import { Header, Container, Row, Col, BackLink } from 'nhsuk-react-components';
 
 import { ContinueButton } from 'components/ui/Buttons';
 import PageContent from '../ui/PageContent';
@@ -26,6 +31,22 @@ const testRunStepStyle = makeStyles((theme: Theme) =>
   })
 );
 
+const urlForStep = (step: string, testRunUID: string) =>
+  `/testrunsteps/${testRunUID}/${step}`;
+
+const renderBackLink = (previousPath: string | undefined): JSX.Element => {
+  if (previousPath) {
+    return (
+      <Row>
+        <Col width="full">
+          {previousPath && <BackLink href={previousPath}>Back</BackLink>}
+        </Col>
+      </Row>
+    );
+  } else {
+    return <div />;
+  }
+};
 /**
  * Test Kit Tutorial.
  * Each step might be just static information or contain form
@@ -74,7 +95,12 @@ export default () => {
 
   let nextButton = null;
   const nextPath = nextDefaultStep
-    ? `/testrunsteps/${testRunUID}/${nextDefaultStep}`
+    ? urlForStep(nextDefaultStep, testRunUID)
+    : undefined;
+
+  const previousStep = getPreviousStep({ currentStepName: step });
+  const previousPath = previousStep
+    ? urlForStep(previousStep, testRunUID)
     : undefined;
 
   if (nextDefaultStep !== undefined && nextPath !== undefined) {
@@ -111,6 +137,7 @@ export default () => {
         </Header.Container>
       </Header>
       <Container>
+        {renderBackLink(previousPath)}
         <TestRunHeader stepDetails={currentStepDescription} step={step} />
         <currentStepDescription.ContentComponent
           setStepReady={setStepReady}

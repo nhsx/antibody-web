@@ -124,8 +124,24 @@ const testrunSteps: { [stepName: string]: StepDetailsIncomplete } = {
     )),
     nav: {
       next: {
+        default: 'washYourHands',
+      },
+    },
+  },
+  washYourHands: {
+    title: 'Take the test',
+    ContentComponent: React.memo((props) => (
+      <Row>
+        <Col width="full">
+          <BodyText>Content goes here</BodyText>
+        </Col>
+      </Row>
+    )),
+    nav: {
+      next: {
         default: 'scanStrip',
       },
+      previous: 'checkYourKit',
     },
   },
   scanStrip: {
