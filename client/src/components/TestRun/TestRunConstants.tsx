@@ -9,7 +9,6 @@ import Grid from '@material-ui/core/Grid';
 import PhotoUploaderPanel from '../FileUploader/PhotoUploaderPanel';
 import React from 'react';
 import TimedStep from './TimedStep';
-import WaitStep from './WaitStep';
 import transcribeTestPath from './transcribeTestPath';
 
 export const FORMID = 'stepForm';

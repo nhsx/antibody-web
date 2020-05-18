@@ -8,7 +8,6 @@ import Loader from 'components/ui/Loader';
 import { TESTRUN_STEPS } from './TestRunConstants';
 import Timer from 'components/ui/Timer';
 import { useParams } from 'react-router-dom';
-import _ from 'lodash';
 
 const useStyle = makeStyles((theme: Theme) =>
   createStyles({
@@ -26,13 +25,13 @@ const useStyle = makeStyles((theme: Theme) =>
 
 export interface interfaceTimedStepProps {
   duration: number;
-  testRunUID: string;
+  //testRunUID: string;
   setStepReady: (ready: boolean) => void;
   description: string;
 }
 
 export default (props: interfaceTimedStepProps) => {
-  const { duration, setStepReady, testRunUID, description } = props;
+  const { duration, setStepReady, description } = props;
 
   const { step } = useParams();
 

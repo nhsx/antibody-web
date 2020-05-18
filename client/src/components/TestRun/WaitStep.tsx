@@ -53,7 +53,7 @@ export default (props: StepDetailComponentProp) => {
       <TimedStep
         description="The test strip will take ten minutes to react with the test solution."
         duration={startTime + 600000 - Date.now()}
-        testRunUID={testRunUID}
+        // testRunUID={testRunUID}
         setStepReady={setStepReady}
       />
       <form style={{ display: 'none' }} id={FORMID} onSubmit={onSubmit} />

@@ -15,7 +15,7 @@ import ImageSelectorInput from './ImageSelectorInput';
 import RDTImagePreview from './RDTImagePreview';
 import { ROUTE_DEFINITIONS } from '../../routes/routes';
 import TestStripCamera from './TestStripCamera';
-import { confirmAlert } from '../../utils/confirmAlert';
+//import { confirmAlert } from '../../utils/confirmAlert';
 import { cx } from '../../style/utils';
 import { getAppConfig } from 'utils/AppConfig';
 import { useHistory } from 'react-router-dom';
@@ -155,7 +155,7 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
       console.log(_.take(imageAsURI, 100));
 
       //@TODO: Abstract this out
-      const response = await fetch(
+      await fetch(
         'https://vfxgyqhz2f.execute-api.eu-west-2.amazonaws.com/dev/upload',
         {
           method: 'POST',
@@ -168,7 +168,7 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
         }
       );
     },
-    [imageAsFile, imageAsURI, setIsUploading, testRunUID, onSubmitForm]
+    [imageAsFile, imageAsURI, setIsUploading]
   );
 
   return (
