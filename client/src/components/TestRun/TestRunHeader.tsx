@@ -2,7 +2,7 @@
 //
 // Use of this source code is governed by an LGPL-3.0 license that
 // can be found in the LICENSE file distributed with this file.
-import { StepDetails } from './TestRunConstants';
+import { StepDetails, TESTRUN_STEPS } from './TestRunConstants';
 import { Theme, createStyles, makeStyles } from '@material-ui/core';
 import { Label, Row, Col } from 'nhsuk-react-components';
 
@@ -27,37 +27,41 @@ interface TestRunHeaderProps {
 
 export default (props: TestRunHeaderProps) => {
   const classes = useStyle();
-  const { stepDetails } = props;
+  const { step, stepDetails } = props;
 
   // Find how many steps are we away from the start
   // TODO: Add this progress counter back in
-  // let stepCount = 1;
-  // let marker = TESTRUN_STEPS[step];
-  // while (marker.nav.previous) {
-  //   stepCount++;
-  //   marker = TESTRUN_STEPS[marker.nav.previous];
-  // }
+  let stepCount = 1;
+  let marker = TESTRUN_STEPS[step];
+  while (marker.nav.previous) {
+    stepCount++;
+    marker = TESTRUN_STEPS[marker.nav.previous];
+  }
 
   // Find how many steps there is in total.
   // We do this because steps can be skipped.
-  // let totalSteps = stepCount;
-  // marker = TESTRUN_STEPS[step];
-  // while (marker.nav.next) {
-  //   totalSteps++;
-  //   marker = TESTRUN_STEPS[marker.nav.next.default];
-  // }
+  let totalSteps = stepCount;
+  marker = TESTRUN_STEPS[step];
+  while (marker.nav.next) {
+    totalSteps++;
+    marker = TESTRUN_STEPS[marker.nav.next.default];
+  }
 
   return (
     <Row>
       <Col width="full">
-        {/* <Progress value={stepCount} max={totalSteps} /> */}
         {stepDetails.LeadingAsset && (
           <div className={classes.leadingAsset}>
             <stepDetails.LeadingAsset />
           </div>
         )}
         {stepDetails.title && (
-          <Label isPageHeading>{props.stepDetails.title}</Label>
+          <Label size="m">
+            <span className="nhsuk-caption-m">
+              {stepCount} of {totalSteps}
+            </span>
+            {props.stepDetails.title}
+          </Label>
         )}
       </Col>
     </Row>
