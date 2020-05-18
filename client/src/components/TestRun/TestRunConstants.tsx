@@ -10,6 +10,7 @@ import PhotoUploaderPanel from '../FileUploader/PhotoUploaderPanel';
 import React from 'react';
 import TimedStep from './TimedStep';
 import transcribeTestPath from './transcribeTestPath';
+import { Row, Col, BodyText } from 'nhsuk-react-components';
 
 export const FORMID = 'stepForm';
 export const UNSET_PROFILE_ID = 'UNSET_PROFILE_ID';
@@ -61,10 +62,72 @@ export interface StepDetails extends StepDetailsIncomplete {
   name: string;
 }
 
-export const START_STEP = 'waitVialReaction';
+export const START_STEP = 'checkYourKit';
 
 // This list represents each steps of the test kit tutorial.
 const testrunSteps: { [stepName: string]: StepDetailsIncomplete } = {
+  checkYourKit: {
+    title: 'Check your test kit',
+    ContentComponent: React.memo((props) => (
+      <Row>
+        <Col width="full">
+          <Asset
+            height={201}
+            width={203}
+            alt="Image of the test kit"
+            src="check-your-test-kit/kit.png"
+          />
+          <BodyText>Your test kit should include:</BodyText>
+          <p className="nhsuk-u-font-weight-bold">Lancet (finger prick tool)</p>
+          <Asset
+            height={80}
+            width={325}
+            alt="Image of the lancet"
+            src="check-your-test-kit/lancet.png"
+          />
+          <p className="nhsuk-u-font-weight-bold">Small bottle</p>
+          <Asset
+            height={80}
+            width={325}
+            alt="Image of the small bottle"
+            src="check-your-test-kit/small-bottle.png"
+          />
+          <p className="nhsuk-u-font-weight-bold">Pipette</p>
+          <Asset
+            height={80}
+            width={325}
+            alt="Image of the pipette"
+            src="check-your-test-kit/pipette.png"
+          />
+          <p className="nhsuk-u-font-weight-bold">Test Device</p>
+          <Asset
+            height={80}
+            width={325}
+            alt="Image of the test device"
+            src="check-your-test-kit/test-device.png"
+          />
+          <p className="nhsuk-u-font-weight-bold">
+            Special bag to dispose of the kit
+          </p>
+          <Asset
+            height={80}
+            width={325}
+            alt="Image of the bag to dispose the kit"
+            src="check-your-test-kit/disposal-bag.png"
+          />
+          <BodyText>
+            Keep them wrapped and do not squeeze or bend them - handle gently
+          </BodyText>
+          <BodyText>Not supplied but needed: plaster/tissue</BodyText>
+        </Col>
+      </Row>
+    )),
+    nav: {
+      next: {
+        default: 'scanStrip',
+      },
+    },
+  },
   scanStrip: {
     title: 'Scan your test strip',
     ContentComponent: React.memo((props) => (

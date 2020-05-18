@@ -4,10 +4,9 @@
 // can be found in the LICENSE file distributed with this file.
 import { StepDetails, TESTRUN_STEPS } from './TestRunConstants';
 import { Theme, createStyles, makeStyles } from '@material-ui/core';
+import { Label, Row, Col } from 'nhsuk-react-components';
 
-import Progress from 'components/ui/Progress';
 import React from 'react';
-import { cx } from 'style/utils';
 
 const useStyle = makeStyles((theme: Theme) =>
   createStyles({
@@ -31,6 +30,7 @@ export default (props: TestRunHeaderProps) => {
   const { step, stepDetails } = props;
 
   // Find how many steps are we away from the start
+  // TODO: Add this progress counter back in
   let stepCount = 1;
   let marker = TESTRUN_STEPS[step];
   while (marker.nav.previous) {
@@ -48,16 +48,22 @@ export default (props: TestRunHeaderProps) => {
   }
 
   return (
-    <div className={cx(['container', classes.headerRoot])}>
-      <Progress value={stepCount} max={totalSteps} />
-      {stepDetails.LeadingAsset && (
-        <div className={classes.leadingAsset}>
-          <stepDetails.LeadingAsset />
-        </div>
-      )}
-      {stepDetails.title && (
-        <h1 className="title">{props.stepDetails.title}</h1>
-      )}
-    </div>
+    <Row>
+      <Col width="full">
+        {stepDetails.LeadingAsset && (
+          <div className={classes.leadingAsset}>
+            <stepDetails.LeadingAsset />
+          </div>
+        )}
+        {stepDetails.title && (
+          <Label size="m">
+            <span className="nhsuk-caption-m">
+              {stepCount} of {totalSteps}
+            </span>
+            {props.stepDetails.title}
+          </Label>
+        )}
+      </Col>
+    </Row>
   );
 };

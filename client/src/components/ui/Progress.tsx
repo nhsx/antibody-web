@@ -37,15 +37,9 @@ export interface ProgressProps {
 }
 
 export default (props: ProgressProps) => {
-  const classes = useStyle();
   return (
-    <div className={classes.progressRoot}>
-      <div
-        className={classes.progressInner}
-        style={{
-          width: `${Math.round((100 * props.value) / props.max)}%`,
-        }}
-      />
+    <div>
+      {props.value} of {props.max}
     </div>
   );
 };
