@@ -1,5 +1,6 @@
 'use strict';
 import { DynamoDB, S3 } from 'aws-sdk';
+import Joi from '@hapi/joi';
 //import { v4 as uuid } from 'uuid';
 
 // Local consts
@@ -9,4 +10,6 @@ module.exports.handler = async (event: any) => {
   // Initialise our services
   const s3 = new S3();
   const dynamo = new DynamoDB();
+
+  const guid = event.body.guid;
 };
