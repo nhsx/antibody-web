@@ -6,8 +6,8 @@ import React from 'react';
 
 export default (
   props: React.DetailedHTMLProps<
-    React.AnchorHTMLAttributes<HTMLAnchorElement>,
-    HTMLAnchorElement
+  React.AnchorHTMLAttributes<HTMLAnchorElement>,
+  HTMLAnchorElement
   >
 ) => {
   const { children, ...rest } = props;
@@ -17,3 +17,4 @@ export default (
     </a>
   );
 };
+ 

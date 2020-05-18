@@ -17,6 +17,6 @@ module.exports = {
     '@typescript-eslint/no-unused-vars': 0,
     '@typescript-eslint/no-use-before-define': 0,
     '@typescript-eslint/no-explicit-any': 0,
-    '@typescript-eslint/indent': [2, 2],
-  },
+    '@typescript-eslint/indent': [2, 2]
+  }
 };
