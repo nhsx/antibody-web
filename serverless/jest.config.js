@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   roots: ['<rootDir>/'],
   testMatch: [
     '**/__tests__/**/*.+(ts|tsx|js)',

@@ -130,11 +130,11 @@ const getFormattedData = (
 // Perform the detection on an image.
 export const analyzeImage = async (
   pixels:
-    | HTMLImageElement
-    | tf.backend_util.PixelData
-    | ImageData
-    | HTMLCanvasElement
-    | HTMLVideoElement,
+  | HTMLImageElement
+  | tf.backend_util.PixelData
+  | ImageData
+  | HTMLCanvasElement
+  | HTMLVideoElement,
   numChannels?: number | undefined
 ): Promise<TopDetectionData> => {
   const model = await loadModel();
