@@ -8,6 +8,7 @@ import { FORMID, TESTRUN_STEPS, getNextDefaultStep } from './TestRunConstants';
 import { Link, useParams } from 'react-router-dom';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Theme, createStyles, makeStyles } from '@material-ui/core';
+import { Header, Container, Row, Col } from 'nhsuk-react-components';
 
 import { ContinueButton } from 'components/ui/Buttons';
 import PageContent from '../ui/PageContent';
@@ -101,17 +102,25 @@ export default () => {
 
   return (
     <PageContent>
-      <TestRunHeader stepDetails={currentStepDescription} step={step} />
-      <div className={'container'}>
-        <div className={style.stepContent}>
-          <currentStepDescription.ContentComponent
-            setStepReady={setStepReady}
-            submitUrl={nextPath}
-            testRunUID={testRunUID!}
-          />
-        </div>
-        {nextButton}
-      </div>
+      <Header transactional>
+        <Header.Container>
+          <Header.Logo href="/" />
+          <Header.ServiceName href="/">
+            Take an COVID-19 Antibody Test
+          </Header.ServiceName>
+        </Header.Container>
+      </Header>
+      <Container>
+        <TestRunHeader stepDetails={currentStepDescription} step={step} />
+        <currentStepDescription.ContentComponent
+          setStepReady={setStepReady}
+          submitUrl={nextPath}
+          testRunUID={testRunUID!}
+        />
+        <Row>
+          <Col width="full">{nextButton}</Col>
+        </Row>
+      </Container>
     </PageContent>
   );
 };

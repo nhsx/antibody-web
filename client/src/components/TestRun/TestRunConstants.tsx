@@ -10,6 +10,7 @@ import PhotoUploaderPanel from '../FileUploader/PhotoUploaderPanel';
 import React from 'react';
 import TimedStep from './TimedStep';
 import transcribeTestPath from './transcribeTestPath';
+import { Row, Col, BodyText } from 'nhsuk-react-components';
 
 export const FORMID = 'stepForm';
 export const UNSET_PROFILE_ID = 'UNSET_PROFILE_ID';
@@ -61,10 +62,25 @@ export interface StepDetails extends StepDetailsIncomplete {
   name: string;
 }
 
-export const START_STEP = 'waitVialReaction';
+export const START_STEP = 'checkYourKit';
 
 // This list represents each steps of the test kit tutorial.
 const testrunSteps: { [stepName: string]: StepDetailsIncomplete } = {
+  checkYourKit: {
+    title: 'Check your test kit',
+    ContentComponent: React.memo((props) => (
+      <Row>
+        <Col width="full">
+          <BodyText>Some content goes here</BodyText>
+        </Col>
+      </Row>
+    )),
+    nav: {
+      next: {
+        default: 'scanStrip',
+      },
+    },
+  },
   scanStrip: {
     title: 'Scan your test strip',
     ContentComponent: React.memo((props) => (
