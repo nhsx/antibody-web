@@ -43,7 +43,6 @@ export const handler = async ({ body }: { body: any} ): Promise<APIGatewayProxyR
   //Pull out our variables from the event body, once validated
   const { value: request, error: uploadError } = validateUploadRequest(parsedBody)
   
-  console.log(request, uploadError)
   if (uploadError) {
     return {
       statusCode: 400,
@@ -57,10 +56,8 @@ export const handler = async ({ body }: { body: any} ): Promise<APIGatewayProxyR
 
 
   const { guid } = request
-  const uploadUrl = await getUploadUrl(UPLOAD_BUCKET, guid)
-  console.log(uploadUrl)
+  const uploadUrl = await getUploadUrl(UPLOAD_BUCKET, guid)  
   const testRecord = await createTestRecord(DYNAMO_TABLE, guid)
-  console.log(testRecord)
   
   // Response
   const response: GenerateTestResponse = {
