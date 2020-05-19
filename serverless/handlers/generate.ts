@@ -53,13 +53,16 @@ export const handler = async ({ body }: { body: any} ): Promise<APIGatewayProxyR
   }
 
   //Handler body
-
-
-  const { guid } = request
-  const uploadUrl = await getUploadUrl(UPLOAD_BUCKET, guid)  
-  const testRecord = await createTestRecord(DYNAMO_TABLE, guid)
+  const { guid } = request 
+  console.log('getting upload url')
+  const uploadUrl = await getUploadUrl(UPLOAD_BUCKET, guid)
+  console.log(uploadUrl)
+  const testRecord = await createTestRecord(DYNAMO_TABLE, {
+    guid,
+    uploadUrl
+  })
   
-  // Response
+  //Response
   const response: GenerateTestResponse = {
     guid: body.guid,
     uploadUrl: uploadUrl,

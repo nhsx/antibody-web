@@ -9,6 +9,7 @@ export const validateUploadRequest = (body: any) => {
 }
 
 export const validateUploadEnvironment = (environment: any) => {
+    
   const schema: ObjectSchema = Joi.object({
     UPLOAD_BUCKET: Joi.string().required(),
     DYNAMO_TABLE: Joi.string().required()

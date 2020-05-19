@@ -9,10 +9,6 @@ import {
 import jestPlugin from 'serverless-jest-plugin';
 import dotenv from 'dotenv'
 
-dotenv.config({
-  path: "../test.env"
-});
-
 // Local consts
 const IMAGE_FIELD = 'rdt_image';
 

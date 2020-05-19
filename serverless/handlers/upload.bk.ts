@@ -9,7 +9,6 @@ import { resolve } from 'path'
 
 require('dotenv').config({path: resolve(__dirname,"../test.env")})
 
-
 // make aws-sdk mockable everywhere
 AWSMock.setSDK(path.resolve(__dirname, '..', 'node_modules', 'aws-sdk'));
 
@@ -27,24 +26,25 @@ describe('upload', () => {
   it('should upload to the bucket provided in the env vars', async () => {
     const mockUpload = jest.fn();
     AWSMock.mock('S3', 'upload', mockUpload);
+    AWSMock.mock('DynamoDB', 'putItem', jest.fn());
 
-    handler({
+    await handler({
       body: JSON.stringify({
         rdt_image: 'R0lGODlhPQ==',
       }),
     })
-      .then(() => {
-        expect(mockUpload).toBeCalledWith(
-          expect.objectContaining({
-            Bucket: process.env.UPLOAD_BUCKET,
-            Key: expect.any(String),
-            Body: expect.any(Buffer),
-          }),
-          expect.anything()
-        );
+        
+    expect(mockUpload).toBeCalledWith(
+      expect.objectContaining({
+        Bucket: process.env.UPLOAD_BUCKET,
+        Key: 'tttp',
+        Body: expect.any(Buffer),
+      }),
+      expect.anything()
+    );
 
-        AWSMock.restore();
-      });
+    AWSMock.restore();
+      
   });
 
   it('should upload the s3 key to a new record in a dynamo DB table given in env vars', async () => {
@@ -67,7 +67,7 @@ describe('upload', () => {
             TableName: process.env.DYNAMO_TABLE,
             Item: expect.objectContaining({
               image_url: {
-                S: 'testlocation',
+                S: 'testlocation234',
               },
             }),
           }),
