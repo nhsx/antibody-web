@@ -2,33 +2,36 @@
 //
 // Use of this source code is governed by an LGPL-3.0 license that
 // can be found in the LICENSE file distributed with this file.
-import { APP_MODES, CURRENT_APP_MODE } from 'utils/globalConstants';
-import { Theme, createStyles, makeStyles } from '@material-ui/core';
-import Asset from '../ui/Asset';
-import Grid from '@material-ui/core/Grid';
-import PhotoUploaderPanel from '../FileUploader/PhotoUploaderPanel';
-import React from 'react';
-import TimedStep from './TimedStep';
-import transcribeTestPath from './transcribeTestPath';
-import { Row, Col, BodyText } from 'nhsuk-react-components';
+import { APP_MODES, CURRENT_APP_MODE } from "utils/globalConstants";
+import { Theme, createStyles, makeStyles } from "@material-ui/core";
+import Asset from "../ui/Asset";
+import Grid from "@material-ui/core/Grid";
+import PhotoUploaderPanel from "../FileUploader/PhotoUploaderPanel";
+import React from "react";
+import TimedStep from "./TimedStep";
+import transcribeTestPath from "./transcribeTestPath";
+import CheckYourKit from "./ContentComponent/CheckYourKit";
+import WashAndDryHands from "./ContentComponent/WashAndDryHands";
+import SetUpTest from "./ContentComponent/SetUpTest";
+import SelectAFinger from "./ContentComponent/SelectAFinger";
 
-export const FORMID = 'stepForm';
-export const UNSET_PROFILE_ID = 'UNSET_PROFILE_ID';
+export const FORMID = "stepForm";
+export const UNSET_PROFILE_ID = "UNSET_PROFILE_ID";
 
 export const getStepStyle = makeStyles((theme: Theme) =>
   createStyles({
     bulletList: {
-      listStyleType: 'square',
-      paddingLeft: '1em',
-      listStylePosition: 'outside',
-      '& li': {
-        margin: '1rem 0',
-      },
+      listStyleType: "square",
+      paddingLeft: "1em",
+      listStylePosition: "outside",
+      "& li": {
+        margin: "1rem 0"
+      }
     },
     centeredAsset: {
-      display: 'block',
-      margin: '1rem auto',
-    },
+      display: "block",
+      margin: "1rem auto"
+    }
   })
 );
 
@@ -62,75 +65,49 @@ export interface StepDetails extends StepDetailsIncomplete {
   name: string;
 }
 
-export const START_STEP = 'checkYourKit';
+export const START_STEP = "checkYourKit";
 
 // This list represents each steps of the test kit tutorial.
 const testrunSteps: { [stepName: string]: StepDetailsIncomplete } = {
   checkYourKit: {
-    title: 'Check your test kit',
-    ContentComponent: React.memo((props) => (
-      <Row>
-        <Col width="full">
-          <Asset
-            height={201}
-            width={203}
-            alt="Image of the test kit"
-            src="check-your-test-kit/kit.png"
-          />
-          <BodyText>Your test kit should include:</BodyText>
-          <p className="nhsuk-u-font-weight-bold">Lancet (finger prick tool)</p>
-          <Asset
-            height={80}
-            width={325}
-            alt="Image of the lancet"
-            src="check-your-test-kit/lancet.png"
-          />
-          <p className="nhsuk-u-font-weight-bold">Small bottle</p>
-          <Asset
-            height={80}
-            width={325}
-            alt="Image of the small bottle"
-            src="check-your-test-kit/small-bottle.png"
-          />
-          <p className="nhsuk-u-font-weight-bold">Pipette</p>
-          <Asset
-            height={80}
-            width={325}
-            alt="Image of the pipette"
-            src="check-your-test-kit/pipette.png"
-          />
-          <p className="nhsuk-u-font-weight-bold">Test Device</p>
-          <Asset
-            height={80}
-            width={325}
-            alt="Image of the test device"
-            src="check-your-test-kit/test-device.png"
-          />
-          <p className="nhsuk-u-font-weight-bold">
-            Special bag to dispose of the kit
-          </p>
-          <Asset
-            height={80}
-            width={325}
-            alt="Image of the bag to dispose the kit"
-            src="check-your-test-kit/disposal-bag.png"
-          />
-          <BodyText>
-            Keep them wrapped and do not squeeze or bend them - handle gently
-          </BodyText>
-          <BodyText>Not supplied but needed: plaster/tissue</BodyText>
-        </Col>
-      </Row>
-    )),
+    title: "Check your test kit",
+    ContentComponent: React.memo(props => <CheckYourKit />),
     nav: {
       next: {
-        default: 'scanStrip',
-      },
-    },
+        default: "washAndDryHands"
+      }
+    }
+  },
+  washAndDryHands: {
+    title: "Wash and dry hands",
+    ContentComponent: React.memo(props => <WashAndDryHands />),
+    nav: {
+      next: {
+        default: "setUpTest"
+      }
+    }
+  },
+  setUpTest: {
+    title: "Set up test",
+    ContentComponent: React.memo(props => <SetUpTest />),
+    nav: {
+      next: {
+        default: "selectAFinger"
+      }
+    }
+  },
+  selectAFinger: {
+    title: "Select a finger",
+    ContentComponent: React.memo(props => <SelectAFinger />),
+    nav: {
+      next: {
+        default: "scanStrip"
+      }
+    }
   },
   scanStrip: {
-    title: 'Scan your test strip',
-    ContentComponent: React.memo((props) => (
+    title: "Scan your test strip",
+    ContentComponent: React.memo(props => (
       <div>
         <div>
           Ensure your test strip is in the middle of the box, and hold your
@@ -165,9 +142,9 @@ const testrunSteps: { [stepName: string]: StepDetailsIncomplete } = {
     hasFormContent: true,
     nav: {
       next: {
-        default: 'waitVialReaction',
-      },
-    },
+        default: "waitVialReaction"
+      }
+    }
   },
   waitVialReaction: {
     isBlockingStep: true,
@@ -190,9 +167,9 @@ const testrunSteps: { [stepName: string]: StepDetailsIncomplete } = {
       );
     }),
     nav: {
-      previous: 'scanStrip',
-    },
-  },
+      previous: "scanStrip"
+    }
+  }
 };
 
 const TESTRUN_STEPS: { [stepName: string]: StepDetails } = {};
@@ -201,7 +178,7 @@ const TESTRUN_STEPS: { [stepName: string]: StepDetails } = {};
 Object.getOwnPropertyNames(testrunSteps).forEach((stepName: string) => {
   TESTRUN_STEPS[stepName] = {
     ...testrunSteps[stepName],
-    name: stepName,
+    name: stepName
   };
 });
 
@@ -225,7 +202,7 @@ export function getNextDefaultStep(param: {
 }): string | undefined {
   return getNextStepOfType({
     ...param,
-    nextStepType: 'default',
+    nextStepType: "default"
   });
 }
 

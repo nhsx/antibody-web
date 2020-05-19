@@ -18,7 +18,7 @@
   },
   "scripts": {
     "test": "npm --prefix client run test -- --watch-all=false && npm --prefix serverless run test",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+    "lint": "./node_modules/.bin/eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "husky": {
     "hooks": {
