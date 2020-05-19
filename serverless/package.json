@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "test": "node -r dotenv/config node_modules/.bin/jest"
+    "test": "node_modules/.bin/jest"
   },
   "dependencies": {
     "@hapi/joi": "^17.1.1",

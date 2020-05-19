@@ -5,8 +5,10 @@ import path from 'path';
 import { handler } from './upload';
 import jestPlugin from 'serverless-jest-plugin';
 import { APIGatewayProxyResult, Handler } from 'aws-lambda';
+import { resolve } from 'path'
 
-require('dotenv').config();
+require('dotenv').config({path: resolve(__dirname,"../test.env")})
+
 
 // make aws-sdk mockable everywhere
 AWSMock.setSDK(path.resolve(__dirname, '..', 'node_modules', 'aws-sdk'));
