@@ -10,7 +10,11 @@ import PhotoUploaderPanel from "../FileUploader/PhotoUploaderPanel";
 import React from "react";
 import TimedStep from "./TimedStep";
 import transcribeTestPath from "./transcribeTestPath";
-import { Row, Col, BodyText, Images, Details } from "nhsuk-react-components";
+import { Row, Col, BodyText, Details } from "nhsuk-react-components";
+import CheckYourKit from "./ContentComponent/CheckYourKit";
+import WashAndDryHands from "./ContentComponent/WashAndDryHands";
+import SetUpTest from "./ContentComponent/SetUpTest";
+import SelectAFinger from "./ContentComponent/SelectAFinger";
 
 export const FORMID = "stepForm";
 export const UNSET_PROFILE_ID = "UNSET_PROFILE_ID";
@@ -68,42 +72,7 @@ export const START_STEP = "checkYourKit";
 const testrunSteps: { [stepName: string]: StepDetailsIncomplete } = {
   checkYourKit: {
     title: "Check your test kit",
-    ContentComponent: React.memo(props => (
-      <Row>
-        <Col width="full">
-          <BodyText>Your test kit should include:</BodyText>
-          <Images
-            srcSet="/assets/images/check-your-test-kit/lancet.png 325w"
-            alt="Image of the lancet"
-            caption="Lancet (finger prick tool)"
-          />
-          <Images
-            srcSet="/assets/images/check-your-test-kit/small-bottle.png 325w"
-            alt="Image of the small bottle"
-            caption="Small bottle"
-          />
-          <Images
-            srcSet="/assets/images/check-your-test-kit/pipette.png 325w"
-            alt="Image of the pipette"
-            caption="Pipette"
-          />
-          <Images
-            srcSet="/assets/images/check-your-test-kit/test-device.png 325w"
-            alt="Image of the test device"
-            caption="Test device"
-          />
-          <Images
-            srcSet="/assets/images/check-your-test-kit/disposal-bag.png 325w"
-            alt="Image of the bag to dispose the kit"
-            caption="Special bag to dispose of the kit"
-          />
-          <BodyText>
-            Keep them wrapped and do not squeeze or bend them - handle gently
-          </BodyText>
-          <BodyText>Not supplied but needed: plaster/tissue</BodyText>
-        </Col>
-      </Row>
-    )),
+    ContentComponent: React.memo(props => <CheckYourKit />),
     nav: {
       next: {
         default: "washAndDryHands"
@@ -112,23 +81,7 @@ const testrunSteps: { [stepName: string]: StepDetailsIncomplete } = {
   },
   washAndDryHands: {
     title: "Wash and dry hands",
-    ContentComponent: React.memo(props => (
-      <Row>
-        <Col width="full">
-          <Asset
-            src="wash-and-dry-your-hands.png"
-            alt="Wash and dry your hands icon"
-            width={201}
-            height={201}
-          />
-          <ul className="nhsuk-list nhsuk-list--bullet">
-            <li>Wash hands for 20 seconds using warm water and soap</li>
-            <li>Dry hands thoroughly</li>
-            <li>Do not apply hand cream or sanitiser</li>
-          </ul>
-        </Col>
-      </Row>
-    )),
+    ContentComponent: React.memo(props => <WashAndDryHands />),
     nav: {
       next: {
         default: "setUpTest"
@@ -137,25 +90,7 @@ const testrunSteps: { [stepName: string]: StepDetailsIncomplete } = {
   },
   setUpTest: {
     title: "Set up test",
-    ContentComponent: React.memo(props => (
-      <Row>
-        <Col width="full">
-          <Asset
-            src="kit.png"
-            alt="Image of the test kit"
-            width={201}
-            height={203}
-          />
-          <ul className="nhsuk-list nhsuk-list--bullet">
-            <li>It takes about 15 to 20 minutes to do the test</li>
-            <li>Choose a well lit room</li>
-            <li>Choose a flat clean dry surface</li>
-            <li>Remove pipette and test device from packaging</li>
-            <li>Carefully twist and pull cap off lancet</li>
-          </ul>
-        </Col>
-      </Row>
-    )),
+    ContentComponent: React.memo(props => <SetUpTest />),
     nav: {
       next: {
         default: "selectAFinger"
@@ -164,39 +99,7 @@ const testrunSteps: { [stepName: string]: StepDetailsIncomplete } = {
   },
   selectAFinger: {
     title: "Select a finger",
-    ContentComponent: React.memo(props => (
-      <Row>
-        <Col width="full">
-          <Asset
-            src="select-a-finger.png"
-            alt="Image showing arrows pointing to the middle and ring finger"
-            width={325}
-            height={201}
-          />
-          <ul className="nhsuk-list nhsuk-list--bullet">
-            <li>Choose a finger on the hand you do not write with</li>
-            <li>
-              The 3rd or 4th (middle or ring) finger are usually less sensitive
-            </li>
-            <li>
-              Get blood flowing into finger - hold hand below waist and gently
-              squeeze along finger from knuckle to tip for 10 seconds
-            </li>
-          </ul>
-          <Details>
-            <Details.Summary>
-              If you’ve had a mastectomy (breast removal)
-            </Details.Summary>
-            <Details.Text>
-              <BodyText>
-                You must not prick a finger on the same side of your body as the
-                operation. If you’re worried, speak to your doctor.
-              </BodyText>
-            </Details.Text>
-          </Details>
-        </Col>
-      </Row>
-    )),
+    ContentComponent: React.memo(props => ( <SelectAFinger /> )),
     nav: {
       next: {
         default: "scanStrip"
