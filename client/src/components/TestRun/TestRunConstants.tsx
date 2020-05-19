@@ -10,7 +10,6 @@ import PhotoUploaderPanel from "../FileUploader/PhotoUploaderPanel";
 import React from "react";
 import TimedStep from "./TimedStep";
 import transcribeTestPath from "./transcribeTestPath";
-import { Row, Col, BodyText, Details } from "nhsuk-react-components";
 import CheckYourKit from "./ContentComponent/CheckYourKit";
 import WashAndDryHands from "./ContentComponent/WashAndDryHands";
 import SetUpTest from "./ContentComponent/SetUpTest";
@@ -99,7 +98,7 @@ const testrunSteps: { [stepName: string]: StepDetailsIncomplete } = {
   },
   selectAFinger: {
     title: "Select a finger",
-    ContentComponent: React.memo(props => ( <SelectAFinger /> )),
+    ContentComponent: React.memo(props => <SelectAFinger />),
     nav: {
       next: {
         default: "scanStrip"
