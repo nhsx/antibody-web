@@ -6,11 +6,12 @@ import {
   Context,
   APIGatewayProxyResult,
 } from 'aws-lambda';
+import jestPlugin from 'serverless-jest-plugin';
 
 // Local consts
 const IMAGE_FIELD = 'rdt_image';
 
-module.exports.handler = async (event: any): Promise<APIGatewayProxyResult> => {
+export const handler = async (event: any): Promise<APIGatewayProxyResult> => {
   // Initialise our services
   const s3 = new S3();
   const dynamo = new DynamoDB();
@@ -21,7 +22,7 @@ module.exports.handler = async (event: any): Promise<APIGatewayProxyResult> => {
       return {
         statusCode: 500,
         body: JSON.stringify({
-          error: `Internal error: missing environment variables`,
+          error: `Internal error: environment is not configured correctly`,
         }),
       };
     }

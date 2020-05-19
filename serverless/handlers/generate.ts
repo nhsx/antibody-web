@@ -1,21 +1,78 @@
-'use strict';
-import { DynamoDB, S3 } from 'aws-sdk';
-import Joi from '@hapi/joi';
+import { APIGatewayProxyResult } from 'aws-lambda';
+import { getUploadUrl, createTestRecord } from '../api/api'
+import { validateUploadRequest, validateUploadEnvironment } from '../api/validate'
 
-//import { v4 as uuid } from 'uuid';
+interface GenerateTestResponse {
+  guid: string;
+  uploadUrl: string;
+  testRecord: any;
+}
 
-// Local consts
-//const IMAGE_FIELD = 'rdt_image';
-const x = 'test';
+interface GenerateBody {
+  guid: string;
+}
 
-module.exports.handler = async (event: any) => {
-  // Initialise our services
-  const s3 = new S3();
-  const dynamo = new DynamoDB();
+export const handler = async ({ body }: { body: any} ): Promise<APIGatewayProxyResult> => {
 
-  const schema = Joi.object({
-    guid: Joi.string().max(64).required,
-  });
+  const parsedBody: GenerateBody = JSON.parse(body)
 
-  const { value, error } = schema.attempt(event.body);
-};
+  if (!parsedBody) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({
+        error: "Missing event body"
+      })
+    }
+  }
+
+  const UPLOAD_BUCKET: string = process.env.UPLOAD_BUCKET as string;
+  const DYNAMO_TABLE: string = process.env.DYNAMO_TABLE as string;
+  
+  // Validation
+  const { error: envError } = validateUploadEnvironment(process.env)
+
+  if (envError) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({
+        error: "Environment configuration error"
+      })
+    }
+  }
+
+  //Pull out our variables from the event body, once validated
+  const { value: request, error: uploadError } = validateUploadRequest(parsedBody)
+  
+  console.log(request, uploadError)
+  if (uploadError) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({
+        error: uploadError.details[0].message
+      })
+    }
+  }
+
+  //Handler body
+
+
+  const { guid } = request
+  const uploadUrl = await getUploadUrl(UPLOAD_BUCKET, guid)
+  console.log(uploadUrl)
+  const testRecord = await createTestRecord(DYNAMO_TABLE, guid)
+  console.log(testRecord)
+  
+  // Response
+  const response: GenerateTestResponse = {
+    guid: body.guid,
+    uploadUrl: uploadUrl,
+    testRecord
+  }
+    
+  return {
+    statusCode: 200,
+    body: JSON.stringify({
+      response
+    })
+  }
+}  

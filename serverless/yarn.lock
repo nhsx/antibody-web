@@ -1039,7 +1039,7 @@
   resolved "https://registry.yarnpkg.com/@testing-library/user-event/-/user-event-7.2.1.tgz#2ad4e844175a3738cb9e7064be5ea070b8863a1c"
   integrity sha512-oZ0Ib5I4Z2pUEcoo95cT1cr6slco9WY7yiPpG+RGNkj8YcYgJnM7pXmYmorNOReh8MIGcKSqXyeGjxnr8YiZbA==
 
-"@types/aws-lambda@^8.10.51":
+"@types/aws-lambda@*", "@types/aws-lambda@^8.10.51":
   version "8.10.51"
   resolved "https://registry.yarnpkg.com/@types/aws-lambda/-/aws-lambda-8.10.51.tgz#7ad774507a3cf1d2e949ca305380c23b5af635a0"
   integrity sha512-XK7RerpXj4r+IO0r7qIeNqUSU6L4qhPMwNhISxozJJiUX/jdXj9WYzTShRVisEcUQHXgJ4TTBqTArM8f9Mjb8g==
@@ -1103,6 +1103,11 @@
   dependencies:
     "@types/node" "*"
 
+"@types/hapi__joi@^17.1.0":
+  version "17.1.0"
+  resolved "https://registry.yarnpkg.com/@types/hapi__joi/-/hapi__joi-17.1.0.tgz#b5324c423a49697ea0926f19cc90c6f5cbb68391"
+  integrity sha512-zqPGKJ3FUiut0NZUstLBm3gAkSMwWwn/soNi/KvefJfhlaQYYoLnMiMCaMN97dPK4iKjFSIVwRbHANSgUCKm7g==
+
 "@types/istanbul-lib-coverage@*", "@types/istanbul-lib-coverage@^2.0.0", "@types/istanbul-lib-coverage@^2.0.1":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@types/istanbul-lib-coverage/-/istanbul-lib-coverage-2.0.1.tgz#42995b446db9a48a11a07ec083499a860e9138ff"
@@ -1123,13 +1128,25 @@
     "@types/istanbul-lib-coverage" "*"
     "@types/istanbul-lib-report" "*"
 
-"@types/jest@^25.2.2":
-  version "25.2.2"
-  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-25.2.2.tgz#6a752e7a00f69c3e790ea00c345029d5cefa92bf"
-  integrity sha512-aRctFbG8Pb7DSLzUt/fEtL3q/GKb9mretFuYhRub2J0q6NhzBYbx9HTQzHrWgBNIxYOlxGNVe6Z54cpbUt+Few==
+"@types/jest@^25.2.3":
+  version "25.2.3"
+  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-25.2.3.tgz#33d27e4c4716caae4eced355097a47ad363fdcaf"
+  integrity sha512-JXc1nK/tXHiDhV55dvfzqtmP4S3sy3T3ouV2tkViZgxY/zeUkcpQcQPGRlgF4KmWzWW5oiWYSZwtCB+2RsE4Fw==
   dependencies:
     jest-diff "^25.2.1"
     pretty-format "^25.2.1"
+
+"@types/joi@^14.3.4":
+  version "14.3.4"
+  resolved "https://registry.yarnpkg.com/@types/joi/-/joi-14.3.4.tgz#eed1e14cbb07716079c814138831a520a725a1e0"
+  integrity sha512-1TQNDJvIKlgYXGNIABfgFp9y0FziDpuGrd799Q5RcnsDu+krD+eeW/0Fs5PHARvWWFelOhIG2OPCo6KbadBM4A==
+
+"@types/lambda-wrapper@*":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@types/lambda-wrapper/-/lambda-wrapper-0.3.0.tgz#bc552efea35f75d98523390daa422eb1c8f15d31"
+  integrity sha512-r3dvCOfUQg/a3dN49KTADLtTaXTfmn+4GsJSv7BCJg6lgE/3umfqY5L7BuBBX/WlCHHVQTaL0d1lF1hrQQwYzw==
+  dependencies:
+    "@types/aws-lambda" "*"
 
 "@types/minimatch@*":
   version "3.0.3"
@@ -1175,6 +1192,19 @@
   version "0.12.0"
   resolved "https://registry.yarnpkg.com/@types/retry/-/retry-0.12.0.tgz#2b35eccfcee7d38cd72ad99232fbd58bffb3c84d"
   integrity sha512-wWKOClTTiizcZhXnPY4wikVAwmdYHp8q6DmC+EJUzAMsycb7HB32Kh9RN4+0gExjmPmZSAQjgURXIGATPegAvA==
+
+"@types/serverless-jest-plugin@^0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@types/serverless-jest-plugin/-/serverless-jest-plugin-0.3.0.tgz#0d6cd5bfa0662fa08d9d61502c5d5a8499e4ca2b"
+  integrity sha512-EWmZFaXw0XVRtkLSb9Rir09j/VLUFf/+4dfMTZg+qyju+rHYze1ftTgK9b/8fxDIgFRH6JdFMNKmprMy//hW6g==
+  dependencies:
+    "@types/lambda-wrapper" "*"
+    "@types/serverless" "*"
+
+"@types/serverless@*":
+  version "1.67.2"
+  resolved "https://registry.yarnpkg.com/@types/serverless/-/serverless-1.67.2.tgz#e57bd17473a91bf569c7c2f5279fdb023c26d279"
+  integrity sha512-CyJHkbWKZLDSZLp70kbddP/OU/p9rNLxHOnEuDZm+zxdcbmeHzT+VW5BRacAnk9/0sHvC6WNVVl9dEJItc21Ew==
 
 "@types/stack-utils@^1.0.1":
   version "1.0.1"

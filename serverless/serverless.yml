@@ -9,6 +9,16 @@ plugins:
   - serverless-offline
   - serverless-jest-plugin
 functions:
+  generate:
+    handler: handlers/generate.handler
+    events:
+      - http:
+          method: POST
+          path: generate
+          cors: true
+    environment:
+      UPLOAD_BUCKET: ${opt:stage, 'dev'}-covid19-antibody-uk
+      DYNAMO_TABLE: ${opt:stage, 'dev'}-covid19-antibody-uk
   upload:
     handler: handlers/upload.handler
     events:
