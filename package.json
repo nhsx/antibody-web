@@ -25,5 +25,7 @@
       "pre-commit": "npm run lint -- --fix"
     }
   },
-  "dependencies": {}
+  "dependencies": {
+    "react-intl": "^4.5.5"
+  }
 }
