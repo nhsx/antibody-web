@@ -10,7 +10,7 @@ import PhotoUploaderPanel from '../FileUploader/PhotoUploaderPanel';
 import React from 'react';
 import TimedStep from './TimedStep';
 import transcribeTestPath from './transcribeTestPath';
-import { Row, Col, BodyText } from 'nhsuk-react-components';
+import { Row, Col, BodyText, Images } from 'nhsuk-react-components';
 
 export const FORMID = 'stepForm';
 export const UNSET_PROFILE_ID = 'UNSET_PROFILE_ID';
@@ -71,49 +71,31 @@ const testrunSteps: { [stepName: string]: StepDetailsIncomplete } = {
     ContentComponent: React.memo((props) => (
       <Row>
         <Col width="full">
-          <Asset
-            height={201}
-            width={203}
-            alt="Image of the test kit"
-            src="check-your-test-kit/kit.png"
-          />
           <BodyText>Your test kit should include:</BodyText>
-          <p className="nhsuk-u-font-weight-bold">Lancet (finger prick tool)</p>
-          <Asset
-            height={80}
-            width={325}
+          <Images
+            srcSet="/assets/images/check-your-test-kit/lancet.png 325w"
             alt="Image of the lancet"
-            src="check-your-test-kit/lancet.png"
+            caption="Lancet (finger prick tool)"
           />
-          <p className="nhsuk-u-font-weight-bold">Small bottle</p>
-          <Asset
-            height={80}
-            width={325}
+          <Images
+            srcSet="/assets/images/check-your-test-kit/small-bottle.png 325w"
             alt="Image of the small bottle"
-            src="check-your-test-kit/small-bottle.png"
+            caption="Small bottle"
           />
-          <p className="nhsuk-u-font-weight-bold">Pipette</p>
-          <Asset
-            height={80}
-            width={325}
+          <Images
+            srcSet="/assets/images/check-your-test-kit/pipette.png 325w"
             alt="Image of the pipette"
-            src="check-your-test-kit/pipette.png"
+            caption="Pipette"
           />
-          <p className="nhsuk-u-font-weight-bold">Test Device</p>
-          <Asset
-            height={80}
-            width={325}
+          <Images
+            srcSet="/assets/images/check-your-test-kit/test-device.png 325w"
             alt="Image of the test device"
-            src="check-your-test-kit/test-device.png"
+            caption="Test device"
           />
-          <p className="nhsuk-u-font-weight-bold">
-            Special bag to dispose of the kit
-          </p>
-          <Asset
-            height={80}
-            width={325}
+          <Images
+            srcSet="/assets/images/check-your-test-kit/disposal-bag.png 325w"
             alt="Image of the bag to dispose the kit"
-            src="check-your-test-kit/disposal-bag.png"
+            caption="Special bag to dispose of the kit"
           />
           <BodyText>
             Keep them wrapped and do not squeeze or bend them - handle gently
