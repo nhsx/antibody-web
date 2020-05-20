@@ -11,6 +11,7 @@ describe('generate', () => {
   beforeAll(() => {
     AWSMock.setSDKInstance(AWS);
   });
+  
 
   it('should throw an error if no guid is supplied', async () => {
     const result = await handler({
@@ -23,9 +24,13 @@ describe('generate', () => {
   });
 
   it('should call S3 to create a signed PUT url to the correct bucket + key', async () => {
-    const mockSigned = jest.fn();
+    const mockSigned = jest.fn((apiCallToSign: string, params: any, callback: Function) => {
+      callback(null, 'someurl');
+    });
 
-    AWSMock.mock('S3', 'getSignedUrlPromise', jest.fn().mockResolvedValue("http://test.com"));
+    AWSMock.mock('S3', 'getSignedUrl', mockSigned);
+
+    // Make sure our function completes
     AWSMock.mock('DynamoDB', 'putItem', () => Promise.resolve());
     
     // We have to reinstantiate the AWS services after mocking them
@@ -54,8 +59,11 @@ describe('generate', () => {
     const mockGuid = 'test-guid';
     
     AWSMock.setSDKInstance(AWS);
-    AWSMock.mock('S3', 'getSignedUrl', () => Promise.resolve(mockUrl));
-    const mockDynamoPut = jest.fn().mockResolvedValue(true);
+    AWSMock.mock('S3', 'getSignedUrl', function (apiCallToSign: string, params: any, callback: Function) {
+      callback(null, mockUrl);
+    });
+    
+    const mockDynamoPut = jest.fn().mockResolvedValue(() => Promise.resolve());
     AWSMock.mock('DynamoDB', 'putItem', mockDynamoPut);
 
     await handler({
@@ -64,7 +72,7 @@ describe('generate', () => {
       }),
     });
     
-    await expect(mockDynamoPut).toBeCalledWith(
+    expect(mockDynamoPut).toBeCalledWith(
       expect.objectContaining({
         TableName: process.env.DYNAMO_TABLE,
         Item: expect.objectContaining({

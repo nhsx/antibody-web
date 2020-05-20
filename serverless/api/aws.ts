@@ -6,7 +6,16 @@ import TestRecord from "models/TestRecord";
 export async function getUploadUrl(bucket: string, guid: string): Promise<string> {
   const s3 = new AWS.S3();
   const params = {Bucket: bucket, Key: `rdt-images/${guid}`};
-  return s3.getSignedUrlPromise("putObject", params);
+  const url = await new Promise((resolve, reject) => {
+    s3.getSignedUrl("putObject", params, (err, url: string) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(url);
+      }
+    });
+  });
+  return url as string;
 };
 
 export async function createTestRecord(table: string, record: TestRecord) {
