@@ -24,7 +24,7 @@ The server side service is hosted on AWS.
 It is deployed to AWS utilising Github actions the Serverless framework where we deploy the web client to Cloud Front and the server side backend  to API Gateway, Lambda function, DynamoDB and S3 to store images.
 
 
-In the project directory, you can run:
+In the project **client** directory, you can run:
 
 ### Install Dependencies
 To install dependent modules.
