@@ -4,10 +4,13 @@
 // can be found in the LICENSE file distributed with this file.
 import PageContent from "../ui/PageContent";
 import React from "react";
-import { Link } from "react-router-dom";
-import { Header, Container, Row, Col } from "nhsuk-react-components";
+import { useHistory } from "react-router-dom";
+import { Header, Container } from "nhsuk-react-components";
+import Login from "../Login/Login";
 
 export default () => {
+  const history = useHistory();
+
   return (
     <PageContent>
       <Header transactional>
@@ -19,11 +22,13 @@ export default () => {
         </Header.Container>
       </Header>
       <Container>
-        <Row>
-          <Col width="full">
-            <Link to="/test">Start new test</Link>
-          </Col>
-        </Row>
+        <Login
+          formSubmit={(signInId: string) => {
+            if (signInId === "valid") {
+              history.push("/test");
+            }
+          }}
+        />
       </Container>
     </PageContent>
   );
