@@ -2,10 +2,10 @@
 //
 // Use of this source code is governed by an LGPL-3.0 license that
 // can be found in the LICENSE file distributed with this file.
-import PageContent from '../ui/PageContent';
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Header } from 'nhsuk-react-components';
+import PageContent from "../ui/PageContent";
+import React from "react";
+import { Link } from "react-router-dom";
+import { Header, Container, Row, Col } from "nhsuk-react-components";
 
 export default () => {
   return (
@@ -18,9 +18,13 @@ export default () => {
           </Header.ServiceName>
         </Header.Container>
       </Header>
-      <div className="container">
-        <Link to="/test">Start new test</Link>
-      </div>
+      <Container>
+        <Row>
+          <Col width="full">
+            <Link to="/test">Start new test</Link>
+          </Col>
+        </Row>
+      </Container>
     </PageContent>
   );
 };
