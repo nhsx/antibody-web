@@ -18,7 +18,7 @@ export const uploadImage = (url, file) => {
   const formData = new FormData();
   formData.append("image", file);
   return fetch(url, {
-    method: "POST",
+    method: "PUT",
     body: formData,
     "headers": {
       ContentType: "multipart/formdata"
