@@ -7,7 +7,7 @@ import {
   APIGatewayProxyResult,
 } from 'aws-lambda';
 import jestPlugin from 'serverless-jest-plugin';
-import dotenv from 'dotenv'
+import dotenv from 'dotenv';
 
 // Local consts
 const IMAGE_FIELD = 'rdt_image';

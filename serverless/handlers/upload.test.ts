@@ -5,9 +5,9 @@ import path from 'path';
 import { handler } from './upload';
 import jestPlugin from 'serverless-jest-plugin';
 import { APIGatewayProxyResult, Handler } from 'aws-lambda';
-import { resolve } from 'path'
+import { resolve } from 'path';
 
-require('dotenv').config({path: resolve(__dirname,"../test.env")})
+require('dotenv').config({path: resolve(__dirname,"../test.env")});
 
 // make aws-sdk mockable everywhere
 AWSMock.setSDK(path.resolve(__dirname, '..', 'node_modules', 'aws-sdk'));
@@ -16,7 +16,7 @@ describe('upload', () => {
   it('should throw an error if no body.rdt_image is supplied ', async () => {
     const result: APIGatewayProxyResult = await handler({});
 
-    const body = JSON.parse(result.body)
+    const body = JSON.parse(result.body);
 
     expect(body).toMatchObject({
       error: expect.stringMatching('Failed to decode'),
@@ -32,7 +32,7 @@ describe('upload', () => {
       body: JSON.stringify({
         rdt_image: 'R0lGODlhPQ==',
       }),
-    })
+    });
         
     expect(mockUpload).toBeCalledWith(
       expect.objectContaining({

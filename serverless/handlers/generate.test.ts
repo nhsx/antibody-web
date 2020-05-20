@@ -1,16 +1,16 @@
 'use strict';
 import * as AWSMock from 'aws-sdk-mock';
-import { AWS } from '../api/api'
+import { AWS } from '../api/api';
 import path from 'path';
-import { handler } from './generate'
-import { resolve } from 'path'
+import { handler } from './generate';
+import { resolve } from 'path';
 
-require('dotenv').config({path: resolve(__dirname,"../test.env")})
+require('dotenv').config({path: resolve(__dirname,"../test.env")});
 
 describe('generate', () => {
   beforeAll(() => {
     AWSMock.setSDKInstance(AWS);
-  })
+  });
 
   it('should throw an error if no guid is supplied', async () => {
     const result = await handler({
@@ -34,7 +34,7 @@ describe('generate', () => {
       body: JSON.stringify({
         guid: 'test-guid'
       }),
-    })
+    });
 
     expect(mockSigned).toBeCalledWith(
       'putObject',
@@ -50,8 +50,8 @@ describe('generate', () => {
   });
 
   it('should create a new record in a dynamo DB table which includes the signed upload url', async () => {
-    const mockUrl = "http://mockuploadurl.com"
-    const mockGuid = 'test-guid'
+    const mockUrl = "http://mockuploadurl.com";
+    const mockGuid = 'test-guid';
     
     AWSMock.setSDKInstance(AWS);
     AWSMock.mock('S3', 'getSignedUrl', () => Promise.resolve(mockUrl));
@@ -62,7 +62,7 @@ describe('generate', () => {
       body: JSON.stringify({
         guid: mockGuid
       }),
-    })
+    });
     
     expect(mockDynamoPut).toBeCalledWith(
       expect.objectContaining({
