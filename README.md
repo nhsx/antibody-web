@@ -81,7 +81,7 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 
 
 ## Code of Conduct
-
+[Code of Conduct](./CODE_OF_CONDUCT.md)
 
 ## Licence
 
