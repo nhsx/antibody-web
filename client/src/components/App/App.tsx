@@ -3,7 +3,7 @@ import { DashboardRoute, ROUTES } from 'routes/routes';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
 import PageNotFound from 'components/PageNotFound/PageNotFound';
-import { IntlProvider, FormattedMessage } from 'react-intl'
+import { IntlProvider } from 'react-intl'
 import AppContext from './context'
 import { appReducer, initialState } from './reducer'
 import messages from "i18n/index"
@@ -21,9 +21,6 @@ const App = () => {
   return (
     <AppContext.Provider value={{ state: appState, setLocale }}>
       <IntlProvider locale={appState.locale} messages={messages[appState.locale]}>
-        <button onClick={() => setLocale("en-gb")}>English</button>
-        <button onClick={() => setLocale("cy-gb")}>Welsh</button>
-        <FormattedMessage id="app.test" />
         <HelmetProvider>
           <Router>
             <Switch>
