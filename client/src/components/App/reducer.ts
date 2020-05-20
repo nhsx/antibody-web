@@ -1,4 +1,4 @@
-import { Reducer } from "react"
+import { Reducer } from "react";
 
 export interface AppState {
   locale: string;
@@ -7,11 +7,11 @@ export interface AppState {
 export type AppAction = {
   type: "SET_LOCALE";
   locale: string;
-}
+};
 
 export const initialState: AppState = {
   locale: 'en-gb'
-}
+};
 
 export const appReducer: Reducer<AppState, AppAction> = (state, action): AppState => {
   const handlers = {
@@ -19,8 +19,8 @@ export const appReducer: Reducer<AppState, AppAction> = (state, action): AppStat
       return { 
         ...state,
         locale: action.locale
-      }
+      };
     }
-  }
-  return handlers[action.type](state, action)
-}
+  };
+  return handlers[action.type](state, action);
+};

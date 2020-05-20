@@ -38,7 +38,7 @@ export const handler = async ({ body }: { body: any} ): Promise<APIGatewayProxyR
     return {
       statusCode: 400,
       body: JSON.stringify({
-        error: uploadError.details[0].message
+        error: uploadError.details?.[0]?.message || "Invalid request body" 
       })
     };
   }

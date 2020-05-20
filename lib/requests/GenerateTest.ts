@@ -2,7 +2,7 @@ export interface GenerateTestRequest {
   guid: string;
 }
 
-export interface GenerateTestResponse extends Response {
+export interface GenerateTestResponse {
   guid: string;
   uploadUrl: string;
   testRecord: any;
