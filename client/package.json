@@ -30,6 +30,7 @@
     "react-dom": "^16.13.1",
     "react-helmet-async": "^1.0.6",
     "react-html5-camera-photo": "^1.5.4",
+    "react-intl": "^4.5.5",
     "react-measure": "^2.3.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
