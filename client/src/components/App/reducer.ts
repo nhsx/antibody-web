@@ -1,7 +1,9 @@
 import { Reducer } from "react";
+import { GenerateTestResponse } from "abt-lib/requests/GenerateTest";
 
 export interface AppState {
   locale: string;
+  testData: GenerateTestResponse | null;
 }
 
 export type AppAction = {
@@ -10,7 +12,8 @@ export type AppAction = {
 };
 
 export const initialState: AppState = {
-  locale: 'en-gb'
+  locale: 'en-gb',
+  testData: null
 };
 
 export const appReducer: Reducer<AppState, AppAction> = (state, action): AppState => {
@@ -19,6 +22,13 @@ export const appReducer: Reducer<AppState, AppAction> = (state, action): AppStat
       return { 
         ...state,
         locale: action.locale
+      };
+    },
+    GENERATE_TEST: (state, action) => {
+      console.log(action);
+      return {
+        ...state,
+        testData: action.testData
       };
     }
   };

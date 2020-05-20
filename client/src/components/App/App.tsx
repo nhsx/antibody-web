@@ -19,7 +19,7 @@ const App = () => {
   };
 
   return (
-    <AppContext.Provider value={{ state: appState, setLocale }}>
+    <AppContext.Provider value={{ state: appState, setLocale, dispatch }}>
       <IntlProvider locale={appState.locale} messages={messages[appState.locale]}>
         <button onClick={() => setLocale("en-gb")}>English</button>
         <button onClick={() => setLocale("cy-gb")}>Welsh</button>

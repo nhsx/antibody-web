@@ -3,14 +3,25 @@ import { START_STEP } from './TestRunConstants';
 import { v4 as uuid } from 'uuid';
 import { ROUTE_DEFINITIONS } from 'routes/routes';
 import { Redirect } from 'react-router-dom';
+import { generateTest } from 'api/testApi';
+import { withApp } from 'components/App/context';
 
-export default () => {
+const NewTestRun = ({app: {dispatch}}) => {
   const [testRunUID, setTestRunUID] = useState<string | null>(null);
 
   useEffect(() => {
     const createNewTestRun = async () => {
       const newTestRunUid = uuid();
+      const testData = await generateTest({
+        guid: newTestRunUid
+      });
+      console.log(testData);
       setTestRunUID(newTestRunUid);
+      dispatch({
+        type: "GENERATE_TEST",
+        testData: testData
+      });
+      //@TODO: error handling / move to action creators + reducer state
     };
     createNewTestRun();
   }, []);
@@ -27,3 +38,6 @@ export default () => {
     <div />
   );
 };
+
+
+export default withApp(NewTestRun);

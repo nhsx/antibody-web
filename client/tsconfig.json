@@ -19,15 +19,13 @@
     "noEmit": true,
     "jsx": "react",
     "baseUrl": "./src",
-    "noImplicitAny": false,
-    "paths": {
-      "lib": ["../lib"]
-    }
+    "noImplicitAny": false
   },
   "exclude": [
     "node_modules"
   ],
   "include": [
-    "src", "__mocks__"
+    "src",
+    "__mocks__"
   ]
 }

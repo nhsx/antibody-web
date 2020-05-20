@@ -20,6 +20,9 @@ import { cx } from '../../style/utils';
 import { getAppConfig } from 'utils/AppConfig';
 import { useHistory } from 'react-router-dom';
 import { useModelPreLoader } from './RDTModelLoader';
+import { AppState } from 'components/App/reducer';
+import { uploadImage } from 'api/testApi';
+import { AppContext, withApp } from 'components/App/context';
 
 export const useTestResultPhotoUploaderStyle = makeStyles((theme: Theme) =>
   createStyles({
@@ -73,10 +76,11 @@ const config = getAppConfig();
 interface TestResultPhotoUploaderProps {
   testRunUID: string;
   onFileUploadComplete: (ready: boolean) => void;
+  app: AppContext;
 }
 
 const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
-  const { testRunUID, onFileUploadComplete } = props;
+  const { testRunUID, onFileUploadComplete, app } = props;
   const classes = useTestResultPhotoUploaderStyle();
   const history = useHistory();
 
@@ -154,19 +158,10 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
 
       console.log(_.take(imageAsURI, 100));
 
-      //@TODO: Abstract this out
-      await fetch(
-        'https://vfxgyqhz2f.execute-api.eu-west-2.amazonaws.com/dev/upload',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            rdt_image: imageAsURI,
-          }),
-        }
-      );
+      console.log(app.state);
+      //@TODO: Add failure handling
+      await uploadImage(app.state.testData?.uploadUrl, imageAsFile);
+  
     },
     [imageAsFile, imageAsURI, setIsUploading]
   );
@@ -296,4 +291,4 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
   );
 };
 
-export default TestResultPhotoUploader;
+export default withApp(TestResultPhotoUploader);

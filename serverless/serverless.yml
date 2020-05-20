@@ -40,14 +40,17 @@ resources:
         BucketName: ${opt:stage, 'dev'}-covid19-antibody-uk
         CorsConfiguration:
           CorsRules:
-            - AllowedHeaders:
-                - "*"
+            -
+              AllowedOrigins:
+                - '*'
+              AllowedHeaders:
+                - '*'
               AllowedMethods:
                 - GET
                 - PUT
-              AllowedOrigins:
-                - "*"
-              MaxAge: "3000"
+                - POST
+                - HEAD
+              MaxAge: 3000
     DynamoDB:
       Type: AWS::DynamoDB::Table
       Properties:
