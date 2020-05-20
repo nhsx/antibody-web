@@ -2,34 +2,7 @@
 //
 // Use of this source code is governed by an LGPL-3.0 license that
 // can be found in the LICENSE file distributed with this file.
-import { Theme, createStyles, makeStyles } from '@material-ui/core';
-
 import React from 'react';
-import getSassStyle from '../../style/sassStyle';
-
-const useStyle = makeStyles((theme: Theme) =>
-  createStyles({
-    progressRoot: {
-      backgroundColor: getSassStyle().progressbackgrouncolor,
-      borderRadius: '10px',
-      display: 'block',
-      height: '1rem',
-      margin: '0 0 1.5em 0',
-      position: 'relative',
-      width: '100%',
-    },
-
-    progressInner: {
-      backgroundColor: getSassStyle().progresscolor,
-      borderRadius: '10px',
-      bottom: 0,
-      left: 0,
-      position: 'absolute',
-      top: 0,
-      transition: '.5s width ease',
-    },
-  })
-);
 
 export interface ProgressProps {
   value: number;
@@ -38,8 +11,8 @@ export interface ProgressProps {
 
 export default (props: ProgressProps) => {
   return (
-    <div>
-      {props.value} of {props.max}
+    <div data-testid="progress-counter">
+      Step {props.value} of {props.max}
     </div>
   );
 };

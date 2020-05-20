@@ -57,5 +57,13 @@
   },
   "devDependencies": {
     "jest": "24.9.0"
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js"
+    },
+    "transformIgnorePatterns": [
+      "/node_modules/(?!image-promise)"
+    ]
   }
 }
