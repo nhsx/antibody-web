@@ -1,7 +1,8 @@
 import { APIGatewayProxyResult } from 'aws-lambda';
-import { getUploadUrl, createTestRecord } from '../api/api';
+import { getUploadUrl, createTestRecord } from '../api/aws';
 import { validateGenerateRequest, validateEnvironment } from '../api/validate';
 import { GenerateTestRequest, GenerateTestResponse}  from "abt-lib/requests/GenerateTest";
+import config from './config';
 
 export const handler = async ({ body }: { body: any} ): Promise<APIGatewayProxyResult> => {
 
@@ -12,7 +13,8 @@ export const handler = async ({ body }: { body: any} ): Promise<APIGatewayProxyR
       statusCode: 400,
       body: JSON.stringify({
         error: "Missing event body"
-      })
+      }),
+      headers: config.defaultHeaders
     };
   }
 
@@ -27,7 +29,8 @@ export const handler = async ({ body }: { body: any} ): Promise<APIGatewayProxyR
       statusCode: 400,
       body: JSON.stringify({
         error: "Environment configuration error"
-      })
+      }),
+      headers: config.defaultHeaders
     };
   }
 
@@ -39,16 +42,18 @@ export const handler = async ({ body }: { body: any} ): Promise<APIGatewayProxyR
       statusCode: 400,
       body: JSON.stringify({
         error: uploadError.details?.[0]?.message || "Invalid request body" 
-      })
+      }),
+      headers: config.defaultHeaders
     };
   }
 
   //Handler body
   const { guid } = request; 
   console.log('getting upload url');
-  const uploadUrl = await getUploadUrl(UPLOAD_BUCKET, guid);
-  console.log(uploadUrl);
 
+  const uploadUrl = await getUploadUrl(UPLOAD_BUCKET, guid);
+  
+  console.log('awaiting, received url ', uploadUrl);
   const testRecord = await createTestRecord(DYNAMO_TABLE, {
     guid,
     uploadUrl
@@ -58,13 +63,12 @@ export const handler = async ({ body }: { body: any} ): Promise<APIGatewayProxyR
   const response: GenerateTestResponse = {
     guid: body.guid,
     uploadUrl: uploadUrl,
-    testRecord
+    testRecord,
   };
     
   return {
     statusCode: 200,
-    body: JSON.stringify({
-      response
-    })
+    body: JSON.stringify(response),
+    headers: config.defaultHeaders
   };
 };  

@@ -1136,11 +1136,6 @@
     jest-diff "^25.2.1"
     pretty-format "^25.2.1"
 
-"@types/joi@^14.3.4":
-  version "14.3.4"
-  resolved "https://registry.yarnpkg.com/@types/joi/-/joi-14.3.4.tgz#eed1e14cbb07716079c814138831a520a725a1e0"
-  integrity sha512-1TQNDJvIKlgYXGNIABfgFp9y0FziDpuGrd799Q5RcnsDu+krD+eeW/0Fs5PHARvWWFelOhIG2OPCo6KbadBM4A==
-
 "@types/lambda-wrapper@*":
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/@types/lambda-wrapper/-/lambda-wrapper-0.3.0.tgz#bc552efea35f75d98523390daa422eb1c8f15d31"
@@ -1263,9 +1258,8 @@ abab@^2.0.0, abab@^2.0.3:
   resolved "https://registry.yarnpkg.com/abab/-/abab-2.0.3.tgz#623e2075e02eb2d3f2475e49f99c91846467907a"
   integrity sha512-tsFzPpcttalNjFBCFMqsKYQcWxxen1pgJR56by//QwvJc4/OUS3kPOOttx2tSIfjsylB0pYu7f5D3K1RCxUnUg==
 
-"abt-lib@link:../lib":
-  version "0.0.0"
-  uid ""
+"abt-lib@file:../lib":
+  version "0.1.0"
 
 acorn-globals@^4.1.0:
   version "4.3.4"

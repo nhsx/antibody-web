@@ -5,12 +5,11 @@
   "dependencies": {
     "@hapi/joi": "^17.1.1",
     "@types/hapi__joi": "^17.1.0",
-    "@types/joi": "^14.3.4",
     "@types/serverless-jest-plugin": "^0.3.0",
     "aws-sdk": "^2.676.0",
     "dotenv": "^8.2.0",
     "uuid": "^8.0.0",
-    "abt-lib": "link:../lib"
+    "abt-lib": "file:./../lib"
   },
   "devDependencies": {
     "@testing-library/react": "^9.3.2",

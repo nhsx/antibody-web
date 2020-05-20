@@ -1,6 +1,6 @@
 'use strict';
 import * as AWSMock from 'aws-sdk-mock';
-import { AWS } from '../api/api';
+import { AWS } from '../api/aws';
 import path from 'path';
 import { handler } from './generate';
 import { resolve } from 'path';
@@ -64,7 +64,7 @@ describe('generate', () => {
       }),
     });
     
-    expect(mockDynamoPut).toBeCalledWith(
+    await expect(mockDynamoPut).toBeCalledWith(
       expect.objectContaining({
         TableName: process.env.DYNAMO_TABLE,
         Item: expect.objectContaining({
