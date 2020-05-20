@@ -1,6 +1,6 @@
 import Joi, { ObjectSchema } from '@hapi/joi';
 
-export const validateUploadRequest = (body: any) => {
+export const validateGenerateRequest = (body: any) => {
   const schema: ObjectSchema = Joi.object({
     guid: Joi.string().required()
   })
@@ -8,7 +8,7 @@ export const validateUploadRequest = (body: any) => {
   return schema.validate(body)
 }
 
-export const validateUploadEnvironment = (environment: any) => {
+export const validateEnvironment = (environment: any) => {
     
   const schema: ObjectSchema = Joi.object({
     UPLOAD_BUCKET: Joi.string().required(),

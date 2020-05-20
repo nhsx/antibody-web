@@ -9,7 +9,8 @@
     "@types/serverless-jest-plugin": "^0.3.0",
     "aws-sdk": "^2.676.0",
     "dotenv": "^8.2.0",
-    "uuid": "^8.0.0"
+    "uuid": "^8.0.0",
+    "abt-lib": "link:../lib"
   },
   "devDependencies": {
     "@testing-library/react": "^9.3.2",

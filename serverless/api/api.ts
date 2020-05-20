@@ -1,16 +1,16 @@
-import AWSSDK from 'aws-sdk'
-export const AWS = AWSSDK
+import AWSSDK from 'aws-sdk';
+export const AWS = AWSSDK;
 import { PutItemInput, GetItemInput, AttributeValue } from "aws-sdk/clients/dynamodb";
 import TestRecord from "models/TestRecord";
 
 export async function getUploadUrl(bucket: string, guid: string): Promise<string> {
-  const s3 = new AWS.S3()
+  const s3 = new AWS.S3();
   const params = {Bucket: bucket, Key: `rdt-images/${guid}`};
-  return s3.getSignedUrlPromise("putObject", params)
+  return s3.getSignedUrlPromise("putObject", params);
 };
 
 export async function createTestRecord(table: string, record: TestRecord) {
-  const dynamo = new AWS.DynamoDB()
+  const dynamo = new AWS.DynamoDB();
 
   const dynamoPutReq: PutItemInput = {
     TableName: table,
@@ -24,11 +24,11 @@ export async function createTestRecord(table: string, record: TestRecord) {
     },
   };
 
-  return dynamo.putItem(dynamoPutReq).promise()
+  return dynamo.putItem(dynamoPutReq).promise();
 }
 
 export async function getTestRecord(table: string, guid: string) {
-  const dynamo = new AWS.DynamoDB()
+  const dynamo = new AWS.DynamoDB();
 
   const dynamoGetReq: GetItemInput = {
     TableName: table,
@@ -39,5 +39,5 @@ export async function getTestRecord(table: string, guid: string) {
     }
   };
 
-  return await dynamo.getItem(dynamoGetReq).promise()
+  return await dynamo.getItem(dynamoGetReq).promise();
 }

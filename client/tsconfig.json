@@ -19,7 +19,10 @@
     "noEmit": true,
     "jsx": "react",
     "baseUrl": "./src",
-    "noImplicitAny": false
+    "noImplicitAny": false,
+    "paths": {
+      "lib": ["../lib"]
+    }
   },
   "exclude": [
     "node_modules"

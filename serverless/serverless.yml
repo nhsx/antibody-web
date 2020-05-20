@@ -29,6 +29,9 @@ functions:
     environment:
       UPLOAD_BUCKET: ${opt:stage, 'dev'}-covid19-antibody-uk
       DYNAMO_TABLE: ${opt:stage, 'dev'}-covid19-antibody-uk
+custom:
+  serverless-offline:
+    httpPort: 4000
 resources:
   Resources:
     S3:
