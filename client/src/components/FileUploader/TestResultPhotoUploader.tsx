@@ -20,7 +20,6 @@ import { cx } from '../../style/utils';
 import { getAppConfig } from 'utils/AppConfig';
 import { useHistory } from 'react-router-dom';
 import { useModelPreLoader } from './RDTModelLoader';
-import { AppState } from 'components/App/reducer';
 import { uploadImage } from 'api/testApi';
 import { AppContext, withApp } from 'components/App/context';
 
@@ -156,14 +155,11 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
         return;
       }
 
-      console.log(_.take(imageAsURI, 100));
-
-      console.log(app.state);
       //@TODO: Add failure handling
       await uploadImage(app.state.testData?.uploadUrl, imageAsFile);
   
     },
-    [imageAsFile, imageAsURI, setIsUploading]
+    [imageAsFile, imageAsURI, setIsUploading, app.state]
   );
 
   return (

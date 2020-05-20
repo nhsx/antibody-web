@@ -3,7 +3,7 @@ import { GenerateTestRequest, GenerateTestResponse } from 'abt-lib/requests/Gene
 
 const { apiBase } = config;
 
-export const generateTest = async (parameters: GenerateTestRequest): Promise<Response> => {
+export const generateTest = async (parameters: GenerateTestRequest): Promise<GenerateTestResponse> => {
   const response = await fetch(apiBase + "/generate", {
     method: "POST",
     body: JSON.stringify(parameters),

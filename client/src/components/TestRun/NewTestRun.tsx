@@ -5,6 +5,7 @@ import { ROUTE_DEFINITIONS } from 'routes/routes';
 import { Redirect } from 'react-router-dom';
 import { generateTest } from 'api/testApi';
 import { withApp } from 'components/App/context';
+import { GenerateTestResponse } from 'abt-lib/requests/GenerateTest';
 
 const NewTestRun = ({app: {dispatch}}) => {
   const [testRunUID, setTestRunUID] = useState<string | null>(null);
@@ -12,10 +13,9 @@ const NewTestRun = ({app: {dispatch}}) => {
   useEffect(() => {
     const createNewTestRun = async () => {
       const newTestRunUid = uuid();
-      const testData = await generateTest({
+      const testData: GenerateTestResponse = await generateTest({
         guid: newTestRunUid
       });
-      console.log(testData);
       setTestRunUID(newTestRunUid);
       dispatch({
         type: "GENERATE_TEST",
@@ -24,7 +24,7 @@ const NewTestRun = ({app: {dispatch}}) => {
       //@TODO: error handling / move to action creators + reducer state
     };
     createNewTestRun();
-  }, []);
+  }, [dispatch]);
 
   return testRunUID ? (
     <Redirect
