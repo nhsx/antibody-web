@@ -57,8 +57,8 @@ export default (props: TestRunHeaderProps) => {
         )}
         {stepDetails.title && (
           <Label size="m">
-            <span className="nhsuk-caption-m">
-              {stepCount} of {totalSteps}
+            <span data-testid="step-counter" className="nhsuk-caption-m">
+              Step {stepCount} of {totalSteps}
             </span>
             {props.stepDetails.title}
           </Label>

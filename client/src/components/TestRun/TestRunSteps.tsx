@@ -2,26 +2,26 @@
 //
 // Use of this source code is governed by an LGPL-3.0 license that
 // can be found in the LICENSE file distributed with this file.
-import '../../style/sassStyle';
+import "../../style/sassStyle";
 
-import { FORMID, TESTRUN_STEPS, getNextDefaultStep } from './TestRunConstants';
-import { Link, useParams } from 'react-router-dom';
-import React, { useCallback, useEffect, useState } from 'react';
-import { Theme, createStyles, makeStyles } from '@material-ui/core';
-import { Header, Container, Row, Col } from 'nhsuk-react-components';
+import { FORMID, TESTRUN_STEPS, getNextDefaultStep } from "./TestRunConstants";
+import { Link, useParams } from "react-router-dom";
+import React, { useCallback, useEffect, useState } from "react";
+import { Theme, createStyles, makeStyles } from "@material-ui/core";
+import { Header, Container, Row, Col } from "nhsuk-react-components";
 
-import { ContinueButton } from 'components/ui/Buttons';
-import PageContent from '../ui/PageContent';
-import TestRunHeader from './TestRunHeader';
+import { ContinueButton } from "components/ui/Buttons";
+import PageContent from "../ui/PageContent";
+import TestRunHeader from "./TestRunHeader";
 
 const testRunStepStyle = makeStyles((theme: Theme) =>
   createStyles({
     testRunButtons: {
-      minWidth: '185px',
+      minWidth: "185px",
     },
 
     stepContent: {
-      marginBottom: '1.5rem',
+      marginBottom: "1.5rem",
     },
   })
 );
@@ -82,7 +82,7 @@ export default () => {
     // contains a form.
     nextButton = (
       <ContinueButton
-        text={currentStepDescription.nav.next ? 'Next' : 'View Results'}
+        text={currentStepDescription.nav.next ? "Next" : "View Results"}
         className={style.testRunButtons}
         disabled={nextIsDisabled}
         form={FORMID}

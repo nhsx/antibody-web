@@ -7,6 +7,11 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
     'prettier',
   ],
+  env: {
+      'browser': true,
+      'amd': true,
+      'node': true
+  },
   settings: {
     'import/parsers': {
       '@typescript-eslint/parser': ['.ts', '.tsx'],
