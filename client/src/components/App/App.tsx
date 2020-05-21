@@ -8,18 +8,19 @@ import AppContext from './context'
 import { appReducer, initialState } from './reducer'
 import messages from "i18n/index"
 
+
 const App = () => {
-  const [appState, dispatch]: [any, Function] = useReducer(appReducer, initialState)
+  const [appState, dispatch]: [any, Function] = useReducer(appReducer, initialState);
 
   const setLocale = (locale) => {
     dispatch({
       type: "SET_LOCALE",
       locale
-    })
-  }
+    });
+  };
 
   return (
-    <AppContext.Provider value={{ state: appState, setLocale }}>
+    <AppContext.Provider value={{ state: appState, setLocale, dispatch }}>
       <IntlProvider locale={appState.locale} messages={messages[appState.locale]}>
         <HelmetProvider>
           <Router>

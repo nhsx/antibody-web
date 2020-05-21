@@ -25,6 +25,7 @@
     "node_modules"
   ],
   "include": [
-    "src", "__mocks__"
+    "src",
+    "__mocks__"
   ]
 }

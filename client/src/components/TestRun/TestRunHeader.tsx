@@ -3,12 +3,11 @@
 // Use of this source code is governed by an LGPL-3.0 license that
 // can be found in the LICENSE file distributed with this file.
 import { StepDetails, TESTRUN_STEPS } from './TestRunConstants';
-import { Theme, createStyles, makeStyles } from '@material-ui/core';
+import {  createStyles, makeStyles } from '@material-ui/core';
 import { Label, Row, Col } from 'nhsuk-react-components';
-
 import React from 'react';
 
-const useStyle = makeStyles((theme: Theme) =>
+const useStyle = makeStyles(() =>
   createStyles({
     leadingAsset: {
       textAlign: 'center',

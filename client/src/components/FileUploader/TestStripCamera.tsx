@@ -12,7 +12,7 @@ import {
   isTopDetectionDataComplete,
 } from './RDTAnalyzer';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Theme, createStyles, makeStyles } from '@material-ui/core';
+import { createStyles, makeStyles } from '@material-ui/core';
 
 import Camera from 'react-html5-camera-photo';
 import DetectionBoxOverlay from './DetectionBoxOverlay';
@@ -23,7 +23,7 @@ import { cx } from 'style/utils';
 import { getAppConfig } from 'utils/AppConfig';
 import useFullscreenStatus from './useFullscreenStatus';
 
-const useStyle = makeStyles((theme: Theme) =>
+const useStyle = makeStyles(() =>
   createStyles({
     wrapper: {
       display: 'inline-block',
@@ -171,7 +171,7 @@ const TestStripCamera = (props: {
     handleTakePhotoAnimationDone,
   ]);
 
-  const onCameraError = useCallback((error: Error) => {
+  const onCameraError = useCallback(() => {
     confirmAlert(
       'Error initializing Camera',
       'Try uploading a picture instead.'

@@ -1,5 +1,5 @@
-import React from 'react'
-import {Row, Col, BodyText, Images} from 'nhsuk-react-components'
+import React from 'react';
+import { Row, Col, BodyText, Images } from 'nhsuk-react-components';
 
 export default () => (
   <Row>

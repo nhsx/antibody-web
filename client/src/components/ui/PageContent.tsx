@@ -4,7 +4,7 @@
 // can be found in the LICENSE file distributed with this file.
 import React, { ReactNode } from 'react';
 import { Footer } from 'nhsuk-react-components';
-import { Theme, createStyles, makeStyles } from '@material-ui/core';
+import {  createStyles, makeStyles } from '@material-ui/core';
 
 import { cx } from 'style/utils';
 import { AUDERE_URL } from 'utils/globalConstants';
@@ -13,7 +13,7 @@ interface PageContentProps {
   children: ReactNode;
 }
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
   createStyles({
     pageContent: {
       minHeight: '600px',

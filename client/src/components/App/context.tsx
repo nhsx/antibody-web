@@ -1,18 +1,19 @@
-import React from 'react'
-import { AppState } from './reducer'
+import React from 'react';
+import { AppState } from './reducer';
 
-interface AppContextInterface {
+export interface AppContext {
   state: AppState;
   setLocale: Function;
+  dispatch: Function;
 }
 
-const AppContext = React.createContext<AppContextInterface | null>(null)
+const Context = React.createContext<AppContext | null>(null);
 
 // Higher-order component for consuming context easily
 export const withApp = Component => props => (
-  <AppContext.Consumer>
+  <Context.Consumer>
     {app => <Component {...props} app={app} />}
-  </AppContext.Consumer>
-)
+  </Context.Consumer>
+);
 
-export default AppContext
+export default Context;

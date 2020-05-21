@@ -29,12 +29,28 @@ functions:
     environment:
       UPLOAD_BUCKET: ${opt:stage, 'dev'}-covid19-antibody-uk
       DYNAMO_TABLE: ${opt:stage, 'dev'}-covid19-antibody-uk
+custom:
+  serverless-offline:
+    httpPort: 4000
 resources:
   Resources:
     S3:
       Type: AWS::S3::Bucket
       Properties:
         BucketName: ${opt:stage, 'dev'}-covid19-antibody-uk
+        CorsConfiguration:
+          CorsRules:
+            -
+              AllowedOrigins:
+                - '*'
+              AllowedHeaders:
+                - '*'
+              AllowedMethods:
+                - GET
+                - PUT
+                - POST
+                - HEAD
+              MaxAge: 3000
     DynamoDB:
       Type: AWS::DynamoDB::Table
       Properties:

@@ -3,9 +3,8 @@
 // Use of this source code is governed by an LGPL-3.0 license that
 // can be found in the LICENSE file distributed with this file.
 import 'react-html5-camera-photo/build/css/index.css';
-import _ from 'lodash';
 import React, { useCallback, useState } from 'react';
-import { Theme, createStyles, makeStyles } from '@material-ui/core';
+import {  createStyles, makeStyles } from '@material-ui/core';
 import { Button } from 'components/ui/Buttons';
 import Divider from '../ui/Divider';
 import { FORMID } from '../TestRun/TestRunConstants';
@@ -20,8 +19,10 @@ import { cx } from '../../style/utils';
 import { getAppConfig } from 'utils/AppConfig';
 import { useHistory } from 'react-router-dom';
 import { useModelPreLoader } from './RDTModelLoader';
+import { uploadImage } from 'api/testApi';
+import { AppContext, withApp } from 'components/App/context';
 
-export const useTestResultPhotoUploaderStyle = makeStyles((theme: Theme) =>
+export const useTestResultPhotoUploaderStyle = makeStyles(() =>
   createStyles({
     imgUploaded: {
       display: 'block',
@@ -73,10 +74,11 @@ const config = getAppConfig();
 interface TestResultPhotoUploaderProps {
   testRunUID: string;
   onFileUploadComplete: (ready: boolean) => void;
+  app: AppContext;
 }
 
 const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
-  const { testRunUID, onFileUploadComplete } = props;
+  const { testRunUID, onFileUploadComplete, app } = props;
   const classes = useTestResultPhotoUploaderStyle();
   const history = useHistory();
 
@@ -152,23 +154,11 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
         return;
       }
 
-      console.log(_.take(imageAsURI, 100));
-
-      //@TODO: Abstract this out
-      await fetch(
-        'https://vfxgyqhz2f.execute-api.eu-west-2.amazonaws.com/dev/upload',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            rdt_image: imageAsURI,
-          }),
-        }
-      );
+      //@TODO: Add failure handling
+      await uploadImage(app.state.testData?.uploadUrl, imageAsFile);
+  
     },
-    [imageAsFile, imageAsURI, setIsUploading]
+    [imageAsFile, imageAsURI, setIsUploading, app.state]
   );
 
   return (
@@ -296,4 +286,4 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
   );
 };
 
-export default TestResultPhotoUploader;
+export default withApp(TestResultPhotoUploader);

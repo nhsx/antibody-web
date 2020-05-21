@@ -3,13 +3,13 @@
 // Use of this source code is governed by an LGPL-3.0 license that
 // can be found in the LICENSE file distributed with this file.
 import React, { useCallback, useEffect, useState } from 'react';
-import { Theme, createStyles, makeStyles } from '@material-ui/core';
+import {  createStyles, makeStyles } from '@material-ui/core';
 import Loader from 'components/ui/Loader';
 import { TESTRUN_STEPS } from './TestRunConstants';
 import Timer from 'components/ui/Timer';
 import { useParams } from 'react-router-dom';
 
-const useStyle = makeStyles((theme: Theme) =>
+const useStyle = makeStyles(() =>
   createStyles({
     timedStepContent: {
       maxWidth: `300px`,
