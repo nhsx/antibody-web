@@ -2,12 +2,15 @@
 //
 // Use of this source code is governed by an LGPL-3.0 license that
 // can be found in the LICENSE file distributed with this file.
-import PageContent from '../ui/PageContent';
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Header } from 'nhsuk-react-components';
+import PageContent from "../ui/PageContent";
+import React from "react";
+import { useHistory } from "react-router-dom";
+import { Header, Container } from "nhsuk-react-components";
+import Login from "../Login/Login";
 
 export default () => {
+  const history = useHistory();
+
   return (
     <PageContent>
       <Header transactional>
@@ -18,9 +21,15 @@ export default () => {
           </Header.ServiceName>
         </Header.Container>
       </Header>
-      <div className="container">
-        <Link to="/test">Start new test</Link>
-      </div>
+      <Container>
+        <Login
+          formSubmit={(signInId: string) => {
+            if (signInId === "valid") {
+              history.push("/test");
+            }
+          }}
+        />
+      </Container>
     </PageContent>
   );
 };
