@@ -1,17 +1,15 @@
 'use strict';
 import * as AWSMock from 'aws-sdk-mock';
 import { AWS } from '../api/aws';
-import path from 'path';
 import { handler } from './generate';
 import { resolve } from 'path';
 
-require('dotenv').config({path: resolve(__dirname,"../test.env")});
+require('dotenv').config({ path: resolve(__dirname,"../test.env") });
 
 describe('generate', () => {
   beforeAll(() => {
     AWSMock.setSDKInstance(AWS);
   });
-  
 
   it('should throw an error if no guid is supplied', async () => {
     const result = await handler({
@@ -33,8 +31,6 @@ describe('generate', () => {
     // Make sure our function completes
     AWSMock.mock('DynamoDB', 'putItem', () => Promise.resolve());
     
-    // We have to reinstantiate the AWS services after mocking them
-
     await handler({
       body: JSON.stringify({
         guid: 'test-guid'
@@ -51,7 +47,6 @@ describe('generate', () => {
     );
     
     AWSMock.restore();
-    
   });
 
   it('should create a new record in a dynamo DB table which includes the signed upload url', async () => {

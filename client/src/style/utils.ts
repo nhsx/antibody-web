@@ -2,7 +2,7 @@
 //
 // Use of this source code is governed by an LGPL-3.0 license that
 // can be found in the LICENSE file distributed with this file.
-import { Theme, createStyles, makeStyles } from '@material-ui/core';
+import {  createStyles, makeStyles } from '@material-ui/core';
 
 interface CxParameter {
   [key: string]: boolean;
@@ -45,7 +45,7 @@ export const cx = (
     .join(' ');
 };
 
-export const useAnimateBgAndColor = makeStyles((theme: Theme) =>
+export const useAnimateBgAndColor = makeStyles(() =>
   createStyles({
     animateBgAndColor: {
       transitionProperty: 'color, background-color',

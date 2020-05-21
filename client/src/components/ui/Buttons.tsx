@@ -5,7 +5,6 @@
 import {
   Button as MaterialButton,
   ButtonProps as MaterialButtonProps,
-  Theme,
   createStyles,
   makeStyles,
 } from '@material-ui/core';
@@ -13,7 +12,7 @@ import React, { FunctionComponent } from 'react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const style = makeStyles((theme: Theme) =>
+const style = makeStyles(() =>
   createStyles({
     nextButton: {
       minWidth: '185px',
@@ -35,7 +34,7 @@ export interface ContinueButtonProps extends MaterialButtonProps {
 }
 
 export const ContinueButton: FunctionComponent<ContinueButtonProps> = (
-  props
+  props: ContinueButtonProps
 ) => {
   const styles = style();
 

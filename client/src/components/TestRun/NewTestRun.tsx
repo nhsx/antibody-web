@@ -4,10 +4,15 @@ import { v4 as uuid } from 'uuid';
 import { ROUTE_DEFINITIONS } from 'routes/routes';
 import { Redirect } from 'react-router-dom';
 import { generateTest } from 'api/testApi';
-import { withApp } from 'components/App/context';
+import { withApp, AppContext } from 'components/App/context';
 import { GenerateTestResponse } from 'abt-lib/requests/GenerateTest';
 
-const NewTestRun = ({app: {dispatch}}) => {
+interface NewTestRunProps {
+  app: AppContext;
+}
+
+const NewTestRun = (props: NewTestRunProps) => {
+  const { app: { dispatch } } = props;
   const [testRunUID, setTestRunUID] = useState<string | null>(null);
 
   useEffect(() => {

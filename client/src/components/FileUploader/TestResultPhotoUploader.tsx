@@ -3,9 +3,8 @@
 // Use of this source code is governed by an LGPL-3.0 license that
 // can be found in the LICENSE file distributed with this file.
 import 'react-html5-camera-photo/build/css/index.css';
-import _ from 'lodash';
 import React, { useCallback, useState } from 'react';
-import { Theme, createStyles, makeStyles } from '@material-ui/core';
+import {  createStyles, makeStyles } from '@material-ui/core';
 import { Button } from 'components/ui/Buttons';
 import Divider from '../ui/Divider';
 import { FORMID } from '../TestRun/TestRunConstants';
@@ -23,7 +22,7 @@ import { useModelPreLoader } from './RDTModelLoader';
 import { uploadImage } from 'api/testApi';
 import { AppContext, withApp } from 'components/App/context';
 
-export const useTestResultPhotoUploaderStyle = makeStyles((theme: Theme) =>
+export const useTestResultPhotoUploaderStyle = makeStyles(() =>
   createStyles({
     imgUploaded: {
       display: 'block',

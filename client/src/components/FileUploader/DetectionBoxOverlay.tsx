@@ -4,14 +4,14 @@
 // can be found in the LICENSE file distributed with this file.
 import React from 'react';
 import { DetectionData, TopDetectionData } from './RDTAnalyzer';
-import { Theme, createStyles, makeStyles } from '@material-ui/core';
+import { createStyles, makeStyles } from '@material-ui/core';
 import { toCSSPercent } from 'style/utils';
 
 interface DetectionBoxOverlayProps {
   detectionData: TopDetectionData;
 }
 
-const useBoxStyle = makeStyles((theme: Theme) =>
+const useBoxStyle = makeStyles(() =>
   createStyles({
     box: {
       fontWeight: 'bold',

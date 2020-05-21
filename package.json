@@ -25,5 +25,7 @@
       "pre-commit": "npm run lint -- --fix"
     }
   },
-  "dependencies": {}
+  "dependencies": {
+    "eslint-plugin-react": "^7.20.0"
+  }
 }

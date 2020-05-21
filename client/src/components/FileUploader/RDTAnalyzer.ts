@@ -135,7 +135,6 @@ export const analyzeImage = async (
   | ImageData
   | HTMLCanvasElement
   | HTMLVideoElement,
-  numChannels?: number | undefined
 ): Promise<TopDetectionData> => {
   const model = await loadModel();
   if (!model) {

@@ -2,7 +2,7 @@
 //
 // Use of this source code is governed by an LGPL-3.0 license that
 // can be found in the LICENSE file distributed with this file.
-import { Theme, createStyles, makeStyles } from '@material-ui/core';
+import {  createStyles, makeStyles } from '@material-ui/core';
 import { AUDERE_URL } from 'utils/globalConstants';
 import Divider from './Divider';
 import ExternalLink from './ExternalLink';
@@ -11,7 +11,7 @@ import Typography from '@material-ui/core/Typography';
 import { cx } from 'style/utils';
 import getSassStyle from 'style/sassStyle';
 
-const useStyle = makeStyles((theme: Theme) =>
+const useStyle = makeStyles(() =>
   createStyles({
     footerText: {
       textAlign: 'center',

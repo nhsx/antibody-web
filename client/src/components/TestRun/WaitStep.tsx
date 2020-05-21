@@ -16,9 +16,9 @@ import TimedStep from './TimedStep';
 // Renders the step with a ten minute timer while the solution reacts
 // with the test strip.
 export default (props: StepDetailComponentProp) => {
-  const { testRunUID, setStepReady } = props;
+  const { setStepReady } = props;
 
-  const [startTime, setStartTime] = useState(Date.now());
+  const [startTime ] = useState(Date.now());
   const history = useHistory();
   const { step } = useParams();
   const onSubmit = useCallback(

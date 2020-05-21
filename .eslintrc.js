@@ -3,6 +3,7 @@ module.exports = {
   plugins: ['@typescript-eslint', 'prettier', 'jest'],
   extends: [
     'eslint:recommended',
+    "plugin:react/recommended",
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
     'prettier',
@@ -21,10 +22,13 @@ module.exports = {
     },
   },
   rules: {
+    "react/prop-types": [2, { ignore: ['children'] }],
+    'object-curly-spacing': ["error", "always"],
     '@typescript-eslint/explicit-function-return-type': 0,
     '@typescript-eslint/no-non-null-assertion': 0,
     '@typescript-eslint/camelcase': 0,
-    '@typescript-eslint/no-unused-vars': 0,
+    'react/display-name': 0,
+    "@typescript-eslint/no-unused-vars": ["error"],
     '@typescript-eslint/no-use-before-define': 0,
     '@typescript-eslint/no-explicit-any': 0,
     '@typescript-eslint/semi': 1,

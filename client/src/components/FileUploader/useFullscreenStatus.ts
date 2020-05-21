@@ -54,7 +54,7 @@ export default function useFullscreenStatus(
         .then(() => {
           setIsFullscreen(document[getBrowserFullscreenElementProp()] !== null);
         })
-        .catch((e) => {
+        .catch(() => {
           setIsFullscreen(false);
         });
     }

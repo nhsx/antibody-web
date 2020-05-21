@@ -1,7 +1,7 @@
 import { APIGatewayProxyResult } from 'aws-lambda';
 import { getUploadUrl, createTestRecord } from '../api/aws';
 import { validateGenerateRequest, validateEnvironment } from '../api/validate';
-import { GenerateTestRequest, GenerateTestResponse}  from "abt-lib/requests/GenerateTest";
+import { GenerateTestRequest, GenerateTestResponse }  from "abt-lib/requests/GenerateTest";
 import config from './config';
 
 export const handler = async ({ body }: { body: any} ): Promise<APIGatewayProxyResult> => {
@@ -49,11 +49,7 @@ export const handler = async ({ body }: { body: any} ): Promise<APIGatewayProxyR
 
   //Handler body
   const { guid } = request; 
-  console.log('getting upload url');
-
   const uploadUrl = await getUploadUrl(UPLOAD_BUCKET, guid);
-  
-  console.log('awaiting, received url ', uploadUrl);
   const testRecord = await createTestRecord(DYNAMO_TABLE, {
     guid,
     uploadUrl

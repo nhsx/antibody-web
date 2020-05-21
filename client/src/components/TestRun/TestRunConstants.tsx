@@ -3,7 +3,7 @@
 // Use of this source code is governed by an LGPL-3.0 license that
 // can be found in the LICENSE file distributed with this file.
 import { APP_MODES, CURRENT_APP_MODE } from "utils/globalConstants";
-import { Theme, createStyles, makeStyles } from "@material-ui/core";
+import {  createStyles, makeStyles } from "@material-ui/core";
 import Asset from "../ui/Asset";
 import Grid from "@material-ui/core/Grid";
 import PhotoUploaderPanel from "../FileUploader/PhotoUploaderPanel";
@@ -18,7 +18,7 @@ import SelectAFinger from "./ContentComponent/SelectAFinger";
 export const FORMID = "stepForm";
 export const UNSET_PROFILE_ID = "UNSET_PROFILE_ID";
 
-export const getStepStyle = makeStyles((theme: Theme) =>
+export const getStepStyle = makeStyles(() =>
   createStyles({
     bulletList: {
       listStyleType: "square",
@@ -71,7 +71,7 @@ export const START_STEP = "checkYourKit";
 const testrunSteps: { [stepName: string]: StepDetailsIncomplete } = {
   checkYourKit: {
     title: "Check your test kit",
-    ContentComponent: React.memo(props => <CheckYourKit />),
+    ContentComponent: React.memo(() => <CheckYourKit />),
     nav: {
       next: {
         default: "washAndDryHands"
@@ -80,7 +80,7 @@ const testrunSteps: { [stepName: string]: StepDetailsIncomplete } = {
   },
   washAndDryHands: {
     title: "Wash and dry hands",
-    ContentComponent: React.memo(props => <WashAndDryHands />),
+    ContentComponent: React.memo(() => <WashAndDryHands />),
     nav: {
       next: {
         default: "setUpTest"
@@ -89,7 +89,7 @@ const testrunSteps: { [stepName: string]: StepDetailsIncomplete } = {
   },
   setUpTest: {
     title: "Set up test",
-    ContentComponent: React.memo(props => <SetUpTest />),
+    ContentComponent: React.memo(() => <SetUpTest />),
     nav: {
       next: {
         default: "selectAFinger"
@@ -98,7 +98,7 @@ const testrunSteps: { [stepName: string]: StepDetailsIncomplete } = {
   },
   selectAFinger: {
     title: "Select a finger",
-    ContentComponent: React.memo(props => <SelectAFinger />),
+    ContentComponent: React.memo(() => <SelectAFinger />),
     nav: {
       next: {
         default: "scanStrip"

@@ -2,13 +2,13 @@
 //
 // Use of this source code is governed by an LGPL-3.0 license that
 // can be found in the LICENSE file distributed with this file.
-import { Theme, createStyles, makeStyles } from '@material-ui/core';
+import {  createStyles, makeStyles } from '@material-ui/core';
 
 import React from 'react';
 import { cx } from '../../style/utils';
 import getSassStyle from '../../style/sassStyle';
 
-const useStyle = makeStyles((theme: Theme) =>
+const useStyle = makeStyles(() =>
   createStyles({
     divider: {
       display: 'block',

@@ -7,14 +7,14 @@ import "../../style/sassStyle";
 import { FORMID, TESTRUN_STEPS, getNextDefaultStep } from "./TestRunConstants";
 import { Link, useParams } from "react-router-dom";
 import React, { useCallback, useEffect, useState } from "react";
-import { Theme, createStyles, makeStyles } from "@material-ui/core";
+import {  createStyles, makeStyles } from "@material-ui/core";
 import { Header, Container, Row, Col } from "nhsuk-react-components";
 
 import { ContinueButton } from "components/ui/Buttons";
 import PageContent from "../ui/PageContent";
 import TestRunHeader from "./TestRunHeader";
 
-const testRunStepStyle = makeStyles((theme: Theme) =>
+const testRunStepStyle = makeStyles(() =>
   createStyles({
     testRunButtons: {
       minWidth: "185px",

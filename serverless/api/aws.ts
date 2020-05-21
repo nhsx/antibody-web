@@ -1,11 +1,11 @@
 import AWSSDK from 'aws-sdk';
 export const AWS = AWSSDK;
-import { PutItemInput, GetItemInput, AttributeValue } from "aws-sdk/clients/dynamodb";
+import { PutItemInput, GetItemInput } from "aws-sdk/clients/dynamodb";
 import TestRecord from "models/TestRecord";
 
 export async function getUploadUrl(bucket: string, guid: string): Promise<string> {
   const s3 = new AWS.S3();
-  const params = {Bucket: bucket, Key: `rdt-images/${guid}`};
+  const params = { Bucket: bucket, Key: `rdt-images/${guid}` };
   const url = await new Promise((resolve, reject) => {
     s3.getSignedUrl("putObject", params, (err, url: string) => {
       if (err) {
