@@ -5,5 +5,5 @@ import { IntlProvider } from 'react-intl';
 
 
 export const renderWithReactIntl = component => {
-  return render(<IntlProvider locale="pt">{component}</IntlProvider>);
+  return render(<IntlProvider locale="en-gb">{component}</IntlProvider>);
 };
