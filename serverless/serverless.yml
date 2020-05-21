@@ -8,6 +8,7 @@ plugins:
   - serverless-plugin-typescript
   - serverless-offline
   - serverless-jest-plugin
+environment:
 functions:
   generate:
     handler: handlers/generate.handler
@@ -22,6 +23,8 @@ functions:
 custom:
   serverless-offline:
     httpPort: 4000
+    stage: dev
+    
 resources:
   Resources:
     S3:
