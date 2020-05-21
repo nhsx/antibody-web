@@ -3,10 +3,10 @@ import { DashboardRoute, ROUTES } from 'routes/routes';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
 import PageNotFound from 'components/PageNotFound/PageNotFound';
-import { IntlProvider } from 'react-intl'
-import AppContext from './context'
-import { appReducer, initialState } from './reducer'
-import messages from "i18n/index"
+import { IntlProvider } from 'react-intl';
+import AppContext from './context';
+import { appReducer, initialState } from './reducer';
+import messages from "i18n/index";
 
 
 const App = () => {

@@ -1,7 +1,12 @@
 import React, { useState, SyntheticEvent } from "react";
 import { Row, Col, Form, Input, Button } from "nhsuk-react-components";
 
-export default ({ formSubmit }) => {
+interface LoginProps {
+  formSubmit: Function;
+}
+
+export default (props: LoginProps) => {
+  const { formSubmit } = props;
   const [signInId, setSignInId] = useState<string>("");
   const onFormSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
