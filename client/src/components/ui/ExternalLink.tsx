@@ -12,7 +12,10 @@ export default (
 ) => {
   const { children, ...rest } = props;
   return (
-    <a target="_blank" rel="noopener noreferrer" {...rest}>
+    <a
+      target="_blank"
+      rel="noopener noreferrer"
+      {...rest}>
       {children}
     </a>
   );

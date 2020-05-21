@@ -14,5 +14,8 @@ export interface AssetsImageProps extends ImgHTMLAttributes<HTMLImageElement> {
 
 export default (props: AssetsImageProps) => {
   const { src, alt, ...rest } = props;
-  return <img src={`/assets/images/${src}`} alt={alt} {...rest} />;
+  return <img
+    src={`/assets/images/${src}`}
+    alt={alt}
+    {...rest} />;
 };

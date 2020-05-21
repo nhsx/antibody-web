@@ -21,12 +21,16 @@ const App = () => {
 
   return (
     <AppContext.Provider value={{ state: appState, setLocale, dispatch }}>
-      <IntlProvider locale={appState.locale} messages={messages[appState.locale]}>
+      <IntlProvider
+        locale={appState.locale}
+        messages={messages[appState.locale]}>
         <HelmetProvider>
           <Router>
             <Switch>
               {ROUTES.map((route: DashboardRoute) => (
-                <Route {...route} key={route.path} />
+                <Route
+                  {...route}
+                  key={route.path} />
               ))}
               <Route key="pagenotfound">
                 <>

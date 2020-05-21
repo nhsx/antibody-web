@@ -215,7 +215,9 @@ const TestStripCamera = (props: {
             (stripHeight * STRIP_IMAGE_WIDTH) / STRIP_IMAGE_HEIGHT;
 
           return (
-            <div className={classes.wrapper} ref={refCamera}>
+            <div
+              className={classes.wrapper}
+              ref={refCamera}>
               <Camera
                 onTakePhotoAnimationDone={handleTakePhotoAnimationDone}
                 onCameraError={onCameraError}

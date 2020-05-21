@@ -187,8 +187,13 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
             </Grid>
           )}
           {config.photoUploadEnabled && config.cameraInlineEnabled && (
-            <Grid xs={12} sm={2} item>
-              <Divider label="OR" isVertical={true} />
+            <Grid
+              xs={12}
+              sm={2}
+              item>
+              <Divider
+                label="OR"
+                isVertical={true} />
             </Grid>
           )}
           {config.cameraInlineEnabled && (
@@ -236,8 +241,13 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
             )}
             {imageAsURI && (
               <div className={classes.buttonsOverPic}>
-                <Grid container spacing={3}>
-                  <Grid item xs={6} className={classes.buttonsOverPicLeft}>
+                <Grid
+                  container
+                  spacing={3}>
+                  <Grid
+                    item
+                    xs={6}
+                    className={classes.buttonsOverPicLeft}>
                     <Button
                       disabled={isUploading}
                       onClick={handleUpload}
@@ -249,7 +259,10 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
                       <span>Upload</span>
                     </Button>
                   </Grid>
-                  <Grid item xs={6} className={classes.buttonsOverPicRight}>
+                  <Grid
+                    item
+                    xs={6}
+                    className={classes.buttonsOverPicRight}>
                     <Button
                       disabled={isUploading}
                       onClick={handleShowCamera}
@@ -281,7 +294,9 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
           </div>
         </div>
       )}
-      <form id={FORMID} onSubmit={onSubmitForm} />
+      <form
+        id={FORMID}
+        onSubmit={onSubmitForm} />
     </div>
   );
 };

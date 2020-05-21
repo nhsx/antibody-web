@@ -24,6 +24,8 @@ module.exports = {
   rules: {
     "react/prop-types": [2, { ignore: ['children'] }],
     'object-curly-spacing': ["error", "always"],
+    'react/jsx-first-prop-new-line': [2, 'multiline'],
+    "react/jsx-max-props-per-line": [2, {maximum: 1}],
     '@typescript-eslint/explicit-function-return-type': 0,
     '@typescript-eslint/no-non-null-assertion': 0,
     '@typescript-eslint/camelcase': 0,

@@ -23,7 +23,10 @@ const style = makeStyles(() =>
 
 export const Button: FunctionComponent<MaterialButtonProps> = (props) => {
   return (
-    <MaterialButton variant="contained" color="primary" {...props}>
+    <MaterialButton
+      variant="contained"
+      color="primary"
+      {...props}>
       {props.children}
     </MaterialButton>
   );
@@ -39,7 +42,10 @@ export const ContinueButton: FunctionComponent<ContinueButtonProps> = (
   const styles = style();
 
   return (
-    <Button className={styles.nextButton} size="large" {...props}>
+    <Button
+      className={styles.nextButton}
+      size="large"
+      {...props}>
       <span>{props.text ? props.text : 'Next'}</span>
       <span className="icon is-medium">
         <FontAwesomeIcon icon="arrow-right" />
