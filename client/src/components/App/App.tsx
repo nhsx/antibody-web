@@ -8,6 +8,7 @@ import AppContext from "./context";
 import { appReducer, initialState } from "./reducer";
 import messages from "i18n/index";
 import { AppContainer } from "./container";
+import LoginProvider from "../LoginProvider/LoginProvider";
 
 const App = () => {
   const [appState, dispatch]: [any, Function] = useReducer(
@@ -36,11 +37,21 @@ const App = () => {
         <HelmetProvider>
           <Router>
             <Switch>
-              {ROUTES.map((route: DashboardRoute) => (
-                <Route
-                  {...route}
-                  key={route.path} />
-              ))}
+              {ROUTES.map((route: DashboardRoute) => {
+                if (route.requiresLogin) {
+                  return (
+                    <LoginProvider>
+                      <Route
+                        {...route}
+                        key={route.path} />
+                    </LoginProvider>
+                  );
+                } else {
+                  return <Route
+                    {...route}
+                    key={route.path} />;
+                }
+              })}
               <Route key="pagenotfound">
                 <>
                   <Helmet title={`Open RDT: Page not foundg`} />
