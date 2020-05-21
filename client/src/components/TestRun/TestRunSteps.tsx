@@ -93,7 +93,9 @@ export default () => {
 
     if (!(currentStepDescription.hasFormContent || nextIsDisabled)) {
       nextButton = (
-        <Link to={nextPath} onClick={onClickNextLink}>
+        <Link
+          to={nextPath}
+          onClick={onClickNextLink}>
           {nextButton}
         </Link>
       );
@@ -111,7 +113,9 @@ export default () => {
         </Header.Container>
       </Header>
       <Container>
-        <TestRunHeader stepDetails={currentStepDescription} step={step} />
+        <TestRunHeader
+          stepDetails={currentStepDescription}
+          step={step} />
         <currentStepDescription.ContentComponent
           setStepReady={setStepReady}
           submitUrl={nextPath}

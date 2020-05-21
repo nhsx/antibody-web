@@ -25,6 +25,7 @@ const App = () => {
   const container = new AppContainer();
 
   return (
+
     <AppContext.Provider
       value={{ state: appState, setLocale, dispatch, container }}
     >
@@ -36,11 +37,13 @@ const App = () => {
           <Router>
             <Switch>
               {ROUTES.map((route: DashboardRoute) => (
-                <Route {...route} key={route.path} />
+                <Route
+                  {...route}
+                  key={route.path} />
               ))}
               <Route key="pagenotfound">
                 <>
-                  <Helmet title={`Open RDT: Page not found`} />
+                  <Helmet title={`Open RDT: Page not foundg`} />
                   <PageNotFound />
                 </>
               </Route>

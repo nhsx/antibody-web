@@ -14,7 +14,9 @@ const Context = React.createContext<AppContext | null>(null);
 // Higher-order component for consuming context easily
 export const withApp = Component => props => (
   <Context.Consumer>
-    {app => <Component {...props} app={app} />}
+    {app => <Component
+      {...props}
+      app={app} />}
   </Context.Consumer>
 );
 

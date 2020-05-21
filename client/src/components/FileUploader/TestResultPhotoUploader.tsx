@@ -134,8 +134,13 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
             </Grid>
           )}
           {config.photoUploadEnabled && config.cameraInlineEnabled && (
-            <Grid xs={12} sm={2} item>
-              <Divider label="OR" isVertical={true} />
+            <Grid
+              xs={12}
+              sm={2}
+              item>
+              <Divider
+                label="OR"
+                isVertical={true} />
             </Grid>
           )}
           {config.cameraInlineEnabled && (
@@ -180,6 +185,7 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
                       <span>Upload</span>
                     </Button>
                   </Grid>
+
                   <Grid item xs={6}>
                     <Button
                       disabled={isUploading}
@@ -203,7 +209,9 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
           </div>
         </div>
       )}
-      <form id={FORMID} onSubmit={onSubmitForm} />
+      <form
+        id={FORMID}
+        onSubmit={onSubmitForm} />
     </div>
   );
 };

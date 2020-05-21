@@ -113,8 +113,12 @@ const testrunSteps: { [stepName: string]: StepDetailsIncomplete } = {
           Ensure your test strip is in the middle of the box, and hold your
           phone flat and directly above your test strip before taking its photo.
         </div>
-        <Grid container spacing={3}>
-          <Grid item xs={6}>
+        <Grid
+          container
+          spacing={3}>
+          <Grid
+            item
+            xs={6}>
             <Asset
               className={getStepStyle().centeredAsset}
               height={180}
@@ -123,7 +127,9 @@ const testrunSteps: { [stepName: string]: StepDetailsIncomplete } = {
               src="scanthestrip.png"
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid
+            item
+            xs={6}>
             <Asset
               className={getStepStyle().centeredAsset}
               height={180}
