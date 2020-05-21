@@ -24,8 +24,4 @@ describe("TestRunSteps", () => {
     expect(content).not.toBeUndefined();
   });
 
-  it("Renders the steps", async () => {
-    const content = await screen.findByTestId("step-counter");
-    expect(content.textContent?.startsWith("Step 1 of")).toEqual(true);
-  });
 });
