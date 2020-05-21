@@ -4,70 +4,21 @@
 // can be found in the LICENSE file distributed with this file.
 import 'react-html5-camera-photo/build/css/index.css';
 import React, { useCallback, useState } from 'react';
-import {  createStyles, makeStyles } from '@material-ui/core';
-import { Button } from 'components/ui/Buttons';
+import { Button } from 'nhsuk-react-components';
+
 import Divider from '../ui/Divider';
 import { FORMID } from '../TestRun/TestRunConstants';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Grid from '@material-ui/core/Grid';
 import ImageSelectorInput from './ImageSelectorInput';
 import RDTImagePreview from './RDTImagePreview';
 import { ROUTE_DEFINITIONS } from '../../routes/routes';
 import TestStripCamera from './TestStripCamera';
-//import { confirmAlert } from '../../utils/confirmAlert';
-import { cx } from '../../style/utils';
 import { getAppConfig } from 'utils/AppConfig';
 import { useHistory } from 'react-router-dom';
 import { useModelPreLoader } from './RDTModelLoader';
 import { uploadImage } from 'api/testApi';
 import { AppContext, withApp } from 'components/App/context';
 
-export const useTestResultPhotoUploaderStyle = makeStyles(() =>
-  createStyles({
-    imgUploaded: {
-      display: 'block',
-      maxHeight: '400px',
-    },
-    centeringWrapper: {
-      position: 'relative',
-      textAlign: 'center',
-    },
-    uploadButton: {
-      position: 'absolute',
-      left: '50%',
-      top: '10px',
-      transform: 'translateX(-50%)',
-    },
-    buttonsOverPic: {
-      position: 'absolute',
-      top: '10px',
-      left: 0,
-      right: 0,
-    },
-    buttonsOverPicLeft: {
-      textAlign: 'right',
-    },
-    buttonsOverPicRight: {
-      textAlign: 'left',
-    },
-    borderImage: {
-      display: 'inline-block',
-      position: 'relative',
-      '&:after': {
-        border: '1px solid rgba(0, 0, 0, .1)',
-        bottom: 0,
-        content: '" "',
-        left: 0,
-        position: 'absolute',
-        right: 0,
-        top: 0,
-      },
-    },
-    photoUploadBottom: {
-      paddingTop: '.75rem',
-    },
-  })
-);
 
 const config = getAppConfig();
 
@@ -79,7 +30,6 @@ interface TestResultPhotoUploaderProps {
 
 const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
   const { testRunUID, onFileUploadComplete, app } = props;
-  const classes = useTestResultPhotoUploaderStyle();
   const history = useHistory();
 
   // Preload model.
@@ -176,9 +126,6 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
               item
               xs={12}
               sm={'auto'}
-              className={cx({
-                [classes.centeringWrapper]: true,
-              })}
             >
               <ImageSelectorInput
                 onImageSelected={handleImageAsFile}
@@ -201,18 +148,11 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
               item
               xs={12}
               sm={'auto'}
-              className={cx({
-                [classes.centeringWrapper]: true,
-              })}
             >
               <Button
                 disabled={isUploading}
                 onClick={handleShowCamera}
-                size="large"
               >
-                <span className="icon is-medium">
-                  <FontAwesomeIcon icon="camera" />
-                </span>
                 <span>Take a Photo</span>
               </Button>
             </Grid>
@@ -220,18 +160,13 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
         </Grid>
       )}
       {(cameraEnabled || imageAsURI || imageUploadedURL) && (
-        <div className={cx({ [classes.photoUploadBottom]: true })}>
+        <div>
           {cameraEnabled && <TestStripCamera onPhotoTaken={handlePhotoTaken} />}
-          <div
-            className={cx({
-              [classes.centeringWrapper]: true,
-            })}
-          >
+          <div>
             {(imageAsURI || imageUploadedURL) && (
-              <div className={cx({ [classes.borderImage]: true })}>
+              <div>
                 {imageUploadedURL && (
                   <img
-                    className={classes.imgUploaded}
                     src={imageUploadedURL}
                     alt="preview"
                   />
@@ -240,37 +175,22 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
               </div>
             )}
             {imageAsURI && (
-              <div className={classes.buttonsOverPic}>
-                <Grid
-                  container
-                  spacing={3}>
-                  <Grid
-                    item
-                    xs={6}
-                    className={classes.buttonsOverPicLeft}>
+              <div>
+                <Grid container spacing={3}>
+                  <Grid item xs={6}>
                     <Button
                       disabled={isUploading}
                       onClick={handleUpload}
-                      size="large"
                     >
-                      <span className="icon is-medium">
-                        <FontAwesomeIcon icon="cloud-upload-alt" />
-                      </span>
                       <span>Upload</span>
                     </Button>
                   </Grid>
-                  <Grid
-                    item
-                    xs={6}
-                    className={classes.buttonsOverPicRight}>
+
+                  <Grid item xs={6}>
                     <Button
                       disabled={isUploading}
                       onClick={handleShowCamera}
-                      size="large"
                     >
-                      <span className="icon is-medium">
-                        <FontAwesomeIcon icon="camera" />
-                      </span>
                       <span>Retake</span>
                     </Button>
                   </Grid>
@@ -279,16 +199,11 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
             )}
             {imageUploadedURL && (
               <Button
-                className={classes.uploadButton}
                 disabled={isUploading}
                 form={FORMID}
-                size="large"
                 type="submit"
               >
                 <span>View Results</span>
-                <span className="icon is-medium">
-                  <FontAwesomeIcon icon="arrow-right" />
-                </span>
               </Button>
             )}
           </div>

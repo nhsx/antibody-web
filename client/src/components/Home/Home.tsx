@@ -7,9 +7,13 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 import { Header, Container } from "nhsuk-react-components";
 import Login from "../Login/Login";
+import { AppContext, withApp } from "components/App/context";
+import { useCookies } from "react-cookie";
 
-export default () => {
+export const Home = ({ app }: { app: AppContext }) => {
   const history = useHistory();
+  const setCookie = useCookies(["login-token"])[1];
+  const login = app.container.getLogin();
 
   return (
     <PageContent>
@@ -17,14 +21,17 @@ export default () => {
         <Header.Container>
           <Header.Logo href="/" />
           <Header.ServiceName href="/">
-            Take an COVID-19 Antibody Test
+            <span data-testid="service-name">
+              Take an COVID-19 Antibody Test
+            </span>
           </Header.ServiceName>
         </Header.Container>
       </Header>
       <Container>
         <Login
           formSubmit={(signInId: string) => {
-            if (signInId === "valid") {
+            if (login(signInId).successful) {
+              setCookie("login-token", "yes");
               history.push("/test");
             }
           }}
@@ -33,3 +40,5 @@ export default () => {
     </PageContent>
   );
 };
+
+export default withApp(Home);
