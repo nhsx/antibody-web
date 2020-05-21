@@ -30,7 +30,9 @@ export default (props: PageContentProps) => (
       <Footer.List>
         <Footer.ListItem>
           OpenRDT Powered by{' '}
-          <a className="nhsuk-footer__list-item-link" href={AUDERE_URL}>
+          <a
+            className="nhsuk-footer__list-item-link"
+            href={AUDERE_URL}>
             Audere
           </a>
         </Footer.ListItem>

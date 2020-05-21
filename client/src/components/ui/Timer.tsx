@@ -143,7 +143,11 @@ export default (props: TimerProps) => {
         xmlns="http://www.w3.org/2000/svg"
       >
         <g className={classes.timerCircle}>
-          <circle className={classes.timerElapsed} cx="50" cy="50" r="45" />
+          <circle
+            className={classes.timerElapsed}
+            cx="50"
+            cy="50"
+            r="45" />
           <path
             id="base-timer-path-remaining"
             strokeDasharray={`${remainingPath} 283`}
