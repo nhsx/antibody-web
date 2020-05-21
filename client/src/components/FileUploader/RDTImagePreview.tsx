@@ -7,7 +7,6 @@ import { TopDetectionData, analyzeImageDataURI } from './RDTAnalyzer';
 
 import DetectionBoxOverlay from './DetectionBoxOverlay';
 import { getAppConfig } from 'utils/AppConfig';
-import { useTestResultPhotoUploaderStyle } from './TestResultPhotoUploader';
 
 interface RDTImagePreviewProps {
   dataURI: string;
@@ -17,7 +16,6 @@ const config = getAppConfig();
 
 export default (props: RDTImagePreviewProps) => {
   const [detectionData, setDetectionData] = useState<TopDetectionData>();
-  const classes = useTestResultPhotoUploaderStyle();
   const { dataURI } = props;
 
   useEffect(() => {
@@ -33,7 +31,7 @@ export default (props: RDTImagePreviewProps) => {
 
   return (
     <div>
-      <img className={classes.imgUploaded} src={dataURI} alt="preview" />
+      <img src={dataURI} alt="preview" />
       {detectionData && <DetectionBoxOverlay detectionData={detectionData} />}
     </div>
   );
