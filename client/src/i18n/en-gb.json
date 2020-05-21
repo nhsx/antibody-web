@@ -2,7 +2,7 @@
     "app": {
     },
     "error": {
-        "header": "Error",
+        "header": "Placeholder error header",
         "title": "There is a problem",
         "body": "Sorry, an error has occurred while generating this page.",
         "resolution_1": "Placeholder resolution action"

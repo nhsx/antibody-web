@@ -8,6 +8,7 @@ import AppContext from './context';
 import { appReducer, initialState } from './reducer';
 import messages from "i18n/index";
 import ErrorBoundary from 'components/ErrorBoundary/ErrorBoundary';
+import flatten from 'flat';
 
 const App = () => {
   const [appState, dispatch]: [any, Function] = useReducer(appReducer, initialState);
@@ -21,8 +22,8 @@ const App = () => {
 
   return (
     <AppContext.Provider value={{ state: appState, setLocale, dispatch }}>
-      <IntlProvider locale={appState.locale} messages={messages[appState.locale]}>
-        <ErrorBoundary>
+      <IntlProvider locale={appState.locale} messages={flatten(messages[appState.locale])}>
+        <ErrorBoundary errorComponent={<div>testerror123</div>}>
           <HelmetProvider>
             <Router>
               <Switch>

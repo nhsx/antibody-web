@@ -20,6 +20,7 @@
     "@types/uuid": "^7.0.3",
     "abt-lib": "file:./../lib",
     "event-emitter3": "^1.0.4",
+    "flat": "^5.0.0",
     "image-capture": "^0.4.0",
     "image-promise": "^7.0.1",
     "lodash": "^4.17.15",

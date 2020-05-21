@@ -1,13 +1,34 @@
-import React from 'react';
-import { ErrorSummary, Header } from 'nhsuk-react-components';
+import React, { ReactElement } from 'react';
+import { ErrorSummary, Header, Container } from 'nhsuk-react-components';
 import { FormattedMessage } from 'react-intl';
+import PageContent from 'components/ui/PageContent';
 
 interface ErrorState {
   hasError: boolean;
 }
 
+interface ErrorBoundaryProps {
+  errorComponent?: ReactElement;
+}
 
-export default class ErrorBoundary extends React.Component<any, ErrorState> {
+const DefaultError = () => (
+  <ErrorSummary data-testid="default-error" aria-labelledby="error-summary-title" role="alert" tabIndex={-1}>
+    <ErrorSummary.Title id="error-summary-title">
+      <FormattedMessage id="error.title"/>
+    </ErrorSummary.Title>
+    <ErrorSummary.Body>
+      <p><FormattedMessage id="error.body" /></p>
+      <ErrorSummary.List>
+        <ErrorSummary.Item href="#example-error-1">
+          <FormattedMessage id="error.resolution_1" />
+        </ErrorSummary.Item>            
+      </ErrorSummary.List>
+    </ErrorSummary.Body>
+  </ErrorSummary>
+);
+
+
+export default class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorState> {
   constructor(props) {
     super(props);
     this.state = { hasError: false };
@@ -25,10 +46,12 @@ export default class ErrorBoundary extends React.Component<any, ErrorState> {
   }
   
   render() {
+
+    console.log(this.props.errorComponent);
     if (this.state.hasError) {
       return (       
-        <>
-          <Header >
+        <PageContent>
+          <Header>
             <Header.Container>
               <Header.Logo href="/" />
               <Header.ServiceName href="/">
@@ -36,18 +59,10 @@ export default class ErrorBoundary extends React.Component<any, ErrorState> {
               </Header.ServiceName>
             </Header.Container>
           </Header>
-          <ErrorSummary aria-labelledby="error-summary-title" role="alert" tabIndex={-1}>
-            <ErrorSummary.Title id="error-summary-title"><FormattedMessage id="error.title"/></ErrorSummary.Title>
-            <ErrorSummary.Body>
-              <p><FormattedMessage id="error.body" /></p>
-              <ErrorSummary.List>
-                <ErrorSummary.Item href="#example-error-1">
-                  <FormattedMessage id="error.resolution_1" />
-                </ErrorSummary.Item>            
-              </ErrorSummary.List>
-            </ErrorSummary.Body>
-          </ErrorSummary>
-        </>
+          <Container>
+            {this.props.errorComponent || <DefaultError />}
+          </Container>
+        </PageContent>
       );
     }
   
