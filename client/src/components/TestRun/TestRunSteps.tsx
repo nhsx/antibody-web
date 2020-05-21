@@ -106,7 +106,7 @@ export default () => {
         <Header.Container>
           <Header.Logo href="/" />
           <Header.ServiceName href="/">
-            Take an COVID-19 Antibody Test
+            Take a COVID-19 Antibody Test
           </Header.ServiceName>
         </Header.Container>
       </Header>
