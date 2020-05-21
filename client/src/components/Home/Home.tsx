@@ -10,7 +10,7 @@ import Login from "../Login/Login";
 import { AppContext, withApp } from "components/App/context";
 import { useCookies } from "react-cookie";
 
-export default withApp(({ app }: { app: AppContext }) => {
+export const Home = ({ app }: { app: AppContext }) => {
   const history = useHistory();
   const setCookie = useCookies(["login-token"])[1];
   const login = app.container.getLogin();
@@ -21,7 +21,9 @@ export default withApp(({ app }: { app: AppContext }) => {
         <Header.Container>
           <Header.Logo href="/" />
           <Header.ServiceName href="/">
-            Take an COVID-19 Antibody Test
+            <span data-testid="service-name">
+              Take an COVID-19 Antibody Test
+            </span>
           </Header.ServiceName>
         </Header.Container>
       </Header>
@@ -37,4 +39,6 @@ export default withApp(({ app }: { app: AppContext }) => {
       </Container>
     </PageContent>
   );
-});
+};
+
+export default withApp(Home);
