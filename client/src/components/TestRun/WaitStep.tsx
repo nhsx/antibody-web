@@ -56,7 +56,10 @@ export default (props: StepDetailComponentProp) => {
         // testRunUID={testRunUID}
         setStepReady={setStepReady}
       />
-      <form style={{ display: 'none' }} id={FORMID} onSubmit={onSubmit} />
+      <form
+        style={{ display: 'none' }}
+        id={FORMID}
+        onSubmit={onSubmit} />
     </>
   );
 };

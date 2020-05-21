@@ -11,7 +11,9 @@ import React from 'react';
 export default () => {
   return (
     <PageContent>
-      <PageHeader title="Ooops!" subtitle="Something went wrong." />
+      <PageHeader
+        title="Ooops!"
+        subtitle="Something went wrong." />
     </PageContent>
   );
 };

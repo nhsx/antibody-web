@@ -35,6 +35,8 @@ yarn install
 
 ### Running the service locally
 
+Create your client/.env file - rename example.env -> .env for local development
+
 ```bash
 yarn start
 ```

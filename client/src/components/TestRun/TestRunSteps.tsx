@@ -94,7 +94,9 @@ export default () => {
 
     if (!(currentStepDescription.hasFormContent || nextIsDisabled)) {
       nextButton = (
-        <Link to={nextPath} onClick={onClickNextLink}>
+        <Link
+          to={nextPath}
+          onClick={onClickNextLink}>
           {nextButton}
         </Link>
       );
@@ -107,12 +109,14 @@ export default () => {
         <Header.Container>
           <Header.Logo href="/" />
           <Header.ServiceName href="/">
-            Take an COVID-19 Antibody Test
+            Take a COVID-19 Antibody Test
           </Header.ServiceName>
         </Header.Container>
       </Header>
       <Container>
-        <TestRunHeader stepDetails={currentStepDescription} step={step} />
+        <TestRunHeader
+          stepDetails={currentStepDescription}
+          step={step} />
         <currentStepDescription.ContentComponent
           setStepReady={setStepReady}
           submitUrl={nextPath}
