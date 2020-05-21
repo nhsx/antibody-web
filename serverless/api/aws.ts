@@ -16,7 +16,7 @@ export async function getUploadUrl(bucket: string, guid: string): Promise<string
     });
   });
   return url as string;
-};
+}
 
 export async function createTestRecord(table: string, record: TestRecord) {
   const dynamo = new AWS.DynamoDB();

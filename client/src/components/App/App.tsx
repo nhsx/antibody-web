@@ -34,7 +34,7 @@ const App = () => {
               ))}
               <Route key="pagenotfound">
                 <>
-                  <Helmet title={`Open RDT: Page not found`} />
+                  <Helmet title={`Open RDT: Page not foundg`} />
                   <PageNotFound />
                 </>
               </Route>
