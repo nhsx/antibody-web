@@ -7548,7 +7548,7 @@ next-tick@~1.0.0:
   resolved "https://registry.yarnpkg.com/next-tick/-/next-tick-1.0.0.tgz#ca86d1fe8828169b0120208e3dc8424b9db8342c"
   integrity sha1-yobR/ogoFpsBICCOPchCS524NCw=
 
-nhsuk-frontend@^3.0.0:
+nhsuk-frontend@^3.0.1:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/nhsuk-frontend/-/nhsuk-frontend-3.1.0.tgz#cfc42567f44dacd001fb5e72e2f7adb4e1183d32"
   integrity sha512-b3mt1E4N+MVkVUjrNtF1z/FyGn8icz2d5slQ/baPAbKbvOvfgE0ecqv6BrggiyGMzFXeSYuA8pTMhRU90jmv/Q==

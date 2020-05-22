@@ -22,7 +22,8 @@
   "scripts": {
     "dev": "concurrently --kill-others \"npm --prefix client run start\" \"npm --prefix serverless run dev\"",
     "test": "npm --prefix client run test -- --watch-all=false && npm --prefix serverless run test",
-    "lint": "./node_modules/.bin/eslint . --ext .js,.jsx,.ts,.tsx"
+    "lint": "./node_modules/.bin/eslint . --ext .js,.jsx,.ts,.tsx",
+    "postinstall": "(cd client && yarn install); (cd lib && yarn install); (cd serverless && yarn install)"
   },
   "husky": {
     "hooks": {
