@@ -10,7 +10,6 @@ describe("<Login>", () => {
     const submit = await login.findByText("Submit");
     fireEvent.change(input, { target: { value: "test" } });
     fireEvent.submit(submit);
-
     expect(formSubmitSpy).toHaveBeenCalledWith("test");
   });
 });
