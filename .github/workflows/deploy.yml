@@ -86,7 +86,7 @@ jobs:
           yarn build
         env:
           REACT_APP_STAGE: prod
-          REACT_APP_API_BASE: https://vfxgyqhz2f.execute-api.eu-west-2.amazonaws.com
+          REACT_APP_API_BASE: https://iy3gq5bmlg.execute-api.eu-west-2.amazonaws.com
       - name: Deploy to S3
         uses: jakejarvis/s3-sync-action@master
         with:

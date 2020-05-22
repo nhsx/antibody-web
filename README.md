@@ -33,6 +33,13 @@ To install dependent modules.
 yarn install
 ```
 
+This will also postinstall dependencies in the /lib /client and /serverless folders
+If you for whatever reason only want to install root dependencies:
+
+```bash
+yarn install --ignore-scripts
+```
+
 ### Running the service locally
 
 Create your client/.env file - rename example.env -> .env for local development
