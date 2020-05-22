@@ -24,4 +24,8 @@ describe("TestRunSteps", () => {
     expect(content).not.toBeUndefined();
   });
 
+  it("There is a next link ", async () => {
+    const content = await screen.findByText(/Next/);
+    expect(content).not.toBeUndefined();
+  });
 });
