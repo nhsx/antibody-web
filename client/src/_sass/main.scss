@@ -1,28 +1,5 @@
 @charset "utf-8";
-
-// Import a Google Font
-@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap');
-@import '~nhsuk-frontend/dist/nhsuk-3.1.0.min.css';
-
-$family-sans-serif: 'Roboto', sans-serif;
-
-// NHS UK
-
-$nhsuk-text-color: #212b32;
-$nhsuk-secondary-text-color: #4c6272;
-$nhsuk-link-color: #005eb8;
-$nhsuk-link-hover-color: #7c2855;
-$nhsuk-link-visited-color: #330072;
-$nhsuk-link-active-color: #002f5c;
-$nhsuk-focus-color: #ffeb3b;
-$nhsuk-focus-text-color: #212b32;
-$nhsuk-border-color: #d8dde0;
-$nhsuk-form-border-color: #4c6272;
-$nhsuk-error-color: #d5281b;
-$nhsuk-button-color: #007f3b;
-$nhsuk-secondary-button-color: #4c6272;
-$color_nhsuk-grey-5: #f0f4f5;
-$color_nhsuk-grey-3: #aeb7bd;
+@import '~nhsuk-frontend/packages/nhsuk';
 
 // Material UI
 
