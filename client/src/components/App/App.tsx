@@ -26,7 +26,6 @@ const App = () => {
   const container = new AppContainer();
 
   return (
-
     <AppContext.Provider
       value={{ state: appState, setLocale, dispatch, container }}
     >
@@ -39,12 +38,16 @@ const App = () => {
             <Switch>
               {ROUTES.map((route: DashboardRoute) => {
                 if (route.requiresLogin) {
+                  const { component, ...routeParams } = route;
+                  const RouteComponent = component;
                   return (
-                    <LoginProvider>
-                      <Route
-                        {...route}
-                        key={route.path} />
-                    </LoginProvider>
+                    <Route
+                      {...routeParams}
+                      key={route.path}>
+                      <LoginProvider>
+                        <RouteComponent />
+                      </LoginProvider>
+                    </Route>
                   );
                 } else {
                   return <Route
