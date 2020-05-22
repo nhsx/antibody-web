@@ -47,7 +47,7 @@ const NewTestRun = (props: NewTestRunProps) => {
 
   if (generateError) {
     //@TODO: Move this
-    return <TestError code={generateError.code} />;
+    return <TestError error={generateError} />;
   }
 
   return testRunUID ? (

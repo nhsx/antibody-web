@@ -2,18 +2,16 @@
 //
 // Use of this source code is governed by an LGPL-3.0 license that
 // can be found in the LICENSE file distributed with this file.
-import { APP_MODES, CURRENT_APP_MODE } from "utils/globalConstants";
 import {  createStyles, makeStyles } from "@material-ui/core";
-import Asset from "../ui/Asset";
-import Grid from "@material-ui/core/Grid";
-import PhotoUploaderPanel from "../FileUploader/PhotoUploaderPanel";
 import React from "react";
-import TimedStep from "./TimedStep";
 import transcribeTestPath from "./transcribeTestPath";
 import CheckYourKit from "./ContentComponent/CheckYourKit";
 import WashAndDryHands from "./ContentComponent/WashAndDryHands";
 import SetUpTest from "./ContentComponent/SetUpTest";
 import SelectAFinger from "./ContentComponent/SelectAFinger";
+import Wait from "./ContentComponent/Wait";
+import ScanKit from "./ContentComponent/ScanKit";
+import Results from "./ContentComponent/Results";
 
 export const FORMID = "stepForm";
 export const UNSET_PROFILE_ID = "UNSET_PROFILE_ID";
@@ -101,79 +99,33 @@ const testrunSteps: { [stepName: string]: StepDetailsIncomplete } = {
     ContentComponent: React.memo(() => <SelectAFinger />),
     nav: {
       next: {
-        default: "scanStrip"
+        default: "scanKit"
       }
     }
   },
-  scanStrip: {
-    title: "Scan your test strip",
-    ContentComponent: React.memo(props => (
-      <div>
-        <div>
-          Ensure your test strip is in the middle of the box, and hold your
-          phone flat and directly above your test strip before taking its photo.
-        </div>
-        <Grid
-          container
-          spacing={3}>
-          <Grid
-            item
-            xs={6}>
-            <Asset
-              className={getStepStyle().centeredAsset}
-              height={180}
-              width={290}
-              alt="Image of the test strip being put in its position in the box."
-              src="scanthestrip.png"
-            />
-          </Grid>
-          <Grid
-            item
-            xs={6}>
-            <Asset
-              className={getStepStyle().centeredAsset}
-              height={180}
-              width={290}
-              alt="Image of a phone taking the test strip photo."
-              src="holdphone.png"
-            />
-          </Grid>
-        </Grid>
-        {CURRENT_APP_MODE === APP_MODES.PROD && (
-          <div>Choose one of the options below to take the photo.</div>
-        )}
-        <PhotoUploaderPanel {...props} />
-      </div>
-    )),
-    hasFormContent: true,
+  wait: {
+    title: "Wait for your kit to react",
+    ContentComponent: React.memo(() => <Wait />),
     nav: {
       next: {
-        default: "waitVialReaction"
+        default: "scanKit"
       }
     }
   },
-  waitVialReaction: {
-    isBlockingStep: true,
-    ContentComponent: React.memo((props: StepDetailComponentProp) => {
-      // TODO: make a facts list that changes every x seconds.
-      return (
-        <>
-          <TimedStep
-            description="Wait for a full minute so that the testing solution can react with the sample from the swab."
-            duration={60000}
-            {...props}
-          />
-          <h1 className="title">Did you know?</h1>
-          <p>
-            You can become infected by coming into close contact (about 6 feet
-            or two arm lengths) with a person who has COVID-19. COVID-19 is
-            primarily spread from person to person.
-          </p>
-        </>
-      );
-    }),
+  scanKit: {
+    title: "Scan your test kit",
+    ContentComponent: React.memo(() => <ScanKit />),
     nav: {
-      previous: "scanStrip"
+      next: {
+        default: "results"
+      }
+    }
+  },
+  results: {
+    title: "Results",
+    ContentComponent: React.memo(() => <Results />),
+    nav: {
+      previous: "scanKit"
     }
   }
 };

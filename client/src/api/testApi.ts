@@ -20,13 +20,12 @@ const testApi: TestApi = {
     return await response.json();
   },
   uploadImage: (url, file) => {
-    const formData = new FormData();
-    formData.append("image", file);
+
     return fetch(url, {
       method: "PUT",
-      body: formData,
+      body: file,
       "headers": {
-        ContentType: "multipart/formdata"
+        "Content-Type": file.type
       }
     });
   }

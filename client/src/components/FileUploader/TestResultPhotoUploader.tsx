@@ -96,6 +96,12 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
     );
   }, [history, testRunUID]);
 
+  const handleRetry = () => {
+    setUploadError(null);
+    setIsUploading(false);
+    setImageAsFile(null);
+  };
+
   // Occurs when the person uploads the photo
   // TODO: Handle Errors
   const handleUpload = useCallback(
@@ -105,6 +111,9 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
       if (imageAsFile === null && !imageAsURI) {
         console.error(`Cannot upload an empty image.`);
         setIsUploading(false);
+        setUploadError({
+          code: "UPL1"
+        });
         return;
       }
 
@@ -114,16 +123,18 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
           await testApi.uploadImage(app.state.testData.uploadUrl, imageAsFile);
         } else {
           setUploadError({
-            code: "UPL2"
+            code: "UPL2",
+            onFix: handleRetry
           });
         }
         
       } catch (error) {
-        console.log(error);
         setIsUploading(false);
         setUploadError({
-          code: "UPL1"
+          code: "UPL1",
+          onFix: handleRetry
         });
+        throw error;
       }
     },
     [imageAsFile, imageAsURI, setIsUploading, app.state, testApi]
@@ -131,8 +142,7 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
 
   return (
     <div>
-      hello
-      {uploadError && <TestError code={uploadError.code} />}
+      {uploadError && <TestError error={uploadError} />}
       {!(cameraEnabled || imageAsURI || imageUploadedURL) && (
         <Grid
           container
