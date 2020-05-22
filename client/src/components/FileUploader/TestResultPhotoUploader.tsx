@@ -121,6 +121,7 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
       try {
         if (app.state.testData && imageAsFile) {
           await testApi.uploadImage(app.state.testData.uploadUrl, imageAsFile);
+          
         } else {
           setUploadError({
             code: "UPL2",
