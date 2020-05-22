@@ -3,6 +3,7 @@
 // Use of this source code is governed by an LGPL-3.0 license that
 // can be found in the LICENSE file distributed with this file.
 import React, { useRef } from 'react';
+import { Button } from 'nhsuk-react-components';
 
 interface ImageSelectorInputProps {
   onImageSelected: (image: File) => void;
@@ -37,7 +38,7 @@ export default (props: ImageSelectorInputProps) => {
         type="file"
         onChange={handleChange}
       />
-      <button
+      <Button
         disabled={props.disabled}
         onClick={() => {
           if (!inputRef || !inputRef.current) {
@@ -47,9 +48,8 @@ export default (props: ImageSelectorInputProps) => {
           }
         }}
       >
-        <span className="icon is-medium"></span>
         <span>Upload a Photo</span>
-      </button>
+      </Button>
     </div>
   );
 };

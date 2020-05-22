@@ -41,8 +41,8 @@ export const ROUTE_DEFINITIONS: { [key: string]: DashboardRoute } = {
     requiresLogin: true,
     component: NewTestRun,
   },
-  PERFORMTEST: {
-    path: "/testrunsteps/:testRunUID/:step",
+  PERFORM_TEST: {
+    path: '/testrunsteps/:testRunUID/:step',
     exact: false,
     seo: {
       title: "Perform a test",

@@ -5,6 +5,23 @@
         "header": "Placeholder error header",
         "title": "There is a problem",
         "body": "Sorry, an error has occurred while generating this page.",
-        "resolution_1": "Placeholder resolution action"
+        "fix": "Placeholder resolution action",
+        "codes": {
+            "UPL1": {
+                "title": "There is a problem",
+                "body": "Sorry, an error has occurred while uploading your photo.",
+                "fix": "Try again"
+            },
+            "UPL2": {
+                "title": "There is a problem",
+                "body": "Your submission is missing test data",
+                "fix": "Try again"
+            },
+            "GEN1": {
+                "title": "There is a problem",
+                "body": "Sorry, an error has occurred while generating this page.",
+                "fix": "Placeholder resolution action"
+            }
+        }
     }
 }

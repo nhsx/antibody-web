@@ -48,7 +48,7 @@ export default (props: InterfaceTimedStepProps) => {
 
   // store the timer start time, will be updated via fastforward click.
   const [startTimeInternal, setStartTimeInternal] = useState<number | null>(
-    null
+    Date.now()
   );
 
   const stepName = TESTRUN_STEPS[step!].name;

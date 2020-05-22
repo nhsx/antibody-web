@@ -24,7 +24,7 @@ const DefaultError = () => (
       <p><FormattedMessage id="error.body" /></p>
       <ErrorSummary.List>
         <ErrorSummary.Item href="#example-error-1">
-          <FormattedMessage id="error.resolution_1" />
+          <FormattedMessage id="error.fix" />
         </ErrorSummary.Item>            
       </ErrorSummary.List>
     </ErrorSummary.Body>
