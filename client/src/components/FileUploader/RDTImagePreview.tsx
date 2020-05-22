@@ -31,7 +31,9 @@ export default (props: RDTImagePreviewProps) => {
 
   return (
     <div>
-      <img src={dataURI} alt="preview" />
+      <img
+        src={dataURI}
+        alt="preview" />
       {detectionData && <DetectionBoxOverlay detectionData={detectionData} />}
     </div>
   );

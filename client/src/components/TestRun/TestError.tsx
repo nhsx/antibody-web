@@ -13,7 +13,10 @@ interface TestErrorProps {
 export default (props: TestErrorProps) => {
 
   return (
-    <ErrorSummary aria-labelledby="error-summary-title" role="alert" tabIndex={-1}>
+    <ErrorSummary
+      aria-labelledby="error-summary-title"
+      role="alert"
+      tabIndex={-1}>
       <ErrorSummary.Title id="error-summary-title">{props.title}</ErrorSummary.Title>
       <ErrorSummary.Body>
         <p>{props.body}</p>

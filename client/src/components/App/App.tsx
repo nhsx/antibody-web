@@ -35,21 +35,23 @@ const App = () => {
         messages={flatten(messages[appState.locale])}
       >
         <HelmetProvider>
-          <Router>
-            <Switch>
-              {ROUTES.map((route: DashboardRoute) => (
-                <Route
-                  {...route}
-                  key={route.path} />
-              ))}
-              <Route key="pagenotfound">
-                <>
-                  <Helmet title={`Open RDT: Page not foundg`} />
-                  <PageNotFound />
-                </>
-              </Route>
-            </Switch>
-          </Router>
+          <ErrorBoundary>
+            <Router>
+              <Switch>
+                {ROUTES.map((route: DashboardRoute) => (
+                  <Route
+                    {...route}
+                    key={route.path} />
+                ))}
+                <Route key="pagenotfound">
+                  <>
+                    <Helmet title={`Open RDT: Page not foundg`} />
+                    <PageNotFound />
+                  </>
+                </Route>
+              </Switch>
+            </Router>
+          </ErrorBoundary>
         </HelmetProvider>
       </IntlProvider>
     </AppContext.Provider>

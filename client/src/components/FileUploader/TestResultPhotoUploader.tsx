@@ -176,8 +176,12 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
             )}
             {imageAsURI && (
               <div>
-                <Grid container spacing={3}>
-                  <Grid item xs={6}>
+                <Grid
+                  container
+                  spacing={3}>
+                  <Grid
+                    item
+                    xs={6}>
                     <Button
                       disabled={isUploading}
                       onClick={handleUpload}
@@ -186,7 +190,9 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
                     </Button>
                   </Grid>
 
-                  <Grid item xs={6}>
+                  <Grid
+                    item
+                    xs={6}>
                     <Button
                       disabled={isUploading}
                       onClick={handleShowCamera}

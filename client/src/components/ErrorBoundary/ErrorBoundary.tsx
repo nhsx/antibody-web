@@ -12,7 +12,11 @@ interface ErrorBoundaryProps {
 }
 
 const DefaultError = () => (
-  <ErrorSummary data-testid="default-error" aria-labelledby="error-summary-title" role="alert" tabIndex={-1}>
+  <ErrorSummary
+    data-testid="default-error"
+    aria-labelledby="error-summary-title"
+    role="alert"
+    tabIndex={-1}>
     <ErrorSummary.Title id="error-summary-title">
       <FormattedMessage id="error.title"/>
     </ErrorSummary.Title>
