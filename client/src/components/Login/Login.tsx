@@ -13,7 +13,6 @@ export default (props: LoginProps) => {
     formSubmit(signInId);
   };
 
-  throw new Error();
 
   return (
     <Row>
