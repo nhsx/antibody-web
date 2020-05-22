@@ -4,6 +4,14 @@ provider:
   runtime: nodejs12.x
   stage: ${opt:stage, 'dev'}
   region: eu-west-2
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:PutItem
+      Resource: 
+        Fn::GetAtt: 
+          - DynamoDB
+          - Arn
 plugins:
   - serverless-plugin-typescript
   - serverless-offline
