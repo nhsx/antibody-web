@@ -16,9 +16,9 @@ import TestStripCamera from './TestStripCamera';
 import { getAppConfig } from 'utils/AppConfig';
 import { useHistory } from 'react-router-dom';
 import { useModelPreLoader } from './RDTModelLoader';
-import { uploadImage } from 'api/testApi';
 import { AppContext, withApp } from 'components/App/context';
-
+import TestError from 'components/TestRun/TestError';
+import ApiError from 'errors/ApiError';
 
 const config = getAppConfig();
 
@@ -30,14 +30,15 @@ interface TestResultPhotoUploaderProps {
 
 const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
   const { testRunUID, onFileUploadComplete, app } = props;
+  const { getTestApi } = app.container;
+  const testApi =  getTestApi();
   const history = useHistory();
-
+  
   // Preload model.
   useModelPreLoader();
 
   // Show/hide the camera
   const [cameraEnabled, setCameraEnabled] = useState(false);
-
   // Image upload flow
   const [imageAsFile, setImageAsFile] = useState<File | null>(null);
   // Show the image preview
@@ -46,6 +47,9 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
   const [imageUploadedURL, setImageUploadedURL] = useState('');
   // Monitors the upload state
   const [isUploading, setIsUploading] = useState(false);
+  // Handles error messages
+  const [uploadError, setUploadError] = useState<ApiError | null>(null);
+
 
   // Occurs after the user selects a file.
   const handleImageAsFile = useCallback(
@@ -105,14 +109,30 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
       }
 
       //@TODO: Add failure handling
-      await uploadImage(app.state.testData?.uploadUrl, imageAsFile);
-  
+      try {
+        if (app.state.testData && imageAsFile) {
+          await testApi.uploadImage(app.state.testData.uploadUrl, imageAsFile);
+        } else {
+          setUploadError({
+            code: "UPL2"
+          });
+        }
+        
+      } catch (error) {
+        console.log(error);
+        setIsUploading(false);
+        setUploadError({
+          code: "UPL1"
+        });
+      }
     },
-    [imageAsFile, imageAsURI, setIsUploading, app.state]
+    [imageAsFile, imageAsURI, setIsUploading, app.state, testApi]
   );
 
   return (
     <div>
+      hello
+      {uploadError && <TestError code={uploadError.code} />}
       {!(cameraEnabled || imageAsURI || imageUploadedURL) && (
         <Grid
           container

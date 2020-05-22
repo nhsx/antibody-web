@@ -38,7 +38,7 @@ export const ROUTE_DEFINITIONS: { [key: string]: DashboardRoute } = {
     },
     component: NewTestRun,
   },
-  PERFORMTEST: {
+  PERFORM_TEST: {
     path: '/testrunsteps/:testRunUID/:step',
     exact: false,
     seo: {

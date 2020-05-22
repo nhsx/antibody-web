@@ -14,9 +14,13 @@
     "eslint-plugin-react-hooks": "^4.0.2",
     "husky": "^4.2.5",
     "prettier": "^2.0.5",
-    "typescript": "^3.9.2"
+    "typescript": "^3.9.2",
+    "concurrently": "^5.2.0",
+    "eslint-plugin-react": "^7.20.0",
+    "react": "^16.13.1"
   },
   "scripts": {
+    "dev": "concurrently --kill-others \"npm --prefix client run start\" \"npm --prefix serverless run dev\"",
     "test": "npm --prefix client run test -- --watch-all=false && npm --prefix serverless run test",
     "lint": "./node_modules/.bin/eslint . --ext .js,.jsx,.ts,.tsx"
   },
@@ -24,9 +28,5 @@
     "hooks": {
       "pre-commit": "npm run lint -- --fix"
     }
-  },
-  "dependencies": {
-    "eslint-plugin-react": "^7.20.0",
-    "react": "^16.13.1"
   }
 }

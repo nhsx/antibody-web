@@ -1,15 +1,18 @@
 import React from 'react';
 import { ErrorSummary } from 'nhsuk-react-components';
+import { FormattedMessage } from 'react-intl';
+import enMsgs from 'i18n/en-gb.json';
+import flatten from 'flat';
 
 interface TestErrorProps {
-  title?: string;
-  body?: string;
-  items?: string[];
+  titleId?: string;
+  bodyId?: string;
+  fixId?: string[];
+  code?: string;
 }
 
-// NOTE: This component should be passed localised strings
-// Ensure you do your localisation in the parent component via useFormatMessage
 
+// You can supply an error code and it will pull translated messages, or provide messageIds directly for each component
 export default (props: TestErrorProps) => {
 
   return (
@@ -17,15 +20,24 @@ export default (props: TestErrorProps) => {
       aria-labelledby="error-summary-title"
       role="alert"
       tabIndex={-1}>
-      <ErrorSummary.Title id="error-summary-title">{props.title}</ErrorSummary.Title>
+      <ErrorSummary.Title id="error-summary-title">
+        <FormattedMessage id={props.titleId || `error.codes.${props.code}.title`}/>
+      </ErrorSummary.Title>
       <ErrorSummary.Body>
-        <p>{props.body}</p>
+        <p>
+          <FormattedMessage id={props.bodyId || `error.codes.${props.code}.body`}/>
+        </p>
         <ErrorSummary.List>
-          {props.items?.map(i => (
-            <ErrorSummary.Item key={i}>
-              {i}
-            </ErrorSummary.Item>            
-          ))}
+          {props.fixId && (
+            <ErrorSummary.Item>
+              <FormattedMessage id={props.bodyId} />
+            </ErrorSummary.Item>
+          )}
+          {flatten(enMsgs)[`error.codes.${props.code}.fix`] && (
+            <ErrorSummary.Item>
+              <FormattedMessage id={`error.codes.${props.code}.fix`} />
+            </ErrorSummary.Item>             
+          )}
         </ErrorSummary.List>
       </ErrorSummary.Body>
     </ErrorSummary>);

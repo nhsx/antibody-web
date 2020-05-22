@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "test": "node_modules/.bin/jest"
+    "test": "node_modules/.bin/jest",
+    "dev": "node_modules/.bin/serverless offline"
   },
   "dependencies": {
     "@hapi/joi": "^17.1.1",
