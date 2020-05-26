@@ -7,10 +7,10 @@
     "@hapi/joi": "^17.1.1",
     "@types/hapi__joi": "^17.1.0",
     "@types/serverless-jest-plugin": "^0.3.0",
+    "abt-lib": "file:../lib",
     "aws-sdk": "^2.676.0",
     "dotenv": "^8.2.0",
-    "uuid": "^8.0.0",
-    "abt-lib": "file:./../lib"
+    "uuid": "^8.0.0"
   },
   "devDependencies": {
     "@testing-library/react": "^9.3.2",
