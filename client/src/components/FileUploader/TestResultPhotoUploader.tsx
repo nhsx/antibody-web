@@ -22,6 +22,12 @@ import ApiError from 'errors/ApiError';
 
 const config = getAppConfig();
 
+const styles = {
+  image: {
+    maxWidth: "100%"
+  }
+};
+
 interface TestResultPhotoUploaderProps {
   testRunUID: string;
   onFileUploadComplete: (ready: boolean) => void;
@@ -49,6 +55,8 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
   const [isUploading, setIsUploading] = useState(false);
   // Handles error messages
   const [uploadError, setUploadError] = useState<ApiError | null>(null);
+  // Analyse
+  const [isProcessing, setIsProcessing] = useState(false);
 
 
   // Occurs after the user selects a file.
@@ -117,11 +125,15 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
         return;
       }
 
-      //@TODO: Add failure handling
       try {
         if (app.state.testData && imageAsFile) {
           await testApi.uploadImage(app.state.testData.uploadUrl, imageAsFile);
-          
+          setImageUploadedURL(app.state.testData.downloadUrl);
+          setIsUploading(false);
+          setIsProcessing(true);
+          setTimeout(() => {
+            setIsProcessing(false);
+          }, 2000);
         } else {
           setUploadError({
             code: "UPL2",
@@ -197,12 +209,16 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
             {(imageAsURI || imageUploadedURL) && (
               <div>
                 {imageUploadedURL && (
-                  <img
-                    src={imageUploadedURL}
-                    alt="preview"
-                  />
+                  <>
+                    <img
+                      style={styles.image}
+                      src={imageUploadedURL}
+                      alt="preview"
+                    />
+                    {isProcessing && "Analysing Your Results..."}
+                  </>
                 )}
-                {imageAsURI && <RDTImagePreview dataURI={imageAsURI} />}
+                {imageAsURI && !imageUploadedURL && <RDTImagePreview dataURI={imageAsURI} />}
               </div>
             )}
             {imageAsURI && (
@@ -217,10 +233,9 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
                       disabled={isUploading}
                       onClick={handleUpload}
                     >
-                      <span>Upload</span>
+                      <span>{imageUploadedURL ? "Upload New File" : "Upload"}</span>
                     </Button>
                   </Grid>
-
                   <Grid
                     item
                     xs={6}>
@@ -228,20 +243,11 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
                       disabled={isUploading}
                       onClick={handleShowCamera}
                     >
-                      <span>Retake</span>
+                      <span>{imageAsFile ? "Take Photo" : "Retake"}</span>
                     </Button>
                   </Grid>
                 </Grid>
               </div>
-            )}
-            {imageUploadedURL && (
-              <Button
-                disabled={isUploading}
-                form={FORMID}
-                type="submit"
-              >
-                <span>View Results</span>
-              </Button>
             )}
           </div>
         </div>

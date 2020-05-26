@@ -5,5 +5,6 @@ export interface GenerateTestRequest {
 export interface GenerateTestResponse {
   guid: string;
   uploadUrl: string;
+  downloadUrl: string;
   testRecord: any;
 }

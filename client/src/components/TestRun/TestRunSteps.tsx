@@ -13,6 +13,7 @@ import { Header, Container, Row, Col } from "nhsuk-react-components";
 import { ContinueButton } from "components/ui/Buttons";
 import PageContent from "../ui/PageContent";
 import TestRunHeader from "./TestRunHeader";
+import MainContent from "components/ui/MainContent";
 
 const testRunStepStyle = makeStyles(() =>
   createStyles({
@@ -114,17 +115,19 @@ export default () => {
         </Header.Container>
       </Header>
       <Container>
-        <TestRunHeader
-          stepDetails={currentStepDescription}
-          step={step} />
-        <currentStepDescription.ContentComponent
-          setStepReady={setStepReady}
-          submitUrl={nextPath}
-          testRunUID={testRunUID!}
-        />
-        <Row>
-          <Col width="full">{nextButton}</Col>
-        </Row>
+        <MainContent>
+          <TestRunHeader
+            stepDetails={currentStepDescription}
+            step={step} />
+          <currentStepDescription.ContentComponent
+            setStepReady={setStepReady}
+            submitUrl={nextPath}
+            testRunUID={testRunUID!}
+          />
+          <Row>
+            <Col width="full">{nextButton}</Col>
+          </Row>
+        </MainContent>
       </Container>
     </PageContent>
   );

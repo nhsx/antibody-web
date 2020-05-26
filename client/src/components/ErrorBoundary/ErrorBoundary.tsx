@@ -2,6 +2,7 @@ import React, { ReactElement } from 'react';
 import { ErrorSummary, Header, Container } from 'nhsuk-react-components';
 import { FormattedMessage } from 'react-intl';
 import PageContent from 'components/ui/PageContent';
+import MainContent from 'components/ui/MainContent';
 
 interface ErrorState {
   hasError: boolean;
@@ -44,14 +45,15 @@ export default class ErrorBoundary extends React.Component<ErrorBoundaryProps, E
   }
   
   componentDidCatch(error) {
-    console.log("caught error", error);
+    if (!error.message.includes("Test Error")) {
+      console.log("Caught error", error);
+    }
     // You can also log the error to an error reporting service
     // @TODO: Add sentry logging
   }
   
   render() {
 
-    console.log(this.props.errorComponent);
     if (this.state.hasError) {
       return (       
         <PageContent>
@@ -64,7 +66,9 @@ export default class ErrorBoundary extends React.Component<ErrorBoundaryProps, E
             </Header.Container>
           </Header>
           <Container>
-            {this.props.errorComponent || <DefaultError />}
+            <MainContent>
+              {this.props.errorComponent || <DefaultError />}
+            </MainContent>
           </Container>
         </PageContent>
       );

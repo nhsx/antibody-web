@@ -28,14 +28,7 @@ export default (props: PageContentProps) => (
     </section>
     <Footer>
       <Footer.List>
-        <Footer.ListItem>
-          OpenRDT Powered by{' '}
-          <a
-            className="nhsuk-footer__list-item-link"
-            href={AUDERE_URL}>
-            Audere
-          </a>
-        </Footer.ListItem>
+        <Footer.ListItem href={AUDERE_URL}>OpenRDT Powered by Audere </Footer.ListItem>
       </Footer.List>
       <Footer.Copyright>&copy; Crown copyright</Footer.Copyright>
     </Footer>

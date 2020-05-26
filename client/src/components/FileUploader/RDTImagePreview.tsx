@@ -4,9 +4,14 @@
 // can be found in the LICENSE file distributed with this file.
 import React, { useEffect, useState } from 'react';
 import { TopDetectionData, analyzeImageDataURI } from './RDTAnalyzer';
-
 import DetectionBoxOverlay from './DetectionBoxOverlay';
 import { getAppConfig } from 'utils/AppConfig';
+
+const styles = {
+  image: {
+    maxWidth: "100%"
+  }
+};
 
 interface RDTImagePreviewProps {
   dataURI: string;
@@ -32,6 +37,7 @@ export default (props: RDTImagePreviewProps) => {
   return (
     <div>
       <img
+        style={styles.image}
         src={dataURI}
         alt="preview" />
       {detectionData && <DetectionBoxOverlay detectionData={detectionData} />}
