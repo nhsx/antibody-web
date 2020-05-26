@@ -1,7 +1,7 @@
 {
   "scripts": {
     "test": "node_modules/.bin/jest",
-    "dev": "node_modules/.bin/serverless offline"
+    "dev": "node_modules/.bin/serverless offline --useChildProcesses"
   },
   "dependencies": {
     "@hapi/joi": "^17.1.1",

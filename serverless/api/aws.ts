@@ -3,11 +3,16 @@ export const AWS = AWSSDK;
 import { PutItemInput, GetItemInput } from "aws-sdk/clients/dynamodb";
 import TestRecord from "models/TestRecord";
 
-export async function getUploadUrl(bucket: string, guid: string): Promise<string> {
+interface UrlResponse {
+  uploadUrl: string;
+  downloadUrl: string;
+}
+
+export async function getUrls(bucket: string, guid: string): Promise<UrlResponse> {
   const s3 = new AWS.S3();
   const params = { Bucket: bucket, Key: `rdt-images/${guid}` };
-  const url = await new Promise((resolve, reject) => {
-    s3.getSignedUrl("putObject", params, (err, url: string) => {
+  const getUrl = async (method: string): Promise<string> => await new Promise((resolve, reject) => {
+    s3.getSignedUrl(method, params, (err, url: string) => {
       if (err) {
         reject(err);
       } else {
@@ -15,7 +20,13 @@ export async function getUploadUrl(bucket: string, guid: string): Promise<string
       }
     });
   });
-  return url as string;
+
+  const [uploadUrl, downloadUrl] = await Promise.all([getUrl("putObject"), getUrl("getObject")]);
+  
+  return {
+    uploadUrl,
+    downloadUrl
+  };
 }
 
 export async function createTestRecord(table: string, record: TestRecord) {

@@ -99,7 +99,7 @@ const testrunSteps: { [stepName: string]: StepDetailsIncomplete } = {
     ContentComponent: React.memo(() => <SelectAFinger />),
     nav: {
       next: {
-        default: "scanKit"
+        default: "wait"
       }
     }
   },
@@ -114,6 +114,15 @@ const testrunSteps: { [stepName: string]: StepDetailsIncomplete } = {
   },
   scanKit: {
     title: "Scan your test kit",
+    ContentComponent: React.memo(() => <ScanKit />),
+    nav: {
+      next: {
+        default: "results"
+      }
+    }
+  },
+  getResults: {
+    title: "Your Results",
     ContentComponent: React.memo(() => <ScanKit />),
     nav: {
       next: {

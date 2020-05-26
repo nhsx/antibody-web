@@ -2,6 +2,7 @@ import React, { ReactElement } from 'react';
 import { ErrorSummary, Header, Container } from 'nhsuk-react-components';
 import { FormattedMessage } from 'react-intl';
 import PageContent from 'components/ui/PageContent';
+import MainContent from 'components/ui/MainContent';
 
 interface ErrorState {
   hasError: boolean;
@@ -51,10 +52,10 @@ export default class ErrorBoundary extends React.Component<ErrorBoundaryProps, E
   
   render() {
 
-    console.log(this.props.errorComponent);
     if (this.state.hasError) {
       return (       
         <PageContent>
+          test
           <Header>
             <Header.Container>
               <Header.Logo href="/" />
@@ -64,7 +65,9 @@ export default class ErrorBoundary extends React.Component<ErrorBoundaryProps, E
             </Header.Container>
           </Header>
           <Container>
-            {this.props.errorComponent || <DefaultError />}
+            <MainContent>
+              {this.props.errorComponent || <DefaultError />}
+            </MainContent>
           </Container>
         </PageContent>
       );
