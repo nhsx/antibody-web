@@ -18,6 +18,7 @@ import { useHistory } from 'react-router-dom';
 import { useModelPreLoader } from './RDTModelLoader';
 import { AppContext, withApp } from 'components/App/context';
 import TestError from 'components/TestRun/TestError';
+import { dataURIToBlob, blobToFile } from 'utils/file';
 import ApiError from 'errors/ApiError';
 
 const config = getAppConfig();
@@ -62,6 +63,7 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
   // Occurs after the user selects a file.
   const handleImageAsFile = useCallback(
     (image: File) => {
+
       setImageAsFile(image);
 
       // Show the preview
@@ -93,7 +95,9 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
   // Occurs when a photo is taken.
   const handlePhotoTaken = useCallback((dataURI: string) => {
     setCameraEnabled(false);
-    // Show the preview
+    const blob = dataURIToBlob(dataURI);
+    const file = blobToFile(blob, 'rdtImage');
+    setImageAsFile(file);
     setImageAsURI(dataURI);
   }, []);
 
@@ -126,8 +130,8 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
       }
 
       try {
-        if (app.state.testData && imageAsFile) {
-          await testApi.uploadImage(app.state.testData.uploadUrl, imageAsFile);
+        if (app.state.testData && (imageAsFile || imageAsURI)) {
+          await testApi.uploadImage(app.state.testData.uploadUrl, imageAsFile || imageAsURI);
           setImageUploadedURL(app.state.testData.downloadUrl);
           setIsUploading(false);
           setIsProcessing(true);
@@ -142,6 +146,7 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
         }
         
       } catch (error) {
+        console.log(error);
         setIsUploading(false);
         setUploadError({
           code: "UPL1",

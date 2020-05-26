@@ -5,7 +5,7 @@ const { apiBase } = config;
 
 export interface TestApi {
   generateTest(parameters: GenerateTestRequest): Promise<GenerateTestResponse>;
-  uploadImage(url: string, file: File);
+  uploadImage(url: string, file: any);
 }
 
 const testApi: TestApi = {
@@ -19,13 +19,21 @@ const testApi: TestApi = {
     });
     return await response.json();
   },
-  uploadImage: (url, file) => {
 
+  uploadImage: (url, file) => {
+    let type;
+    // If this is a file upload
+    if (file.type) {
+      type = file.type;
+    } else {
+    // Otherwise they've used the camera
+      type = 'image/png';
+    }
     return fetch(url, {
       method: "PUT",
       body: file,
       "headers": {
-        "Content-Type": file.type
+        "Content-Type": type
       }
     });
   }
