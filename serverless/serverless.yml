@@ -12,6 +12,24 @@ provider:
         Fn::GetAtt: 
           - DynamoDB
           - Arn
+    - Effect: Allow
+      Action:
+        - s3:PutObject
+      Resource:
+        Fn::Join:
+          - ''
+          - - 'arn:aws:s3:::'
+            - Ref: S3
+            - '/*'
+    - Effect: Allow
+      Action:
+        - s3:GetObject
+      Resource:
+        Fn::Join:
+          - ''
+          - - 'arn:aws:s3:::'
+            - Ref: S3
+            - '/*'
 plugins:
   - serverless-plugin-typescript
   - serverless-offline
