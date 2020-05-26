@@ -45,7 +45,9 @@ export default class ErrorBoundary extends React.Component<ErrorBoundaryProps, E
   }
   
   componentDidCatch(error) {
-    console.log("caught error", error);
+    if (!error.message.includes("Test Error")) {
+      console.log("Caught error", error);
+    }
     // You can also log the error to an error reporting service
     // @TODO: Add sentry logging
   }
@@ -55,7 +57,6 @@ export default class ErrorBoundary extends React.Component<ErrorBoundaryProps, E
     if (this.state.hasError) {
       return (       
         <PageContent>
-          test
           <Header>
             <Header.Container>
               <Header.Logo href="/" />

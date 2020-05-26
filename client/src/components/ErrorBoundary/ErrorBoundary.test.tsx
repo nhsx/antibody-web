@@ -1,9 +1,10 @@
 import React from "react";
 import ErrorBoundary from "./ErrorBoundary";
 import { renderWithReactIntl } from "utils/testUtils";
+import _ from 'lodash';
 
 const Thrower = () => {
-  throw new Error();
+  throw new Error("Test Error");
   return (
     <div>
     </div>
@@ -11,6 +12,17 @@ const Thrower = () => {
 };
 
 describe("<ErrorBoundary>", () => {
+
+  beforeEach(() => {
+    jest.spyOn(console, 'error');
+    global.console.error = jest.fn().mockImplementation(_.noop);
+  });
+  
+  afterEach(() => {
+    global.console.error.mockRestore();
+  });
+  
+
   it("Renders the error component when a child element throws an error", async () => {
     const errorBoundary = renderWithReactIntl(
       <ErrorBoundary errorComponent={<div>testerror123</div>}>
