@@ -1,9 +1,16 @@
-type LoginResponse = { successful: boolean };
+type LoginResponse = { successful: boolean; user: any };
 
-export default () => (userID: string): LoginResponse => {
-  if (userID === "valid") {
-    return { successful: true };
-  }
+export default () => (userID: string): Promise<LoginResponse> => {
 
-  return { successful: false };
+  return new Promise((resolve, reject) => {
+    console.log(userID);
+    setTimeout(() => {
+      if (userID === "valid") {
+        return resolve({ successful: true, user: {
+          name: "Test Testerson"
+        } });
+      }
+      return reject({ successful: false });
+    }, 500);
+  });
 };

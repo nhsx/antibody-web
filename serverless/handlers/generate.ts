@@ -1,8 +1,9 @@
 import { APIGatewayProxyResult } from 'aws-lambda';
 import { getUrls, createTestRecord } from '../api/aws';
 import { validateGenerateRequest, validateEnvironment } from '../api/validate';
-import { GenerateTestRequest, GenerateTestResponse }  from "abt-lib/requests/GenerateTest";
+import { GenerateTestRequest }  from "abt-lib/requests/GenerateTest";
 import config from './config';
+import TestRecord from 'abt-lib/models/TestRecord';
 
 export const handler = async ({ body }: { body: any} ): Promise<APIGatewayProxyResult> => {
 
@@ -49,25 +50,25 @@ export const handler = async ({ body }: { body: any} ): Promise<APIGatewayProxyR
 
   //Handler body
   const { guid } = request; 
-  const { uploadUrl, downloadUrl } = await getUrls(UPLOAD_BUCKET, guid);
+
+  // Check if this user already has a test in progress
   
-  const testRecord = await createTestRecord(DYNAMO_TABLE, {
+
+  const { uploadUrl, downloadUrl } = await getUrls(UPLOAD_BUCKET, guid);
+  const record: TestRecord = {
     guid,
     uploadUrl,
-    downloadUrl
-  });
+    downloadUrl,
+    step: "checkYourKit"
+  };
+
+  await createTestRecord(DYNAMO_TABLE, record);
   
   //Response
-  const response: GenerateTestResponse = {
-    guid: body.guid,
-    uploadUrl,
-    downloadUrl,
-    testRecord,
-  };
     
   return {
     statusCode: 200,
-    body: JSON.stringify(response),
+    body: JSON.stringify(record),
     headers: config.defaultHeaders
   };
 };  

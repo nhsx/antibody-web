@@ -1,8 +1,12 @@
 import React from 'react';
 import { Row, Col, BodyText, Images } from 'nhsuk-react-components';
+import { ContinueButton } from 'components/ui/Buttons';
+import { StepProps } from './Step';
 
-export default () => (
-  <Row>
+export default (props: StepProps) => {
+  console.log(props);
+
+  return <Row>
     <Col width="full">
       <BodyText>Your test kit should include:</BodyText>
       <Images
@@ -34,6 +38,11 @@ export default () => (
         Keep them wrapped and do not squeeze or bend them - handle gently
       </BodyText>
       <BodyText>Not supplied but needed: plaster/tissue</BodyText>
+      <ContinueButton
+        href={props.next}
+        size="large"
+        type="submit"
+      />
     </Col>
-  </Row>
-);
+  </Row>;
+};

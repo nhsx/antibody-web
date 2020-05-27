@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Row, Col } from "nhsuk-react-components";
 import TimedStep from '../TimedStep';
-import { withApp } from 'components/App/context';
-import { StepDetailComponentProp } from '../TestRunConstants';
+import { StepProps } from './Step';
+import { ContinueButton } from 'components/ui/Buttons';
 
-const Wait = (props: StepDetailComponentProp) => {
-  const { setStepReady } = props;
+export default (props: StepProps) => {
+  
   const [startTime ] = useState(Date.now());
-
+  const [ready, setStepReady ] = useState<boolean>(false);
   useEffect(() => {
     //@TODO: Save start time to user record if not already there, else pull it out
   },[]);
@@ -22,9 +22,12 @@ const Wait = (props: StepDetailComponentProp) => {
           setStepReady={setStepReady}
         />
       </Col>
+      <ContinueButton
+        disabled={!ready}
+        href={props.next}
+        size="large"
+        type="submit"
+      />
     </Row>
-  
   );
 };
-
-export default withApp(Wait);

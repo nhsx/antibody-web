@@ -24,12 +24,20 @@ export const appReducer: Reducer<AppState, AppAction> = (state, action): AppStat
         locale: action.locale
       };
     },
-    GENERATE_TEST: (state, action) => {
-      console.log(action);
+    SET_ERROR: (state, action) => {
+      return { 
+        ...state,
+        error: action.error
+      };
+    },
+    LOGIN_SUCCESS: (state, action) => {
       return {
         ...state,
-        testData: action.testData
+        user: action.user
       };
+    },
+    LOGOUT: () => {
+      return initialState;
     }
   };
   return handlers[action.type](state, action);

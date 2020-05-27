@@ -5,9 +5,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import {  createStyles, makeStyles } from '@material-ui/core';
 import Loader from 'components/ui/Loader';
-import { TESTRUN_STEPS } from './TestRunConstants';
 import Timer from 'components/ui/Timer';
-import { useParams } from 'react-router-dom';
 
 const useStyle = makeStyles(() =>
   createStyles({
@@ -33,8 +31,6 @@ export interface InterfaceTimedStepProps {
 export default (props: InterfaceTimedStepProps) => {
   const { duration, setStepReady, description } = props;
 
-  const { step } = useParams();
-
   const classes = useStyle();
 
   // Time is complete, enable the "next" button.
@@ -44,6 +40,7 @@ export default (props: InterfaceTimedStepProps) => {
 
   // Fetch when the timer started.
   const [testRunDetail, loading, error] = [{ steps: {} }, false, null];
+  console.log(testRunDetail);
   // @TODO : Fetch our test state from wherever we're storing it
 
   // store the timer start time, will be updated via fastforward click.
@@ -51,13 +48,8 @@ export default (props: InterfaceTimedStepProps) => {
     Date.now()
   );
 
-  const stepName = TESTRUN_STEPS[step!].name;
-
   // Time when the step was first accessed.
-  const registeredStartTime = step
-    ? testRunDetail?.steps[stepName]?.firstVisitedTime
-    : undefined; // not loaded yet
-
+  const registeredStartTime = null;
   // Set the starttime once the value is loaded.
   useEffect(() => {
     if (loading || error) {

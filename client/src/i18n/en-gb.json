@@ -1,5 +1,17 @@
 {
     "app": {
+        
+    },
+    "screens": {
+        "home": {
+            "title": "Take an COVID-19 Antibody Test"
+        },
+        "perform-test": {
+            "title": "Perform Test"
+        },
+        "start_test": {
+            "title": "Start Test"
+        }
     },
     "error": {
         "header": "Placeholder error header",

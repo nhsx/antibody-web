@@ -7,19 +7,16 @@ import React, { useCallback, useState } from 'react';
 import { Button } from 'nhsuk-react-components';
 
 import Divider from '../ui/Divider';
-import { FORMID } from '../TestRun/TestRunConstants';
 import Grid from '@material-ui/core/Grid';
 import ImageSelectorInput from './ImageSelectorInput';
 import RDTImagePreview from './RDTImagePreview';
-import { ROUTE_DEFINITIONS } from '../../routes/routes';
 import TestStripCamera from './TestStripCamera';
 import { getAppConfig } from 'utils/AppConfig';
 import { useHistory } from 'react-router-dom';
 import { useModelPreLoader } from './RDTModelLoader';
 import { AppContext, withApp } from 'components/App/context';
-import TestError from 'components/TestRun/TestError';
 import { dataURIToBlob, blobToFile } from 'utils/file';
-import ApiError from 'errors/ApiError';
+
 
 const config = getAppConfig();
 
@@ -37,7 +34,8 @@ interface TestResultPhotoUploaderProps {
 
 const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
   const { testRunUID, onFileUploadComplete, app } = props;
-  const { getTestApi } = app.container;
+  const { setAppError, container } = app;
+  const { getTestApi } = container;
   const testApi =  getTestApi();
   const history = useHistory();
   
@@ -54,8 +52,6 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
   const [imageUploadedURL, setImageUploadedURL] = useState('');
   // Monitors the upload state
   const [isUploading, setIsUploading] = useState(false);
-  // Handles error messages
-  const [uploadError, setUploadError] = useState<ApiError | null>(null);
   // Analyse
   const [isProcessing, setIsProcessing] = useState(false);
 
@@ -103,13 +99,11 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
 
   const onSubmitForm = useCallback(() => {
     // This is a dummy form, only here to go to the next page.
-    history.push(
-      ROUTE_DEFINITIONS.TESTRESULT.path.replace(':testRunUID', testRunUID)
-    );
+    history.push("/test/results");
   }, [history, testRunUID]);
 
   const handleRetry = () => {
-    setUploadError(null);
+    setAppError(null);
     setIsUploading(false);
     setImageAsFile(null);
   };
@@ -123,7 +117,7 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
       if (imageAsFile === null && !imageAsURI) {
         console.error(`Cannot upload an empty image.`);
         setIsUploading(false);
-        setUploadError({
+        setAppError({
           code: "UPL1"
         });
         return;
@@ -139,7 +133,7 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
             setIsProcessing(false);
           }, 2000);
         } else {
-          setUploadError({
+          setAppError({
             code: "UPL2",
             onFix: handleRetry
           });
@@ -148,7 +142,7 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
       } catch (error) {
         console.log(error);
         setIsUploading(false);
-        setUploadError({
+        setAppError({
           code: "UPL1",
           onFix: handleRetry
         });
@@ -160,7 +154,6 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
 
   return (
     <div>
-      {uploadError && <TestError error={uploadError} />}
       {!(cameraEnabled || imageAsURI || imageUploadedURL) && (
         <Grid
           container
@@ -258,7 +251,6 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
         </div>
       )}
       <form
-        id={FORMID}
         onSubmit={onSubmitForm} />
     </div>
   );

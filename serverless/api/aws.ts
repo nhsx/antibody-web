@@ -1,7 +1,7 @@
 import AWSSDK from 'aws-sdk';
 export const AWS = AWSSDK;
 import { PutItemInput, GetItemInput } from "aws-sdk/clients/dynamodb";
-import TestRecord from "models/TestRecord";
+import TestRecord from "abt-lib/models/TestRecord";
 
 interface UrlResponse {
   uploadUrl: string;

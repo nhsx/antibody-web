@@ -5,9 +5,11 @@
 import {  ButtonProps as MaterialButtonProps } from '@material-ui/core';
 import React, { FunctionComponent } from 'react';
 import { ActionLink } from 'nhsuk-react-components';
+import { Link } from 'react-router-dom';
 
 export interface ContinueButtonProps extends MaterialButtonProps {
   text?: string;
+  href?: string;
 }
 
 export const ContinueButton: FunctionComponent<ContinueButtonProps> = (
@@ -15,6 +17,6 @@ export const ContinueButton: FunctionComponent<ContinueButtonProps> = (
 ) => {
 
   return (
-    <ActionLink>{props.text ? props.text : 'Next'}</ActionLink>
+    <ActionLink>{props.href ? <Link to={props.href}>{props.text ? props.text : 'Next'}</Link> : props.text}</ActionLink>
   );
 };
