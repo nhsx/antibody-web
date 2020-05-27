@@ -3,14 +3,15 @@
 // Use of this source code is governed by an LGPL-3.0 license that
 // can be found in the LICENSE file distributed with this file.
 
-import { AppConfig } from '../utils/ConfigTypes';
+import { AppConfig } from "../utils/ConfigTypes";
 
 /**
  * Use this file to enable/disable features.
  */
 
 const overrides: Partial<AppConfig> = {
-  landingPage: 'NEWTESTRUN',
+  landingPage: "NEWTESTRUN",
+  photoUploadEnabled: process.env.REACT_APP_DISPLAY_UPLOAD_BUTTON === "yes",
 };
 
 export default overrides;
