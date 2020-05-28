@@ -137,7 +137,7 @@ const TestResultPhotoUploader = () => {
         throw error;
       }
     },
-    [imageAsFile, imageAsURI, setIsUploading, app.state, testApi]
+    [imageAsFile, imageAsURI, setIsUploading, testApi, handleRetry, setAppError, testData]
   );
 
   return (

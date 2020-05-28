@@ -8,6 +8,7 @@ export default (props: StepProps) => {
   
   const [startTime ] = useState(Date.now());
   const [ready, setStepReady ] = useState<boolean>(false);
+
   useEffect(() => {
     //@TODO: Save start time to user record if not already there, else pull it out
   },[]);
@@ -22,12 +23,12 @@ export default (props: StepProps) => {
           setStepReady={setStepReady}
         />
       </Col>
-      <ContinueButton
-        disabled={!ready}
+      {ready && <ContinueButton
+        
         href={props.next}
         size="large"
         type="submit"
-      />
+      />}
     </Row>
   );
 };

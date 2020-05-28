@@ -49,7 +49,7 @@ const TestContainer = (props: TestContainerProps) => {
     };
 
     fetchTest();
-  }, []);
+  }, [testApi, cookies, dispatch, setAppError, history]);
 
   useEffect(() => {
     updateTest({

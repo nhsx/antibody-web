@@ -44,22 +44,23 @@ export default (props: InterfaceTimedStepProps) => {
   );
 
   // Time when the step was first accessed.
-  const registeredStartTime = Date.now();
+  const [ registeredStartTime ] = useState(Date.now());
   // Set the starttime once the value is loaded.
   useEffect(() => {
-
     if (registeredStartTime !== undefined) {
       setStartTimeInternal(registeredStartTime);
     }
   }, [registeredStartTime]);
 
-  // fast forward on click.
   const onClickWrapper = useCallback(() => {
+    if (startTimeInternal === null) {
+      return;
+    }
     const now = Date.now();
     if (duration - (now - startTimeInternal) > 5000) {
       setStartTimeInternal(now - duration + 5000);
     }
-  }, []);
+  }, [startTimeInternal, duration]);
 
   return (
     <div onClick={onClickWrapper}>
