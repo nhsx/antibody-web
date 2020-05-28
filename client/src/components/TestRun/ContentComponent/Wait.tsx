@@ -20,7 +20,7 @@ export default (props: StepProps) => {
     } else if (testRecord) {
       setStartTime(testRecord.timerStartedAt);
     }
-  },[testRecord]);
+  },[testRecord, startTime, updateTest]);
 
   return (
     <Row>

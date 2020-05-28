@@ -39,7 +39,7 @@ const useTestData = (): [TestRecord | null, Function, UpdateStatus] => {
       setAppError(err);
       setError(err);
     }
-  }, [setIsLoading, setAppError, testApi, setError]);
+  }, [setIsLoading, setAppError, testApi, setError, dispatch]);
 
   return [testRecord, updateTestData, {
     isLoading,

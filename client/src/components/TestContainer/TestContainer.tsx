@@ -62,7 +62,7 @@ const TestContainer = (props: TestContainerProps) => {
       });
     }
     
-  }, [step, testRecord]);
+  }, [step, testRecord, updateTest]);
 
 
   if (isFetchingTest) {
