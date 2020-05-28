@@ -64,7 +64,7 @@ export const handler = async ({ body }: { body: any} ): Promise<APIGatewayProxyR
       uploadUrl,
       downloadUrl,
       step: "checkYourKit"
-    };
+    } as TestRecord;
 
     await putTestRecord(DYNAMO_TABLE, record);
   }
