@@ -6,6 +6,7 @@ const { apiBase } = config;
 export interface TestApi {
   generateTest(parameters: GenerateTestRequest): Promise<GenerateTestResponse>;
   uploadImage(url: string, file: any);
+  updateTest(data: any);
 }
 
 const testApi: TestApi = {
@@ -35,6 +36,14 @@ const testApi: TestApi = {
       "headers": {
         "Content-Type": type
       }
+    });
+  },
+
+  updateTest: () => {
+    return new Promise((res) => {
+      setTimeout(() => {
+        res({ success: true });
+      }, 1000);
     });
   }
 };

@@ -35,7 +35,6 @@ const TestRoute = (props: TestRouteProps) => {
 
 const App = () => {
 
-
   const [appState, dispatch]: [any, Function] = useReducer(
     appReducer,
     initialState
@@ -57,8 +56,6 @@ const App = () => {
 
   const container = new AppContainer();
 
-  console.log('rerendtering app');
-
   return (
     <AppContext.Provider
       value={{ state: appState, setLocale, setAppError, dispatch, container }}
@@ -77,39 +74,44 @@ const App = () => {
                     exact
                     component={Home} />
                   <LoginProvider>
-                    <Route path="/test">
-                      <TestContainer>
-                        <Switch>
-                          <TestRoute
-                            component={CheckYourKit}
-                            path="/test/checkYourKit"
-                            next="/test/washAndDryHands" />
-                          <TestRoute
-                            component={WashAndDryHands}
-                            path="/test/washAndDryHands"
-                            next="/test/setUpTest" />  
-                          <TestRoute
-                            component={SetUpTest}
-                            path="/test/setUpTest"
-                            next="/test/selectAFinger" />  
-                          <TestRoute
-                            component={SelectAFinger}
-                            path="/test/selectAFinger"
-                            next="/test/wait" />  
-                          <TestRoute
-                            component={Wait}
-                            path="/test/wait"
-                            next="/test/scanKit" />  
-                          <TestRoute
-                            component={ScanKit}
-                            path="/test/scanKit"
-                            next="/test/results" />  
-                          <TestRoute
-                            component={Results}
-                            path="/test/scanKit"
-                          />
-                        </Switch>
-                      </TestContainer>
+                    <Route
+                      path="/test/:step?"
+                      render={({ match }) => (
+                        <TestContainer step={match.params.step}> 
+                          <Switch>
+                            <TestRoute
+                              component={CheckYourKit}
+                              path="/test/checkYourKit"
+                              next="/test/washAndDryHands" />
+                            <TestRoute
+                              component={WashAndDryHands}
+                              path="/test/washAndDryHands"
+                              next="/test/setUpTest" />  
+                            <TestRoute
+                              component={SetUpTest}
+                              path="/test/setUpTest"
+                              next="/test/selectAFinger" />  
+                            <TestRoute
+                              component={SelectAFinger}
+                              path="/test/selectAFinger"
+                              next="/test/wait" />  
+                            <TestRoute
+                              component={Wait}
+                              path="/test/wait"
+                              next="/test/scanKit" />  
+                            <TestRoute
+                              component={ScanKit}
+                              path="/test/scanKit"
+                              next="/test/results" />  
+                            <TestRoute
+                              component={Results}
+                              path="/test/results"
+                            />
+                          </Switch>
+                        </TestContainer>
+                      )}>
+                      
+                        
                     </Route>
                   </LoginProvider>
                   <Route key="pagenotfound">

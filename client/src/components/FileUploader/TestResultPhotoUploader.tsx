@@ -3,7 +3,7 @@
 // Use of this source code is governed by an LGPL-3.0 license that
 // can be found in the LICENSE file distributed with this file.
 import 'react-html5-camera-photo/build/css/index.css';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useContext } from 'react';
 import { Button } from 'nhsuk-react-components';
 
 import Divider from '../ui/Divider';
@@ -14,8 +14,9 @@ import TestStripCamera from './TestStripCamera';
 import { getAppConfig } from 'utils/AppConfig';
 import { useHistory } from 'react-router-dom';
 import { useModelPreLoader } from './RDTModelLoader';
-import { AppContext, withApp } from 'components/App/context';
 import { dataURIToBlob, blobToFile } from 'utils/file';
+import appContext, { AppContext } from 'components/App/context';
+import testContext, { TestContext } from 'components/TestContainer/context';
 
 
 const config = getAppConfig();
@@ -26,15 +27,12 @@ const styles = {
   }
 };
 
-interface TestResultPhotoUploaderProps {
-  testRunUID: string;
-  onFileUploadComplete: (ready: boolean) => void;
-  app: AppContext;
-}
 
-const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
-  const { testRunUID, onFileUploadComplete, app } = props;
+const TestResultPhotoUploader = () => {
+  const app = useContext(appContext) as AppContext;  
+  const test = useContext(testContext) as TestContext;
   const { setAppError, container } = app;
+  const testData = test.state.testData;
   const { getTestApi } = container;
   const testApi =  getTestApi();
   const history = useHistory();
@@ -57,23 +55,17 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
 
 
   // Occurs after the user selects a file.
-  const handleImageAsFile = useCallback(
-    (image: File) => {
+  const handleImageAsFile = useCallback((image: File) => {
 
-      setImageAsFile(image);
+    setImageAsFile(image);
 
-      // Show the preview
-      setImageAsURI(URL.createObjectURL(image));
+    // Show the preview
+    setImageAsURI(URL.createObjectURL(image));
 
-      // Reset other data
-      setCameraEnabled(false);
-      setImageUploadedURL('');
-
-      // Hide the Next button.
-      onFileUploadComplete(false);
-    },
-    [onFileUploadComplete]
-  );
+    // Reset other data
+    setCameraEnabled(false);
+    setImageUploadedURL('');
+  }, []);
 
   // Occurs when the person chose to use its camera.
   const handleShowCamera = useCallback(() => {
@@ -83,10 +75,7 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
     setImageAsFile(null);
     setImageAsURI('');
     setImageUploadedURL('');
-
-    // Disable the next button.
-    onFileUploadComplete(false);
-  }, [onFileUploadComplete]);
+  }, []);
 
   // Occurs when a photo is taken.
   const handlePhotoTaken = useCallback((dataURI: string) => {
@@ -100,7 +89,7 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
   const onSubmitForm = useCallback(() => {
     // This is a dummy form, only here to go to the next page.
     history.push("/test/results");
-  }, [history, testRunUID]);
+  }, [history, testData?.guid]);
 
   const handleRetry = () => {
     setAppError(null);
@@ -124,9 +113,9 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
       }
 
       try {
-        if (app.state.testData && (imageAsFile || imageAsURI)) {
-          await testApi.uploadImage(app.state.testData.uploadUrl, imageAsFile || imageAsURI);
-          setImageUploadedURL(app.state.testData.downloadUrl);
+        if (testData && (imageAsFile || imageAsURI)) {
+          await testApi.uploadImage(testData.uploadUrl, imageAsFile || imageAsURI);
+          setImageUploadedURL(testData.downloadUrl);
           setIsUploading(false);
           setIsProcessing(true);
           setTimeout(() => {
@@ -140,7 +129,6 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
         }
         
       } catch (error) {
-        console.log(error);
         setIsUploading(false);
         setAppError({
           code: "UPL1",
@@ -256,4 +244,4 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
   );
 };
 
-export default withApp(TestResultPhotoUploader);
+export default TestResultPhotoUploader;

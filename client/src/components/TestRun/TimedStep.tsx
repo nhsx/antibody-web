@@ -4,7 +4,6 @@
 // can be found in the LICENSE file distributed with this file.
 import React, { useCallback, useEffect, useState } from 'react';
 import {  createStyles, makeStyles } from '@material-ui/core';
-import Loader from 'components/ui/Loader';
 import Timer from 'components/ui/Timer';
 
 const useStyle = makeStyles(() =>
@@ -30,7 +29,6 @@ export interface InterfaceTimedStepProps {
 
 export default (props: InterfaceTimedStepProps) => {
   const { duration, setStepReady, description } = props;
-
   const classes = useStyle();
 
   // Time is complete, enable the "next" button.
@@ -38,60 +36,42 @@ export default (props: InterfaceTimedStepProps) => {
     setStepReady && setStepReady(true);
   }, [setStepReady]);
 
-  // Fetch when the timer started.
-  const [testRunDetail, loading, error] = [{ steps: {} }, false, null];
-  console.log(testRunDetail);
   // @TODO : Fetch our test state from wherever we're storing it
 
   // store the timer start time, will be updated via fastforward click.
-  const [startTimeInternal, setStartTimeInternal] = useState<number | null>(
+  const [startTimeInternal, setStartTimeInternal] = useState<number>(
     Date.now()
   );
 
   // Time when the step was first accessed.
-  const registeredStartTime = null;
+  const registeredStartTime = Date.now();
   // Set the starttime once the value is loaded.
   useEffect(() => {
-    if (loading || error) {
-      return;
-    }
+
     if (registeredStartTime !== undefined) {
       setStartTimeInternal(registeredStartTime);
     }
-  }, [registeredStartTime, loading, error]);
+  }, [registeredStartTime]);
 
   // fast forward on click.
   const onClickWrapper = useCallback(() => {
-    if (loading || startTimeInternal === null) {
-      return;
-    }
     const now = Date.now();
     if (duration - (now - startTimeInternal) > 5000) {
       setStartTimeInternal(now - duration + 5000);
     }
-  }, [startTimeInternal, duration, loading]);
-
-  if (error) {
-    // TODO: Generic error handler.
-    return <div>Something went wrong</div>;
-  }
-
-  const showLoader = loading || startTimeInternal === null;
+  }, []);
 
   return (
     <div onClick={onClickWrapper}>
       {description && <div>{props.description}</div>}
       <div className={classes.timedStepContent}>
-        {showLoader && <Loader />}
-        {!showLoader && (
-          <div className={classes.timedStepTimer}>
-            <Timer
-              duration={duration}
-              startTime={startTimeInternal!}
-              onTimerComplete={timerCompleteCallback}
-            />
-          </div>
-        )}
+        <div className={classes.timedStepTimer}>
+          <Timer
+            duration={duration}
+            startTime={startTimeInternal!}
+            onTimerComplete={timerCompleteCallback}
+          />
+        </div>
       </div>
     </div>
   );

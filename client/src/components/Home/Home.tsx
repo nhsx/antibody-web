@@ -21,7 +21,7 @@ export const Home = ({ app }: { app: AppContext }) => {
   
   const handleLogin = async (signInId: string) => {
     const response = await login(signInId);
-    console.log(response);
+
     if (response.successful) {
       
       dispatch({
