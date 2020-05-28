@@ -26,7 +26,7 @@ const useTestData = (): [TestRecord | null, Function, UpdateStatus] => {
       setIsLoading(true);
       await testApi.updateTest({ testRecord });
       dispatch({
-        type: "UPDATE_TEST",
+        type: "SAVE_TEST",
         testRecord
       });
       setIsLoading(false);

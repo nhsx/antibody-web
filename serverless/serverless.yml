@@ -4,6 +4,10 @@ provider:
   runtime: nodejs12.x
   stage: ${opt:stage, 'dev'}
   region: eu-west-2
+  environment:
+      UPLOAD_BUCKET: ${opt:stage, 'dev'}-covid19-antibody-uk
+      DYNAMO_TABLE: ${opt:stage, 'dev'}-covid19-antibody-uk
+      AWS_REGION: eu-west-2
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -35,9 +39,7 @@ functions:
           method: POST
           path: generate
           cors: true
-    environment:
-      UPLOAD_BUCKET: ${opt:stage, 'dev'}-covid19-antibody-uk
-      DYNAMO_TABLE: ${opt:stage, 'dev'}-covid19-antibody-uk
+    
   update:
     handler: handlers/update.handler
     events:
@@ -45,9 +47,6 @@ functions:
           method: POST
           path: update
           cors: true
-    environment:
-      UPLOAD_BUCKET: ${opt:stage, 'dev'}-covid19-antibody-uk
-      DYNAMO_TABLE: ${opt:stage, 'dev'}-covid19-antibody-uk
 custom:
   serverless-offline:
     httpPort: 4000

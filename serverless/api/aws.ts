@@ -43,7 +43,7 @@ export async function putTestRecord(table: string, record: TestRecord) {
   return dynamo.put(dynamoPutReq).promise();
 }
 
-export async function getTestRecord(table: string, guid: string): Promise<TestRecord> {
+export async function getTestRecord(table: string, guid: string): Promise<TestRecord | null> {
   const dynamo = new DocumentClient();
 
   const dynamoGetReq: DocumentClient.GetItemInput = {
@@ -55,5 +55,5 @@ export async function getTestRecord(table: string, guid: string): Promise<TestRe
 
   const dynamoRecord = await dynamo.get(dynamoGetReq).promise();
 
-  return dynamoRecord.Item as TestRecord;
+  return dynamoRecord?.Item ? dynamoRecord.Item as TestRecord : null;
 }
