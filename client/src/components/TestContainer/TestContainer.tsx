@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useReducer, useContext, ReactNode } from 'react';
+import React, { useState, useEffect, useReducer, useContext, ReactNode, useRef } from 'react';
 import appContext, { AppContext } from 'components/App/context';
 import { useCookies } from 'react-cookie';
 import { useHistory } from 'react-router-dom';
@@ -23,7 +23,8 @@ const TestContainer = (props: TestContainerProps) => {
   const [testRecord, updateTest] = useTestData();
 
   const { setAppError, container: { getTestApi } } = app;
-  const testApi = getTestApi();
+
+  const testApi = useRef(getTestApi()).current;
   
   const [isFetchingTest, setIsFetchingTest] = useState<boolean>(true);
 
@@ -51,17 +52,17 @@ const TestContainer = (props: TestContainerProps) => {
     };
 
     fetchTest();
-  }, [testApi, cookies, dispatch, setAppError, history]);
+  }, [cookies, dispatch, setAppError, history, testApi]);
 
   useEffect(() => {
-    if (step) {
+    if (step && step !== testRecord?.step) {
       updateTest({
         ...testRecord,
         step
       });
     }
     
-  }, [step, updateTest, testRecord]);
+  }, [step, testRecord]);
 
 
   if (isFetchingTest) {

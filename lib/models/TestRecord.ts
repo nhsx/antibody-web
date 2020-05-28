@@ -3,4 +3,5 @@ export default interface TestRecord {
   uploadUrl: string;
   downloadUrl: string;
   step: string;
+  timerStartedAt: number;
 }

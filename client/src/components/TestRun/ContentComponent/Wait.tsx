@@ -3,15 +3,24 @@ import { Row, Col } from "nhsuk-react-components";
 import TimedStep from '../TimedStep';
 import { StepProps } from './Step';
 import { ContinueButton } from 'components/ui/Buttons';
+import useTestData from 'hooks/useTestData';
 
 export default (props: StepProps) => {
   
-  const [startTime ] = useState(Date.now());
+  const [testRecord, updateTest ] = useTestData(); 
+  const [startTime, setStartTime ] = useState<number>(Date.now());
   const [ready, setStepReady ] = useState<boolean>(false);
 
   useEffect(() => {
-    //@TODO: Save start time to user record if not already there, else pull it out
-  },[]);
+    if (testRecord && !testRecord.timerStartedAt) {
+      updateTest({
+        ...testRecord,
+        timerStartedAt: startTime
+      });
+    } else if (testRecord) {
+      setStartTime(testRecord.timerStartedAt);
+    }
+  },[testRecord]);
 
   return (
     <Row>
@@ -19,12 +28,10 @@ export default (props: StepProps) => {
         <TimedStep
           description="The test strip will take ten minutes to react with the test solution."
           duration={startTime + 600000 - Date.now()}
-          // testRunUID={testRunUID}
           setStepReady={setStepReady}
         />
       </Col>
       {ready && <ContinueButton
-        
         href={props.next}
         size="large"
         type="submit"
