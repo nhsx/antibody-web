@@ -1,10 +1,9 @@
+import TestRecord from "../models/TestRecord";
+
 export interface GenerateTestRequest {
-  guid: string;
+  guid?: string;
 }
 
 export interface GenerateTestResponse {
-  guid: string;
-  uploadUrl: string;
-  downloadUrl: string;
-  testRecord: any;
+  testRecord: TestRecord;
 }

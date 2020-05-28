@@ -8,11 +8,11 @@ interface LoginProps {
 export default (props: LoginProps) => {
   const { formSubmit } = props;
   const [signInId, setSignInId] = useState<string>("");
+
   const onFormSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
     formSubmit(signInId);
   };
-
 
   return (
     <Row>

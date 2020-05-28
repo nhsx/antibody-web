@@ -1,7 +1,7 @@
+import { DocumentClient } from "aws-sdk/clients/dynamodb";
+import TestRecord from "abt-lib/models/TestRecord";
 import AWSSDK from 'aws-sdk';
 export const AWS = AWSSDK;
-import { PutItemInput, GetItemInput } from "aws-sdk/clients/dynamodb";
-import TestRecord from "models/TestRecord";
 
 interface UrlResponse {
   uploadUrl: string;
@@ -9,8 +9,10 @@ interface UrlResponse {
 }
 
 export async function getUrls(bucket: string, guid: string): Promise<UrlResponse> {
+
   const s3 = new AWS.S3();
   const params = { Bucket: bucket, Key: `rdt-images/${guid}` };
+
   const getUrl = async (method: string): Promise<string> => await new Promise((resolve, reject) => {
     s3.getSignedUrl(method, params, (err, url: string) => {
       if (err) {
@@ -29,35 +31,29 @@ export async function getUrls(bucket: string, guid: string): Promise<UrlResponse
   };
 }
 
-export async function createTestRecord(table: string, record: TestRecord) {
-  const dynamo = new AWS.DynamoDB();
+export async function putTestRecord(table: string, record: TestRecord) {
 
-  const dynamoPutReq: PutItemInput = {
+  const dynamo = new DocumentClient();
+
+  const dynamoPutReq: DocumentClient.PutItemInput = {
     TableName: table,
-    Item: {
-      guid: { 
-        S: record.guid 
-      },
-      uploadUrl: {
-        S: record.uploadUrl
-      }
-    },
+    Item: record
   };
 
-  return dynamo.putItem(dynamoPutReq).promise();
+  return dynamo.put(dynamoPutReq).promise();
 }
 
-export async function getTestRecord(table: string, guid: string) {
-  const dynamo = new AWS.DynamoDB();
+export async function getTestRecord(table: string, guid: string): Promise<TestRecord | null> {
+  const dynamo = new DocumentClient();
 
-  const dynamoGetReq: GetItemInput = {
+  const dynamoGetReq: DocumentClient.GetItemInput = {
     TableName: table,
     Key: {
-      guid: {
-        S: guid
-      }
+      guid
     }
   };
 
-  return await dynamo.getItem(dynamoGetReq).promise();
+  const dynamoRecord = await dynamo.get(dynamoGetReq).promise();
+
+  return dynamoRecord?.Item ? dynamoRecord.Item as TestRecord : null;
 }

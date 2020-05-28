@@ -1,5 +1,4 @@
 import React, { useReducer } from "react";
-import { DashboardRoute, ROUTES } from "routes/routes";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 import PageNotFound from "components/PageNotFound/PageNotFound";
@@ -11,12 +10,23 @@ import ErrorBoundary from 'components/ErrorBoundary/ErrorBoundary';
 import flatten from 'flat';
 import { AppContainer } from "./container";
 import LoginProvider from "../LoginProvider/LoginProvider";
+import Layout from "components/ui/Layout";
+import Home from "components/Home/Home";
+import TestRoutes from "routes/TestRoutes";
 
 const App = () => {
+
   const [appState, dispatch]: [any, Function] = useReducer(
     appReducer,
     initialState
   );
+
+  const setAppError = (error)  => {
+    dispatch({
+      type: "SET_ERROR",
+      error
+    });
+  };
 
   const setLocale = (locale) => {
     dispatch({
@@ -29,7 +39,7 @@ const App = () => {
 
   return (
     <AppContext.Provider
-      value={{ state: appState, setLocale, dispatch, container }}
+      value={{ state: appState, setLocale, setAppError, dispatch, container }}
     >
       <IntlProvider
         locale={appState.locale}
@@ -38,33 +48,23 @@ const App = () => {
         <HelmetProvider>
           <ErrorBoundary>
             <Router>
-              <Switch>
-                {ROUTES.map((route: DashboardRoute) => {
-                  if (route.requiresLogin) {
-                    const { component, ...routeParams } = route;
-                    const RouteComponent = component;
-                    return (
-                      <Route
-                        {...routeParams}
-                        key={route.path}>
-                        <LoginProvider>
-                          <RouteComponent />
-                        </LoginProvider>
-                      </Route>
-                    );
-                  } else {
-                    return <Route
-                      {...route}
-                      key={route.path} />;
-                  }
-                })}
-                <Route key="pagenotfound">
-                  <>
-                    <Helmet title={`Open RDT: Page not foundg`} />
-                    <PageNotFound />
-                  </>
-                </Route>
-              </Switch>
+              <Layout error={appState.error}>
+                <Switch>
+                  <Route
+                    path="/"
+                    exact
+                    component={Home} />
+                  <LoginProvider>
+                    <TestRoutes />
+                  </LoginProvider>
+                  <Route key="pagenotfound">
+                    <>
+                      <Helmet title={`Open RDT: Page not found`} />
+                      <PageNotFound />
+                    </>
+                  </Route>
+                </Switch>
+              </Layout>
             </Router>
           </ErrorBoundary>
         </HelmetProvider>

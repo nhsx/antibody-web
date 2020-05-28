@@ -3,23 +3,21 @@
 // Use of this source code is governed by an LGPL-3.0 license that
 // can be found in the LICENSE file distributed with this file.
 import 'react-html5-camera-photo/build/css/index.css';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useContext } from 'react';
 import { Button } from 'nhsuk-react-components';
 
 import Divider from '../ui/Divider';
-import { FORMID } from '../TestRun/TestRunConstants';
 import Grid from '@material-ui/core/Grid';
 import ImageSelectorInput from './ImageSelectorInput';
 import RDTImagePreview from './RDTImagePreview';
-import { ROUTE_DEFINITIONS } from '../../routes/routes';
 import TestStripCamera from './TestStripCamera';
 import { getAppConfig } from 'utils/AppConfig';
 import { useHistory } from 'react-router-dom';
 import { useModelPreLoader } from './RDTModelLoader';
-import { AppContext, withApp } from 'components/App/context';
-import TestError from 'components/TestRun/TestError';
 import { dataURIToBlob, blobToFile } from 'utils/file';
-import ApiError from 'errors/ApiError';
+import appContext, { AppContext } from 'components/App/context';
+import testContext, { TestContext } from 'components/TestContainer/context';
+
 
 const config = getAppConfig();
 
@@ -29,15 +27,13 @@ const styles = {
   }
 };
 
-interface TestResultPhotoUploaderProps {
-  testRunUID: string;
-  onFileUploadComplete: (ready: boolean) => void;
-  app: AppContext;
-}
 
-const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
-  const { testRunUID, onFileUploadComplete, app } = props;
-  const { getTestApi } = app.container;
+const TestResultPhotoUploader = () => {
+  const app = useContext(appContext) as AppContext;  
+  const test = useContext(testContext) as TestContext;
+  const { setAppError, container } = app;
+  const testRecord = test.state.testRecord;
+  const { getTestApi } = container;
   const testApi =  getTestApi();
   const history = useHistory();
   
@@ -54,30 +50,22 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
   const [imageUploadedURL, setImageUploadedURL] = useState('');
   // Monitors the upload state
   const [isUploading, setIsUploading] = useState(false);
-  // Handles error messages
-  const [uploadError, setUploadError] = useState<ApiError | null>(null);
   // Analyse
   const [isProcessing, setIsProcessing] = useState(false);
 
 
   // Occurs after the user selects a file.
-  const handleImageAsFile = useCallback(
-    (image: File) => {
+  const handleImageAsFile = useCallback((image: File) => {
 
-      setImageAsFile(image);
+    setImageAsFile(image);
 
-      // Show the preview
-      setImageAsURI(URL.createObjectURL(image));
+    // Show the preview
+    setImageAsURI(URL.createObjectURL(image));
 
-      // Reset other data
-      setCameraEnabled(false);
-      setImageUploadedURL('');
-
-      // Hide the Next button.
-      onFileUploadComplete(false);
-    },
-    [onFileUploadComplete]
-  );
+    // Reset other data
+    setCameraEnabled(false);
+    setImageUploadedURL('');
+  }, []);
 
   // Occurs when the person chose to use its camera.
   const handleShowCamera = useCallback(() => {
@@ -87,10 +75,7 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
     setImageAsFile(null);
     setImageAsURI('');
     setImageUploadedURL('');
-
-    // Disable the next button.
-    onFileUploadComplete(false);
-  }, [onFileUploadComplete]);
+  }, []);
 
   // Occurs when a photo is taken.
   const handlePhotoTaken = useCallback((dataURI: string) => {
@@ -103,16 +88,14 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
 
   const onSubmitForm = useCallback(() => {
     // This is a dummy form, only here to go to the next page.
-    history.push(
-      ROUTE_DEFINITIONS.TESTRESULT.path.replace(':testRunUID', testRunUID)
-    );
-  }, [history, testRunUID]);
+    history.push("/test/results");
+  }, [history]);
 
-  const handleRetry = () => {
-    setUploadError(null);
+  const handleRetry = useCallback(() => {
+    setAppError(null);
     setIsUploading(false);
     setImageAsFile(null);
-  };
+  }, [setAppError, setIsUploading, setImageAsFile]);
 
   // Occurs when the person uploads the photo
   // TODO: Handle Errors
@@ -123,44 +106,42 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
       if (imageAsFile === null && !imageAsURI) {
         console.error(`Cannot upload an empty image.`);
         setIsUploading(false);
-        setUploadError({
+        setAppError({
           code: "UPL1"
         });
         return;
       }
 
       try {
-        if (app.state.testData && (imageAsFile || imageAsURI)) {
-          await testApi.uploadImage(app.state.testData.uploadUrl, imageAsFile || imageAsURI);
-          setImageUploadedURL(app.state.testData.downloadUrl);
+        if (testRecord && (imageAsFile || imageAsURI)) {
+          await testApi.uploadImage(testRecord.uploadUrl, imageAsFile || imageAsURI);
+          setImageUploadedURL(testRecord.downloadUrl);
           setIsUploading(false);
           setIsProcessing(true);
           setTimeout(() => {
             setIsProcessing(false);
           }, 2000);
         } else {
-          setUploadError({
+          setAppError({
             code: "UPL2",
             onFix: handleRetry
           });
         }
         
       } catch (error) {
-        console.log(error);
         setIsUploading(false);
-        setUploadError({
+        setAppError({
           code: "UPL1",
           onFix: handleRetry
         });
         throw error;
       }
     },
-    [imageAsFile, imageAsURI, setIsUploading, app.state, testApi]
+    [imageAsFile, imageAsURI, setIsUploading, testApi, handleRetry, setAppError, testRecord]
   );
 
   return (
     <div>
-      {uploadError && <TestError error={uploadError} />}
       {!(cameraEnabled || imageAsURI || imageUploadedURL) && (
         <Grid
           container
@@ -258,10 +239,9 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
         </div>
       )}
       <form
-        id={FORMID}
         onSubmit={onSubmitForm} />
     </div>
   );
 };
 
-export default withApp(TestResultPhotoUploader);
+export default TestResultPhotoUploader;

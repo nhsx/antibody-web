@@ -3,18 +3,19 @@ import { ErrorSummary } from 'nhsuk-react-components';
 import { FormattedMessage } from 'react-intl';
 import enMsgs from 'i18n/en-gb.json';
 import flatten from 'flat';
-import ApiError from 'errors/ApiError';
-interface TestErrorProps {
+import AppError from 'errors/AppError';
+
+interface ErrorProps {
   titleId?: string;
   bodyId?: string;
   fixId?: string[];
   code?: string;
-  error: ApiError;
+  error: AppError;
 }
 
 
 // You can supply an error object and it will pull translated messages in based on its code, or provide messageIds directly for a custom error msg
-export default (props: TestErrorProps) => {
+export default (props: ErrorProps) => {
   // Scroll so error is in view. We can use more heavyweight solutions if we ever want errors that aren't at the top of the page.
   useEffect(() => {
     window.scrollTo(0, 0);

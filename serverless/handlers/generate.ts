@@ -1,8 +1,9 @@
 import { APIGatewayProxyResult } from 'aws-lambda';
-import { getUrls, createTestRecord } from '../api/aws';
-import { validateGenerateRequest, validateEnvironment } from '../api/validate';
-import { GenerateTestRequest, GenerateTestResponse }  from "abt-lib/requests/GenerateTest";
+import { getUrls, getTestRecord, putTestRecord } from '../api/aws';
+import { validateGenerateRequest, validateGenerateEnvironment } from '../api/validate';
+import { GenerateTestRequest }  from "abt-lib/requests/GenerateTest";
 import config from './config';
+import TestRecord from 'abt-lib/models/TestRecord';
 
 export const handler = async ({ body }: { body: any} ): Promise<APIGatewayProxyResult> => {
 
@@ -22,7 +23,7 @@ export const handler = async ({ body }: { body: any} ): Promise<APIGatewayProxyR
   const DYNAMO_TABLE: string = process.env.DYNAMO_TABLE as string;
   
   // Validation
-  const { error: envError } = validateEnvironment(process.env);
+  const { error: envError } = validateGenerateEnvironment(process.env);
 
   if (envError) {
     return {
@@ -35,13 +36,13 @@ export const handler = async ({ body }: { body: any} ): Promise<APIGatewayProxyR
   }
 
   //Pull out our variables from the event body, once validated
-  const { value: request, error: uploadError } = validateGenerateRequest(parsedBody);
+  const { value: request, error: generateError } = validateGenerateRequest(parsedBody);
   
-  if (uploadError) {
+  if (generateError) {
     return {
       statusCode: 400,
       body: JSON.stringify({
-        error: uploadError.details?.[0]?.message || "Invalid request body" 
+        error: generateError.details?.[0]?.message || "Invalid request body" 
       }),
       headers: config.defaultHeaders
     };
@@ -49,25 +50,32 @@ export const handler = async ({ body }: { body: any} ): Promise<APIGatewayProxyR
 
   //Handler body
   const { guid } = request; 
-  const { uploadUrl, downloadUrl } = await getUrls(UPLOAD_BUCKET, guid);
-  
-  const testRecord = await createTestRecord(DYNAMO_TABLE, {
-    guid,
-    uploadUrl,
-    downloadUrl
-  });
+  let record: TestRecord | null;
+
+  // Check if this user already has a test in progress
+  record = await getTestRecord(DYNAMO_TABLE, guid);
+
+
+  // If not, generate their signed urls and their test record
+  if (!record) {
+    const { uploadUrl, downloadUrl } = await getUrls(UPLOAD_BUCKET, guid);
+    record = {
+      guid,
+      uploadUrl,
+      downloadUrl,
+      step: "checkYourKit"
+    } as TestRecord;
+
+    await putTestRecord(DYNAMO_TABLE, record);
+  }
   
   //Response
-  const response: GenerateTestResponse = {
-    guid: body.guid,
-    uploadUrl,
-    downloadUrl,
-    testRecord,
-  };
-    
   return {
     statusCode: 200,
-    body: JSON.stringify(response),
+    body: JSON.stringify(
+      {
+        testRecord: record
+      }),
     headers: config.defaultHeaders
   };
 };  

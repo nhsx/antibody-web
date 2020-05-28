@@ -5,6 +5,7 @@ import { AppContainer } from './container';
 export interface AppContext {
   state: AppState;
   setLocale: Function;
+  setAppError: Function;
   dispatch: Function;
   container: AppContainer;
 }

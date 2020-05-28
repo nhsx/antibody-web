@@ -1,16 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { Row, Col } from "nhsuk-react-components";
 import TimedStep from '../TimedStep';
-import { withApp } from 'components/App/context';
-import { StepDetailComponentProp } from '../TestRunConstants';
+import { StepProps } from './Step';
+import { ContinueButton } from 'components/ui/Buttons';
+import useTestData from 'hooks/useTestData';
 
-const Wait = (props: StepDetailComponentProp) => {
-  const { setStepReady } = props;
-  const [startTime ] = useState(Date.now());
+export default (props: StepProps) => {
+  
+  const [testRecord, updateTest ] = useTestData(); 
+  const [startTime, setStartTime ] = useState<number>(Date.now());
+  const [ready, setStepReady ] = useState<boolean>(false);
 
   useEffect(() => {
-    //@TODO: Save start time to user record if not already there, else pull it out
-  },[]);
+    if (testRecord && !testRecord.timerStartedAt) {
+      updateTest({
+        ...testRecord,
+        timerStartedAt: startTime
+      });
+    } else if (testRecord) {
+      setStartTime(testRecord.timerStartedAt);
+    }
+  },[testRecord, startTime, updateTest]);
 
   return (
     <Row>
@@ -18,13 +28,14 @@ const Wait = (props: StepDetailComponentProp) => {
         <TimedStep
           description="The test strip will take ten minutes to react with the test solution."
           duration={startTime + 600000 - Date.now()}
-          // testRunUID={testRunUID}
           setStepReady={setStepReady}
         />
       </Col>
+      {ready && <ContinueButton
+        href={props.next}
+        size="large"
+        type="submit"
+      />}
     </Row>
-  
   );
 };
-
-export default withApp(Wait);

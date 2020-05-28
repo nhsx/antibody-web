@@ -13,10 +13,7 @@
       "jest"
     ],
     "esModuleInterop": true,
-    "inlineSourceMap": true,
-    "paths": {
-      "lib": ["../lib"]
-    }
+    "inlineSourceMap": true
   },
   "exclude": ["node_modules"]
 }
