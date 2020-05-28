@@ -1,22 +1,16 @@
 import React from "react";
-import TestRunSteps from "../TestRunSteps";
-import { MemoryRouter, Route } from "react-router-dom";
+import { MemoryRouter } from "react-router-dom";
 import { render, screen } from "@testing-library/react";
+import { TestRoutes } from "routes/TestRoutes";
+
 
 describe("TestRunSteps", () => {
   beforeEach(() => {
     render(
-      <MemoryRouter initialEntries={["/testrunsteps/asdf/checkYourKit"]}>
-        <Route path="/testrunsteps/:testRunUID/:step">
-          <TestRunSteps />
-        </Route>
+      <MemoryRouter initialEntries={["/test/checkYourKit"]}>
+        <TestRoutes />
       </MemoryRouter>
     );
-  });
-
-  it("Renders the title correctly", async () => {
-    const title = await screen.findByText(/Check your test kit/);
-    expect(title).not.toBeUndefined();
   });
 
   it("Renders the content component", async () => {

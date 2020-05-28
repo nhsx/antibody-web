@@ -1,6 +1,6 @@
-import React, { useReducer, FunctionComponent } from "react";
+import React, { useReducer } from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
-import { Route, BrowserRouter as Router, Switch, RouteProps } from "react-router-dom";
+import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 import PageNotFound from "components/PageNotFound/PageNotFound";
 import { IntlProvider } from "react-intl";
 import AppContext from "./context";
@@ -11,27 +11,8 @@ import flatten from 'flat';
 import { AppContainer } from "./container";
 import LoginProvider from "../LoginProvider/LoginProvider";
 import Layout from "components/ui/Layout";
-import CheckYourKit from "components/TestRun/ContentComponent/CheckYourKit";
-import TestContainer from "components/TestContainer/TestContainer";
-import WashAndDryHands from "components/TestRun/ContentComponent/WashAndDryHands";
-import SetUpTest from "components/TestRun/ContentComponent/SetUpTest";
-import SelectAFinger from "components/TestRun/ContentComponent/SelectAFinger";
-import Wait from "components/TestRun/ContentComponent/Wait";
-import ScanKit from "components/TestRun/ContentComponent/ScanKit";
 import Home from "components/Home/Home";
-import Results from "components/TestRun/ContentComponent/Results";
-import { StepProps } from "components/TestRun/ContentComponent/Step";
-
-
-export interface TestRouteProps extends RouteProps {
-  component: FunctionComponent<StepProps>;
-  next?: string;
-}
-
-const TestRoute = (props: TestRouteProps) => {
-  const { component: Component, ...other } = props;
-  return <Component {...other} />;
-};
+import TestRoutes from "routes/TestRoutes";
 
 const App = () => {
 
@@ -74,45 +55,7 @@ const App = () => {
                     exact
                     component={Home} />
                   <LoginProvider>
-                    <Route
-                      path="/test/:step?"
-                      render={({ match }) => (
-                        <TestContainer step={match.params.step}> 
-                          <Switch>
-                            <TestRoute
-                              component={CheckYourKit}
-                              path="/test/checkYourKit"
-                              next="/test/washAndDryHands" />
-                            <TestRoute
-                              component={WashAndDryHands}
-                              path="/test/washAndDryHands"
-                              next="/test/setUpTest" />  
-                            <TestRoute
-                              component={SetUpTest}
-                              path="/test/setUpTest"
-                              next="/test/selectAFinger" />  
-                            <TestRoute
-                              component={SelectAFinger}
-                              path="/test/selectAFinger"
-                              next="/test/wait" />  
-                            <TestRoute
-                              component={Wait}
-                              path="/test/wait"
-                              next="/test/scanKit" />  
-                            <TestRoute
-                              component={ScanKit}
-                              path="/test/scanKit"
-                              next="/test/results" />  
-                            <TestRoute
-                              component={Results}
-                              path="/test/results"
-                            />
-                          </Switch>
-                        </TestContainer>
-                      )}>
-                      
-                        
-                    </Route>
+                    <TestRoutes />
                   </LoginProvider>
                   <Route key="pagenotfound">
                     <>

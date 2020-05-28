@@ -2,28 +2,11 @@
 //
 // Use of this source code is governed by an LGPL-3.0 license that
 // can be found in the LICENSE file distributed with this file.
-import {  createStyles, makeStyles } from "@material-ui/core";
 import React from "react";
 
 export const FORMID = "stepForm";
 export const UNSET_PROFILE_ID = "UNSET_PROFILE_ID";
 
-export const getStepStyle = makeStyles(() =>
-  createStyles({
-    bulletList: {
-      listStyleType: "square",
-      paddingLeft: "1em",
-      listStylePosition: "outside",
-      "& li": {
-        margin: "1rem 0"
-      }
-    },
-    centeredAsset: {
-      display: "block",
-      margin: "1rem auto"
-    }
-  })
-);
 
 export interface StepDetailComponentProp {
   setStepReady: (ready: boolean) => void;

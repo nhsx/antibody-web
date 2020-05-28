@@ -4,8 +4,7 @@ import { ContinueButton } from 'components/ui/Buttons';
 import { StepProps } from './Step';
 
 export default (props: StepProps) => {
-  console.log(props);
-
+  
   return <Row>
     <Col width="full">
       <BodyText>Your test kit should include:</BodyText>
