@@ -48,7 +48,7 @@ export const handler = async ({ body }: { body: any} ): Promise<APIGatewayProxyR
     };
   }
 
-  const { testRecord } : {testRecord: TestRecord } = request;
+  const { testRecord }: {testRecord: TestRecord } = request;
 
   await putTestRecord(DYNAMO_TABLE, testRecord);
   

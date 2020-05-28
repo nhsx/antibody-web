@@ -35,9 +35,9 @@ const TestContainer = (props: TestContainerProps) => {
         // If the user already as an ongoing test with that guid, this will return their current info
         
         const { testRecord }: { testRecord: TestRecord} = await testApi.generateTest({ guid: cookies['login-token'] });
-        console.log(testRecord);
+        
         dispatch({
-          type: "GENERATE_TEST",
+          type: "SAVE_TEST",
           testRecord
         });
         history.push(`/test/${testRecord.step}`);

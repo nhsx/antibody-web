@@ -13,7 +13,7 @@ const useTestData = (): [TestRecord | null, Function, UpdateStatus] => {
   const app = useContext(appContext) as AppContext;
   const test = useContext(testContext) as TestContext;
 
-  const { state: { testRecord } } = test;
+  const { state: { testRecord }, dispatch } = test;
   const { container, setAppError } = app;
 
   const [ isLoading, setIsLoading ] = useState<boolean>(false);
@@ -25,6 +25,10 @@ const useTestData = (): [TestRecord | null, Function, UpdateStatus] => {
     try {
       setIsLoading(true);
       await testApi.updateTest({ testRecord });
+      dispatch({
+        type: "UPDATE_TEST",
+        testRecord
+      });
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);

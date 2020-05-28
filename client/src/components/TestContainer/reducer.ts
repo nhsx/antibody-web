@@ -6,7 +6,7 @@ export interface TestState {
 }
 
 export type TestAction = {
-  type: "GENERATE_TEST";
+  type: "SAVE_TEST";
   testRecord: TestRecord;
 };
 
@@ -16,7 +16,7 @@ export const initialState: TestState = {
 
 export const testReducer: Reducer<TestState, TestAction> = (state, action): TestState => {
   const handlers = {
-    GENERATE_TEST: (state, action) => {
+    SAVE_TEST: (state, action) => {
       return {
         ...state,
         testRecord: action.testRecord
