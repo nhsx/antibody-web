@@ -1,12 +1,12 @@
 import config from './config';
 import { GenerateTestRequest, GenerateTestResponse } from 'abt-lib/requests/GenerateTest';
-
+import { UpdateTestRequest, UpdateTestResponse } from 'abt-lib/requests/UpdateTest';
 const { apiBase } = config;
 
 export interface TestApi {
   generateTest(parameters: GenerateTestRequest): Promise<GenerateTestResponse>;
   uploadImage(url: string, file: any);
-  updateTest(data: any);
+  updateTest(parameters: any);
 }
 
 const testApi: TestApi = {
@@ -39,12 +39,15 @@ const testApi: TestApi = {
     });
   },
 
-  updateTest: () => {
-    return new Promise((res) => {
-      setTimeout(() => {
-        res({ success: true });
-      }, 1000);
+  updateTest: async (parameters: UpdateTestRequest): Promise<UpdateTestResponse> => {
+    const response = await fetch(`${apiBase}/update`, {
+      method: "POST",
+      body: JSON.stringify(parameters),
+      headers: {
+        "Content-Type": "application/json"
+      }
     });
+    return await response.json();
   }
 };
 

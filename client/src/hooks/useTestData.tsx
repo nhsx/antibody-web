@@ -1,19 +1,19 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useCallback } from "react";
 import appContext, { AppContext } from 'components/App/context';
 import testContext, { TestContext } from 'components/TestContainer/context';
 import AppError from "errors/AppError";
-import { GenerateTestResponse } from "abt-lib/requests/GenerateTest";
+import TestRecord from "abt-lib/models/TestRecord";
 
 interface UpdateStatus {
   error: AppError | null;
   isLoading: boolean;
 }
 
-const useTestData = (): [GenerateTestResponse | null, Function, UpdateStatus] => {
+const useTestData = (): [TestRecord | null, Function, UpdateStatus] => {
   const app = useContext(appContext) as AppContext;
   const test = useContext(testContext) as TestContext;
 
-  const { state: { testData } } = test;
+  const { state: { testRecord } } = test;
   const { container, setAppError } = app;
 
   const [ isLoading, setIsLoading ] = useState<boolean>(false);
@@ -21,10 +21,10 @@ const useTestData = (): [GenerateTestResponse | null, Function, UpdateStatus] =>
 
   const testApi = container.getTestApi();
 
-  const updateTestData = async data => {
+  const updateTestData = useCallback(async testRecord => {
     try {
       setIsLoading(true);
-      await testApi.updateTest(data);
+      await testApi.updateTest({ testRecord });
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
@@ -35,9 +35,9 @@ const useTestData = (): [GenerateTestResponse | null, Function, UpdateStatus] =>
       setAppError(err);
       setError(err);
     }
-  };
+  }, [setIsLoading, setAppError, testApi, setError]);
 
-  return [testData, updateTestData, {
+  return [testRecord, updateTestData, {
     isLoading,
     error
   }];

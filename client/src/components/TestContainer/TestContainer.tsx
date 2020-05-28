@@ -2,10 +2,10 @@ import React, { useState, useEffect, useReducer, useContext, ReactNode } from 'r
 import appContext, { AppContext } from 'components/App/context';
 import { useCookies } from 'react-cookie';
 import { useHistory } from 'react-router-dom';
-import { GenerateTestResponse } from 'abt-lib/requests/GenerateTest';
 import { testReducer, initialState } from "./reducer";
 import TestContext from "./context";
 import useTestData from 'hooks/useTestData';
+import TestRecord from 'abt-lib/models/TestRecord';
 
 interface TestContainerProps {
   children: React.ReactNode;
@@ -20,7 +20,7 @@ const TestContainer = (props: TestContainerProps) => {
   const app = useContext(appContext) as AppContext;
 
   const history = useHistory();
-  const [ , updateTest] = useTestData();
+  const [testRecord, updateTest] = useTestData();
 
   const { setAppError, container: { getTestApi } } = app;
   const testApi = getTestApi();
@@ -33,12 +33,14 @@ const TestContainer = (props: TestContainerProps) => {
     const fetchTest = async() => {
       try {
         // If the user already as an ongoing test with that guid, this will return their current info
-        const testData: GenerateTestResponse = await testApi.generateTest({ guid: cookies['login-token'] });
+        
+        const { testRecord }: { testRecord: TestRecord} = await testApi.generateTest({ guid: cookies['login-token'] });
+        console.log(testRecord);
         dispatch({
           type: "GENERATE_TEST",
-          testData: testData
+          testRecord
         });
-        history.push(`/test/${testData.step}`);
+        history.push(`/test/${testRecord.step}`);
         setIsFetchingTest(false);
       } catch (error) {
         setIsFetchingTest(false);
@@ -52,10 +54,14 @@ const TestContainer = (props: TestContainerProps) => {
   }, [testApi, cookies, dispatch, setAppError, history]);
 
   useEffect(() => {
-    updateTest({
-      step
-    });
-  }, [step, updateTest]);
+    if (step) {
+      updateTest({
+        ...testRecord,
+        step
+      });
+    }
+    
+  }, [step, updateTest, testRecord]);
 
 
   if (isFetchingTest) {

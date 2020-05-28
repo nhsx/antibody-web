@@ -1,17 +1,17 @@
 import { Reducer } from "react";
-import { GenerateTestResponse } from "abt-lib/requests/GenerateTest";
+import TestRecord from "abt-lib/models/TestRecord";
 
 export interface TestState {
-  testData: GenerateTestResponse | null;
+  testRecord: TestRecord | null;
 }
 
 export type TestAction = {
   type: "GENERATE_TEST";
-  testData: GenerateTestResponse;
+  testRecord: TestRecord;
 };
 
 export const initialState: TestState = {
-  testData: null
+  testRecord: null
 };
 
 export const testReducer: Reducer<TestState, TestAction> = (state, action): TestState => {
@@ -19,7 +19,7 @@ export const testReducer: Reducer<TestState, TestAction> = (state, action): Test
     GENERATE_TEST: (state, action) => {
       return {
         ...state,
-        testData: action.testData
+        testRecord: action.testRecord
       };
     }
   };

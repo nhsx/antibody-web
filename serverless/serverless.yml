@@ -38,6 +38,16 @@ functions:
     environment:
       UPLOAD_BUCKET: ${opt:stage, 'dev'}-covid19-antibody-uk
       DYNAMO_TABLE: ${opt:stage, 'dev'}-covid19-antibody-uk
+  update:
+    handler: handlers/update.handler
+    events:
+      - http:
+          method: POST
+          path: update
+          cors: true
+    environment:
+      UPLOAD_BUCKET: ${opt:stage, 'dev'}-covid19-antibody-uk
+      DYNAMO_TABLE: ${opt:stage, 'dev'}-covid19-antibody-uk
 custom:
   serverless-offline:
     httpPort: 4000

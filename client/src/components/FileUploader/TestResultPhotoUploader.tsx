@@ -32,7 +32,7 @@ const TestResultPhotoUploader = () => {
   const app = useContext(appContext) as AppContext;  
   const test = useContext(testContext) as TestContext;
   const { setAppError, container } = app;
-  const testData = test.state.testData;
+  const testRecord = test.state.testRecord;
   const { getTestApi } = container;
   const testApi =  getTestApi();
   const history = useHistory();
@@ -113,9 +113,9 @@ const TestResultPhotoUploader = () => {
       }
 
       try {
-        if (testData && (imageAsFile || imageAsURI)) {
-          await testApi.uploadImage(testData.uploadUrl, imageAsFile || imageAsURI);
-          setImageUploadedURL(testData.downloadUrl);
+        if (testRecord && (imageAsFile || imageAsURI)) {
+          await testApi.uploadImage(testRecord.uploadUrl, imageAsFile || imageAsURI);
+          setImageUploadedURL(testRecord.downloadUrl);
           setIsUploading(false);
           setIsProcessing(true);
           setTimeout(() => {
@@ -137,7 +137,7 @@ const TestResultPhotoUploader = () => {
         throw error;
       }
     },
-    [imageAsFile, imageAsURI, setIsUploading, testApi, handleRetry, setAppError, testData]
+    [imageAsFile, imageAsURI, setIsUploading, testApi, handleRetry, setAppError, testRecord]
   );
 
   return (

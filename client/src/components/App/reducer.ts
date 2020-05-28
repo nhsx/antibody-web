@@ -1,19 +1,28 @@
 import { Reducer } from "react";
-import { GenerateTestResponse } from "abt-lib/requests/GenerateTest";
+import AppError from "errors/AppError";
+
 
 export interface AppState {
   locale: string;
-  testData: GenerateTestResponse | null;
+  user?: any; // @TODO: Replace with proper typing once we know what our user data / auth flow looks like
 }
 
 export type AppAction = {
   type: "SET_LOCALE";
   locale: string;
+} | {
+  type: "SET_ERROR";
+  error: AppError;
+} | {
+  type: "LOGIN_SUCCESS";
+  user: any;
+} | {
+  type: "LOGOUT";
 };
 
 export const initialState: AppState = {
   locale: 'en-gb',
-  testData: null
+  user: null
 };
 
 export const appReducer: Reducer<AppState, AppAction> = (state, action): AppState => {
