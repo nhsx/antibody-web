@@ -1,4 +1,3 @@
-'use strict';
 import * as AWSMock from 'aws-sdk-mock';
 import { AWS } from '../api/aws';
 import { handler } from './generate';

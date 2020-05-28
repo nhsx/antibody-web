@@ -1,7 +1,7 @@
-import AWSSDK from 'aws-sdk';
-export const AWS = AWSSDK;
 import { DocumentClient } from "aws-sdk/clients/dynamodb";
 import TestRecord from "abt-lib/models/TestRecord";
+import AWSSDK from 'aws-sdk';
+export const AWS = AWSSDK;
 
 interface UrlResponse {
   uploadUrl: string;
