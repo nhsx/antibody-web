@@ -31,7 +31,5 @@
       "pre-commit": "npm run lint -- --fix"
     }
   },
-  "dependencies": {
-    
-  }
+  "dependencies": {}
 }
