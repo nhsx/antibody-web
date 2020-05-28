@@ -89,13 +89,13 @@ const TestResultPhotoUploader = () => {
   const onSubmitForm = useCallback(() => {
     // This is a dummy form, only here to go to the next page.
     history.push("/test/results");
-  }, [history, testData?.guid]);
+  }, [history]);
 
-  const handleRetry = () => {
+  const handleRetry = useCallback(() => {
     setAppError(null);
     setIsUploading(false);
     setImageAsFile(null);
-  };
+  }, [setAppError, setIsUploading, setImageAsFile]);
 
   // Occurs when the person uploads the photo
   // TODO: Handle Errors

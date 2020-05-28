@@ -55,7 +55,7 @@ const TestContainer = (props: TestContainerProps) => {
     updateTest({
       step
     });
-  }, [step]);
+  }, [step, updateTest]);
 
 
   if (isFetchingTest) {
