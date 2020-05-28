@@ -14,16 +14,8 @@ provider:
           - Arn
     - Effect: Allow
       Action:
-        - s3:PutObject
-      Resource:
-        Fn::Join:
-          - ''
-          - - 'arn:aws:s3:::'
-            - Ref: S3
-            - '/*'
-    - Effect: Allow
-      Action:
         - s3:GetObject
+        - s3:PutObject
       Resource:
         Fn::Join:
           - ''
@@ -105,14 +97,16 @@ resources:
                 - 's3:GetObject'
               Effect: 'Allow'
               Principal:
-                CanonicalUser: !GetAtt
-                  - ClientCloudFrontAccessIdentity
-                  - S3CanonicalUserId
-              Resource: !Join
-                - ''
-                - - 'arn:aws:s3:::'
-                  - Ref: 'ClientS3'
-                  - '/*'
+                CanonicalUser: 
+                  Fn::GetAtt:
+                    - ClientCloudFrontAccessIdentity
+                    - S3CanonicalUserId
+              Resource: 
+                Fn::Join:
+                  - ''
+                  - - 'arn:aws:s3:::'
+                    - Ref: 'ClientS3'
+                    - '/*'
     ClientCloudFrontDistribution:
       Type: AWS::CloudFront::Distribution
       Properties:
@@ -132,19 +126,21 @@ resources:
             MinTTL: 0
             TargetOriginId: ClientS3Origin
             ForwardedValues:
-              QueryString: 'false'
+              QueryString: false
               Cookies:
                 Forward: none
             ViewerProtocolPolicy: allow-all
           DefaultRootObject: 'index.html'
-          Enabled: 'true'
+          Enabled: true
           Origins:
-            - DomainName: !GetAtt
-                - ClientS3
-                - DomainName
+            - DomainName: 
+                Fn::GetAtt:
+                  - ClientS3
+                  - DomainName
               Id: ClientS3Origin
               S3OriginConfig:
-                OriginAccessIdentity: !Join
-                  - ''
-                  - - 'origin-access-identity/cloudfront/'
-                    - Ref: ClientCloudFrontAccessIdentity
+                OriginAccessIdentity:
+                  Fn::Join:
+                    - ''
+                    - - 'origin-access-identity/cloudfront/'
+                      - Ref: ClientCloudFrontAccessIdentity
