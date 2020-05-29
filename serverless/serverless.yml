@@ -7,7 +7,6 @@ provider:
   environment:
       UPLOAD_BUCKET: ${opt:stage, 'dev'}-covid19-antibody-uk
       DYNAMO_TABLE: ${opt:stage, 'dev'}-covid19-antibody-uk
-      AWS_REGION: eu-west-2
   iamRoleStatements:
     - Effect: Allow
       Action:
