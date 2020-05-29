@@ -85,7 +85,7 @@ const TestContainerWrapper = (props: WrapperProps) => {
   
   const { children, step } = props;
 
-  const [testState, dispatch]: [any, Function] = useReducer(
+  const [testState, dispatch] = useReducer(
     testReducer,
     initialState
   );

@@ -13,22 +13,22 @@ import LoginProvider from "../LoginProvider/LoginProvider";
 import Layout from "components/ui/Layout";
 import Home from "components/Home/Home";
 import TestRoutes from "routes/TestRoutes";
+import AppError from "errors/AppError";
 
 const App = () => {
-
-  const [appState, dispatch]: [any, Function] = useReducer(
+  const [appState, dispatch] = useReducer(
     appReducer,
     initialState
   );
 
-  const setAppError = (error)  => {
+  const setAppError = (error: AppError | null)  => {
     dispatch({
       type: "SET_ERROR",
       error
     });
   };
 
-  const setLocale = (locale) => {
+  const setLocale = (locale: string) => {
     dispatch({
       type: "SET_LOCALE",
       locale,

@@ -15,13 +15,11 @@ export const initialState: TestState = {
 };
 
 export const testReducer: Reducer<TestState, TestAction> = (state, action): TestState => {
-  const handlers = {
-    SAVE_TEST: (state, action) => {
+  switch (action.type) {
+    case "SAVE_TEST":
       return {
         ...state,
         testRecord: action.testRecord
       };
-    }
-  };
-  return handlers[action.type](state, action);
+  }
 };

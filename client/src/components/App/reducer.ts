@@ -5,6 +5,7 @@ import AppError from "errors/AppError";
 export interface AppState {
   locale: string;
   user?: any; // @TODO: Replace with proper typing once we know what our user data / auth flow looks like
+  error?: AppError;
 }
 
 export type AppAction = {
@@ -12,7 +13,7 @@ export type AppAction = {
   locale: string;
 } | {
   type: "SET_ERROR";
-  error: AppError;
+  error: AppError | null;
 } | {
   type: "LOGIN_SUCCESS";
   user: any;
@@ -26,28 +27,23 @@ export const initialState: AppState = {
 };
 
 export const appReducer: Reducer<AppState, AppAction> = (state, action): AppState => {
-  const handlers = {
-    SET_LOCALE: (state, action) => {
-      return { 
+  switch (action.type) {
+    case "SET_LOCALE":
+      return {
         ...state,
         locale: action.locale
       };
-    },
-    SET_ERROR: (state, action) => {
+    case "SET_ERROR":
       return { 
         ...state,
-        error: action.error
+        error: action.error || undefined
       };
-    },
-    LOGIN_SUCCESS: (state, action) => {
+    case "LOGIN_SUCCESS":
       return {
         ...state,
         user: action.user
       };
-    },
-    LOGOUT: () => {
+    case "LOGOUT":
       return initialState;
-    }
-  };
-  return handlers[action.type](state, action);
+  }
 };

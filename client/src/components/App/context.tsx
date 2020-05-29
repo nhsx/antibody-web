@@ -1,12 +1,13 @@
 import React from 'react';
-import { AppState } from './reducer';
+import { AppAction, AppState } from './reducer';
 import { AppContainer } from './container';
+import AppError from 'errors/AppError';
 
 export interface AppContext {
   state: AppState;
-  setLocale: Function;
-  setAppError: Function;
-  dispatch: Function;
+  setLocale: (locale: string) => void;
+  setAppError: (error: AppError | null) => void;
+  dispatch: React.Dispatch<AppAction>;
   container: AppContainer;
 }
 

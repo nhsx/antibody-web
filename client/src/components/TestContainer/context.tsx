@@ -1,9 +1,9 @@
 import React from 'react';
-import { TestState } from './reducer';
+import { TestAction, TestState } from './reducer';
 
 export interface TestContext {
   state: TestState;
-  dispatch: Function;
+  dispatch: React.Dispatch<TestAction>;
 }
 
 const Context = React.createContext<TestContext | null>(null);
