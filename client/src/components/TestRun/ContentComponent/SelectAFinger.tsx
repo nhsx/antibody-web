@@ -36,9 +36,9 @@ export default (props: StepProps) => {
             </BodyText>
           </Details.Text>
         </Details>
-      <ContinueButton
-        href={props.next}
-      />
+        <ContinueButton
+          href={props.next}
+        />
       </Col>
     </Row>
   );
