@@ -9,6 +9,14 @@ export interface TestApi {
   updateTest(parameters: any);
 }
 
+
+function handleErrors(response) {
+  if (!response.ok) {
+    throw Error(response.statusText);
+  }
+  return response;
+}
+
 const testApi: TestApi = {
   generateTest: async (parameters: GenerateTestRequest): Promise<GenerateTestResponse> => {
     const response = await fetch(`${apiBase}/generate`, {
@@ -17,11 +25,12 @@ const testApi: TestApi = {
       headers: {
         "Content-Type": "application/json"
       }
-    });
-    return await response.json();
+    }).then(handleErrors);
+    return response.json();
+    
   },
 
-  uploadImage: (url, file) => {
+  uploadImage: async (url, file) => {
     let type;
     // If this is a file upload
     if (file.type) {
@@ -30,13 +39,14 @@ const testApi: TestApi = {
     // Otherwise they've used the camera
       type = 'image/png';
     }
-    return fetch(url, {
+    const response = await fetch(url, {
       method: "PUT",
       body: file,
       "headers": {
         "Content-Type": type
       }
-    });
+    }).then(handleErrors);
+    return response.json();
   },
 
   updateTest: async (parameters: UpdateTestRequest): Promise<UpdateTestResponse> => {
@@ -46,8 +56,8 @@ const testApi: TestApi = {
       headers: {
         "Content-Type": "application/json"
       }
-    });
-    return await response.json();
+    }).then(handleErrors);
+    return response.json();
   }
 };
 

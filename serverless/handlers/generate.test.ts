@@ -2,6 +2,7 @@ import * as AWSMock from 'aws-sdk-mock';
 import { AWS } from '../api/aws';
 import { handler } from './generate';
 import { resolve } from 'path';
+import { START_STEP } from 'abt-lib/models/Steps';
 
 require('dotenv').config({ path: resolve(__dirname,"../test.env") });
 
@@ -113,7 +114,7 @@ describe('generate', () => {
           guid: mockGuid,
           uploadUrl: mockUrl,
           downloadUrl: mockUrl,
-          step: "checkYourKit"
+          step: START_STEP
         }) 
       }),
       expect.anything()
