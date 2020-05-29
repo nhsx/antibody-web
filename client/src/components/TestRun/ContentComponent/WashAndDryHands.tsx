@@ -19,12 +19,10 @@ export default (props: StepProps) => {
           <li>Dry hands thoroughly</li>
           <li>Do not apply hand cream or sanitiser</li>
         </ul>
+        <ContinueButton
+          href={props.next}
+        />
       </Col>
-      <ContinueButton
-        href={props.next}
-        size="large"
-        type="submit"
-      />
     </Row>
   );
 };

@@ -6,10 +6,10 @@ import { ContinueButton } from 'components/ui/Buttons';
 import useTestData from 'hooks/useTestData';
 
 export default (props: StepProps) => {
-  
-  const [testRecord, updateTest ] = useTestData(); 
-  const [startTime, setStartTime ] = useState<number>(Date.now());
-  const [ready, setStepReady ] = useState<boolean>(false);
+
+  const [testRecord, updateTest] = useTestData();
+  const [startTime, setStartTime] = useState<number>(Date.now());
+  const [ready, setStepReady] = useState<boolean>(false);
 
   useEffect(() => {
     if (testRecord && !testRecord.timerStartedAt) {
@@ -20,7 +20,7 @@ export default (props: StepProps) => {
     } else if (testRecord) {
       setStartTime(testRecord.timerStartedAt);
     }
-  },[testRecord, startTime, updateTest]);
+  }, [testRecord, startTime, updateTest]);
 
   return (
     <Row>
@@ -30,12 +30,10 @@ export default (props: StepProps) => {
           duration={startTime + 600000 - Date.now()}
           setStepReady={setStepReady}
         />
+        {ready && <ContinueButton
+          href={props.next}
+        />}
       </Col>
-      {ready && <ContinueButton
-        href={props.next}
-        size="large"
-        type="submit"
-      />}
     </Row>
   );
 };

@@ -36,12 +36,10 @@ export default (props: StepProps) => {
             </BodyText>
           </Details.Text>
         </Details>
-      </Col>
       <ContinueButton
         href={props.next}
-        size="large"
-        type="submit"
       />
+      </Col>
     </Row>
   );
 };
