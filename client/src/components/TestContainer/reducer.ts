@@ -7,7 +7,7 @@ export interface TestState {
 
 export type TestAction = {
   type: "SAVE_TEST";
-  testRecord: TestRecord;
+  testRecord: TestRecord | null;
 };
 
 export const initialState: TestState = {
