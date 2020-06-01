@@ -39,8 +39,6 @@ export default (props: StepProps) => {
       <BodyText>Not supplied but needed: plaster/tissue</BodyText>
       <ContinueButton
         href={props.next}
-        size="large"
-        type="submit"
       />
     </Col>
   </Row>;

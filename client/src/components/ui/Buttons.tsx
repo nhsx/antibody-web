@@ -2,12 +2,11 @@
 //
 // Use of this source code is governed by an LGPL-3.0 license that
 // can be found in the LICENSE file distributed with this file.
-import {  ButtonProps as MaterialButtonProps } from '@material-ui/core';
 import React, { FunctionComponent } from 'react';
 import { ActionLink } from 'nhsuk-react-components';
 import { Link } from 'react-router-dom';
 
-export interface ContinueButtonProps extends MaterialButtonProps {
+export interface ContinueButtonProps {
   text?: string;
   href?: string;
 }

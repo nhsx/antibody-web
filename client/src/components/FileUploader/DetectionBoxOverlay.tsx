@@ -4,31 +4,16 @@
 // can be found in the LICENSE file distributed with this file.
 import React from 'react';
 import { DetectionData, TopDetectionData } from './RDTAnalyzer';
-import { createStyles, makeStyles } from '@material-ui/core';
 import { toCSSPercent } from 'style/utils';
 
 interface DetectionBoxOverlayProps {
   detectionData: TopDetectionData;
 }
 
-const useBoxStyle = makeStyles(() =>
-  createStyles({
-    box: {
-      fontWeight: 'bold',
-      fontSize: '11px',
-      whiteSpace: 'nowrap',
-      position: 'absolute',
-      border: '1px solid red',
-      textShadow:
-        '-1px 1px 1px #fff, 1px 1px 1px #fff, 1px -1px 0 #fff, -1px -1px 0 #fff',
-    },
-  })
-);
 
 // Renders overlaying boxes over an image, according to detection results
 export default (props: DetectionBoxOverlayProps): JSX.Element => {
   const { detectionData } = props;
-  const classes = useBoxStyle();
 
   const boxes: Array<React.ReactNode> = [];
   if (detectionData) {
@@ -50,8 +35,15 @@ export default (props: DetectionBoxOverlayProps): JSX.Element => {
             left: left,
             right: right,
             bottom: bottom,
+            fontWeight: 'bold',
+            fontSize: '11px',
+            whiteSpace: 'nowrap',
+            position: 'absolute',
+            border: '1px solid red',
+            textShadow:
+              '-1px 1px 1px #fff, 1px 1px 1px #fff, 1px -1px 0 #fff, -1px -1px 0 #fff',
+        
           }}
-          className={classes.box}
           key={dataType}
         >
           {dataType}: {score}

@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { ErrorSummary, Header, Container } from 'nhsuk-react-components';
+import { ErrorSummary, Container } from 'nhsuk-react-components';
 import { FormattedMessage } from 'react-intl';
 import PageContent from 'components/ui/PageContent';
 import MainContent from 'components/ui/MainContent';
@@ -57,14 +57,6 @@ export default class ErrorBoundary extends React.Component<ErrorBoundaryProps, E
     if (this.state.hasError) {
       return (       
         <PageContent>
-          <Header>
-            <Header.Container>
-              <Header.Logo href="/" />
-              <Header.ServiceName href="/">
-                <FormattedMessage id="error.header" />
-              </Header.ServiceName>
-            </Header.Container>
-          </Header>
           <Container>
             <MainContent>
               {this.props.errorComponent || <DefaultError />}

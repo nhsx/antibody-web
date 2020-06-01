@@ -10,12 +10,10 @@ export default (props: StepProps) => {
     <Row>
       <Col width="full">
         <TestResultPhotoUploader />
+        <ContinueButton
+          href={props.next}
+        />
       </Col>
-      <ContinueButton
-        href={props.next}
-        size="large"
-        type="submit"
-      />
     </Row>
   );
 };
