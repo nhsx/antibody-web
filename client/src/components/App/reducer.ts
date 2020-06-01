@@ -4,6 +4,7 @@ import AppError from "errors/AppError";
 
 export interface AppState {
   locale: string;
+  error?: AppError;
   user?: any; // @TODO: Replace with proper typing once we know what our user data / auth flow looks like
 }
 

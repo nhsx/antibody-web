@@ -22,26 +22,33 @@ const TestContainer = (props: TestContainerProps) => {
   const history = useHistory();
   const [testRecord, updateTest] = useTestData();
 
-  const { setAppError, container: { getTestApi } } = app;
+  const { setAppError, state: { error }, container: { getTestApi } } = app;
 
   const testApi = useRef(getTestApi()).current;
   
-  const [isFetchingTest, setIsFetchingTest] = useState<boolean>(true);
+  const [isFetchingTest, setIsFetchingTest] = useState<boolean>(false);
 
   const [cookies] = useCookies(['login-token']);
 
   useEffect(() => {
     const fetchTest = async() => {
+      if (isFetchingTest || testRecord) {
+        return;
+      }
       try {
+        setIsFetchingTest(true);
         // If the user already as an ongoing test with that guid, this will return their current info
-        
         const { testRecord }: { testRecord: TestRecord} = await testApi.generateTest({ guid: cookies['login-token'] });
         
         dispatch({
           type: "SAVE_TEST",
           testRecord
         });
-        history.push(`/test/${testRecord.step}`);
+
+        if (testRecord?.step && testRecord.step !== step) {
+          history.push(`/test/${testRecord.step}`);
+        }
+
         setIsFetchingTest(false);
       } catch (error) {
         setIsFetchingTest(false);
@@ -52,17 +59,21 @@ const TestContainer = (props: TestContainerProps) => {
     };
 
     fetchTest();
-  }, [cookies, dispatch, setAppError, history, testApi]);
+  }, [cookies, dispatch, history, testApi, setAppError, testRecord, isFetchingTest, step]);
 
   useEffect(() => {
-    if (step && step !== testRecord?.step) {
+    if (step && testRecord && step !== testRecord.step) {
+      // Make sure we clear out the application error if they are navigating back a step, for instance
+      if (error) {
+        setAppError(null);
+      }
       updateTest({
         ...testRecord,
         step
       });
     }
     
-  }, [step, testRecord, updateTest]);
+  }, [step, updateTest, error, setAppError, testRecord]);
 
 
   if (isFetchingTest) {
