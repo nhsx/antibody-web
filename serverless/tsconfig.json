@@ -4,6 +4,7 @@
     "module": "commonjs",
     "outDir": "./dist",
     "strict": true,
+    "allowJs": true,
     "baseUrl": "./",
     "typeRoots": [
       "node_modules/@types"

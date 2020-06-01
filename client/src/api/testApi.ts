@@ -23,6 +23,7 @@ const testApi: TestApi = {
       method: "POST",
       body: JSON.stringify(parameters),
       headers: {
+        "Authorization": `TEMP_ALLOW`,
         "Content-Type": "application/json"
       }
     }).then(handleErrors);
@@ -54,6 +55,8 @@ const testApi: TestApi = {
       method: "POST",
       body: JSON.stringify(parameters),
       headers: {
+        // @TODO: Change to actual jwt token once auth flow is settled
+        "Authorization": `TEMP_ALLOW`,
         "Content-Type": "application/json"
       }
     }).then(handleErrors);

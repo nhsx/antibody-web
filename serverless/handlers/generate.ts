@@ -55,10 +55,10 @@ export const handler = async ({ body }: { body: any} ): Promise<APIGatewayProxyR
   // Check if this user already has a test in progress
   record = await getTestRecord(DYNAMO_TABLE, guid);
 
-
   // If not, generate their signed urls and their test record
   if (!record) {
     const { uploadUrl, downloadUrl } = await getUrls(UPLOAD_BUCKET, guid);
+    
     record = {
       guid,
       uploadUrl,

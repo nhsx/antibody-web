@@ -32,7 +32,7 @@ const TestContainer = (props: TestContainerProps) => {
 
   useEffect(() => {
     const fetchTest = async() => {
-      if (isFetchingTest || testRecord) {
+      if (isFetchingTest || testRecord || error) {
         return;
       }
       try {
@@ -51,6 +51,9 @@ const TestContainer = (props: TestContainerProps) => {
 
         setIsFetchingTest(false);
       } catch (error) {
+        if (error.statusCode === 403 || error.statusCode === 401) {
+          history.push("/");
+        }
         setIsFetchingTest(false);
         setAppError({
           code: "GEN1"
@@ -59,7 +62,7 @@ const TestContainer = (props: TestContainerProps) => {
     };
 
     fetchTest();
-  }, [cookies, dispatch, history, testApi, setAppError, testRecord, isFetchingTest, step]);
+  }, [cookies, dispatch, history, testApi, setAppError, testRecord, isFetchingTest, step, error]);
 
   useEffect(() => {
     if (step && testRecord && step !== testRecord.step) {
