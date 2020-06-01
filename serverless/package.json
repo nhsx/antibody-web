@@ -5,6 +5,7 @@
   },
   "dependencies": {
     "@hapi/joi": "^17.1.1",
+    "@serverless/event-mocks": "^1.1.1",
     "@types/hapi__joi": "^17.1.0",
     "@types/serverless-jest-plugin": "^0.3.0",
     "abt-lib": "./../lib",

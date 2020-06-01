@@ -1,23 +1,25 @@
 import * as AWSMock from 'aws-sdk-mock';
-import { AWS } from '../api/aws';
-import { handler } from './generate';
+import { AWS } from '../../api/aws';
+import { handler } from '../generate';
 import { resolve } from 'path';
-import { START_STEP } from 'abt-lib/models/Steps';
+import { START_STEP } from 'abt-lib/dist/models/Steps';
+import { getAuthorisedEvent, mockPrincipalId } from './utils';
+import createEvent from '@serverless/event-mocks';
 
-require('dotenv').config({ path: resolve(__dirname,"../test.env") });
+require('dotenv').config({ path: resolve(__dirname,"../../test.env") });
+
+const generateEvent = getAuthorisedEvent({});
 
 describe('generate', () => {
   beforeAll(() => {
     AWSMock.setSDKInstance(AWS);
   });
 
-  it('should throw an error if no guid is supplied', async () => {
-    const result = await handler({
-      body: JSON.stringify({})
-    });
+  it('should throw an error if no auth token is supplied', async () => {
+    const result = await handler(createEvent("aws:apiGateway", {} as any));
     
     expect(JSON.parse(result.body)).toMatchObject({
-      error: expect.stringContaining("is required"),  
+      error: expect.stringContaining("Missing user id"),  
     });
   });
 
@@ -32,17 +34,21 @@ describe('generate', () => {
     // Make sure our function completes
     AWSMock.mock('DynamoDB.DocumentClient', 'put', () => Promise.resolve());
     
-    await handler({
-      body: JSON.stringify({
-        guid: 'test-guid'
-      }),
-    });
-
-    expect(mockSigned).toBeCalledWith(
+    await handler(generateEvent);
+    
+    expect(mockSigned).toHaveBeenNthCalledWith(1, 
       'putObject',
       expect.objectContaining({
         Bucket: process.env.UPLOAD_BUCKET,
-        Key: expect.stringContaining('rdt-images/test-guid')
+        Key: expect.stringContaining(`rdt-images/${mockPrincipalId}`)
+      }),
+      expect.anything()
+    );
+    expect(mockSigned).toHaveBeenNthCalledWith(2, 
+      'getObject',
+      expect.objectContaining({
+        Bucket: process.env.UPLOAD_BUCKET,
+        Key: expect.stringContaining(`rdt-images/${mockPrincipalId}`)
       }),
       expect.anything()
     );
@@ -64,17 +70,12 @@ describe('generate', () => {
     // Make sure our function completes
     AWSMock.mock('DynamoDB.DocumentClient', 'get', mockGet);
     
-    const response = await handler({
-      body: JSON.stringify({
-        guid: 'test-guid'
-      }),
-    });
-
+    const response = await handler(generateEvent);
 
     expect(mockGet).toBeCalledWith(
       expect.objectContaining({
         TableName: process.env.DYNAMO_TABLE,
-        Key: { guid: 'test-guid' }
+        Key: { guid: mockPrincipalId }
       }),
       expect.anything()
     );
@@ -90,7 +91,6 @@ describe('generate', () => {
 
   it('should create a new record in a dynamo DB table if no record is found', async () => {
     const mockUrl = "http://mockuploadurl.com";
-    const mockGuid = 'test-guid';
     
     AWSMock.setSDKInstance(AWS);
     AWSMock.mock('S3', 'getSignedUrl', function (apiCallToSign: string, params: any, callback: Function) {
@@ -101,17 +101,13 @@ describe('generate', () => {
     AWSMock.mock('DynamoDB.DocumentClient', 'get', jest.fn().mockResolvedValue(null));
     AWSMock.mock('DynamoDB.DocumentClient', 'put', mockDynamoPut);
 
-    await handler({
-      body: JSON.stringify({
-        guid: mockGuid
-      }),
-    });
+    await handler(generateEvent);
     
     expect(mockDynamoPut).toBeCalledWith(
       expect.objectContaining({
         TableName: process.env.DYNAMO_TABLE,
         Item: expect.objectContaining({
-          guid: mockGuid,
+          guid: mockPrincipalId,
           uploadUrl: mockUrl,
           downloadUrl: mockUrl,
           step: START_STEP

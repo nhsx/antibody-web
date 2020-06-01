@@ -2,9 +2,9 @@ import Joi, { ObjectSchema } from '@hapi/joi';
 
 export const validateGenerateRequest = (body: any) => {
   const schema: ObjectSchema = Joi.object({
-    guid: Joi.string().required()
   });
 
+  // We have removed the guid from here as we more closely approximate real jwt flow now
   return schema.validate(body);
 };
 

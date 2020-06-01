@@ -1,7 +1,7 @@
 import React from 'react';
 import { Row, Col, ActionLink } from "nhsuk-react-components";
 import { Link } from 'react-router-dom';
-import { START_STEP } from 'abt-lib/models/Steps';
+import { START_STEP } from 'abt-lib/dist/models/Steps';
 
 export default () => {
   return (

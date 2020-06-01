@@ -11,15 +11,10 @@ import config from './config'
 */
 console.log('Loading function');
 
-exports.handler = async function(event, context, callback) {
-// Do not print the auth token unless absolutely necessary- @TODO: Remove this, dev only
-  console.log('Client token: ' + event.authorizationToken);
+export async function handler(event, context, callback) {
 
-
-
-  //@TODO: Get token out of event.authorizationToken.
-  // Pass to WS2 Authorisation, return relevant data
-  if (event.authorizationToken !== 'TEMP_ALLOW') {
+  //@TODO: Implement proper token decryption
+  if (!event.authorizationToken?.startsWith('TEMP_ALLOW')) {
     throw new Error("Unauthorized")
   }
   const user = decodeToken(event.authorizationToken)
@@ -71,8 +66,9 @@ exports.handler = async function(event, context, callback) {
 
 function decodeToken(token) {
   //@TODO: Assuming they do use a JWT approach we will need WS2's secret key here.
+  // For now just pull the id out of their auth token
   return {
-    user_id: 'f532224c-6732-458a-8701-2c5230a4431c'
+    user_id: token.split("TEMP_ALLOW_")[1]
   }
 }
 

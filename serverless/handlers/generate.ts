@@ -1,19 +1,19 @@
-import { APIGatewayProxyResult } from 'aws-lambda';
+import { APIGatewayProxyResult, APIGatewayEvent } from 'aws-lambda';
 import { getUrls, getTestRecord, putTestRecord } from '../api/aws';
-import { validateGenerateRequest, validateGenerateEnvironment } from '../api/validate';
-import { GenerateTestRequest }  from "abt-lib/requests/GenerateTest";
+import { validateGenerateEnvironment } from '../api/validate';
 import config from './config';
 import TestRecord from 'abt-lib/models/TestRecord';
 
-export const handler = async ({ body }: { body: any} ): Promise<APIGatewayProxyResult> => {
+export const handler = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
 
-  const parsedBody: GenerateTestRequest = JSON.parse(body);
+  const guid = event.requestContext.authorizer?.principalId;
+  console.log(guid);
 
-  if (!parsedBody) {
+  if (!guid) {
     return {
       statusCode: 400,
       body: JSON.stringify({
-        error: "Missing event body"
+        error: "Missing user id"
       }),
       headers: config.defaultHeaders
     };
@@ -35,21 +35,6 @@ export const handler = async ({ body }: { body: any} ): Promise<APIGatewayProxyR
     };
   }
 
-  //Pull out our variables from the event body, once validated
-  const { value: request, error: generateError } = validateGenerateRequest(parsedBody);
-  
-  if (generateError) {
-    return {
-      statusCode: 400,
-      body: JSON.stringify({
-        error: generateError.details?.[0]?.message || "Invalid request body" 
-      }),
-      headers: config.defaultHeaders
-    };
-  }
-
-  //Handler body
-  const { guid } = request; 
   let record: TestRecord | null;
 
   // Check if this user already has a test in progress
@@ -58,7 +43,7 @@ export const handler = async ({ body }: { body: any} ): Promise<APIGatewayProxyR
   // If not, generate their signed urls and their test record
   if (!record) {
     const { uploadUrl, downloadUrl } = await getUrls(UPLOAD_BUCKET, guid);
-    
+
     record = {
       guid,
       uploadUrl,

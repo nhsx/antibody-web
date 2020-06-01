@@ -1,10 +1,11 @@
 import config from './config';
-import { GenerateTestRequest, GenerateTestResponse } from 'abt-lib/requests/GenerateTest';
+import { GenerateTestResponse } from 'abt-lib/requests/GenerateTest';
 import { UpdateTestRequest, UpdateTestResponse } from 'abt-lib/requests/UpdateTest';
+import cookies from 'js-cookie';
 const { apiBase } = config;
 
 export interface TestApi {
-  generateTest(parameters: GenerateTestRequest): Promise<GenerateTestResponse>;
+  generateTest(): Promise<GenerateTestResponse>;
   uploadImage(url: string, file: any);
   updateTest(parameters: any);
 }
@@ -18,12 +19,11 @@ function handleErrors(response) {
 }
 
 const testApi: TestApi = {
-  generateTest: async (parameters: GenerateTestRequest): Promise<GenerateTestResponse> => {
+  generateTest: async (): Promise<GenerateTestResponse> => {
     const response = await fetch(`${apiBase}/generate`, {
       method: "POST",
-      body: JSON.stringify(parameters),
       headers: {
-        "Authorization": `TEMP_ALLOW`,
+        "Authorization": cookies.get('login-token'),
         "Content-Type": "application/json"
       }
     }).then(handleErrors);
@@ -56,7 +56,7 @@ const testApi: TestApi = {
       body: JSON.stringify(parameters),
       headers: {
         // @TODO: Change to actual jwt token once auth flow is settled
-        "Authorization": `TEMP_ALLOW`,
+        "Authorization": cookies.get('login-token'),
         "Content-Type": "application/json"
       }
     }).then(handleErrors);
