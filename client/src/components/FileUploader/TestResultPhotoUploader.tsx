@@ -4,10 +4,8 @@
 // can be found in the LICENSE file distributed with this file.
 import 'react-html5-camera-photo/build/css/index.css';
 import React, { useCallback, useState, useContext } from 'react';
-import { Button } from 'nhsuk-react-components';
-
+import { Button, Container, Row, Col } from 'nhsuk-react-components';
 import Divider from '../ui/Divider';
-import Grid from '@material-ui/core/Grid';
 import ImageSelectorInput from './ImageSelectorInput';
 import RDTImagePreview from './RDTImagePreview';
 import TestStripCamera from './TestStripCamera';
@@ -18,7 +16,6 @@ import { dataURIToBlob, blobToFile } from 'utils/file';
 import appContext, { AppContext } from 'components/App/context';
 import testContext, { TestContext } from 'components/TestContainer/context';
 
-
 const config = getAppConfig();
 
 const styles = {
@@ -26,7 +23,6 @@ const styles = {
     maxWidth: "100%"
   }
 };
-
 
 const TestResultPhotoUploader = () => {
   const app = useContext(appContext) as AppContext;  
@@ -36,7 +32,7 @@ const TestResultPhotoUploader = () => {
   const { getTestApi } = container;
   const testApi =  getTestApi();
   const history = useHistory();
-  
+
   // Preload model.
   useModelPreLoader();
 
@@ -127,7 +123,7 @@ const TestResultPhotoUploader = () => {
             onFix: handleRetry
           });
         }
-        
+
       } catch (error) {
         console.log('uploading error!');
         setIsUploading(false);
@@ -143,50 +139,49 @@ const TestResultPhotoUploader = () => {
   return (
     <div>
       {!(cameraEnabled || imageAsURI || imageUploadedURL) && (
-        <Grid
-          container
-          direction="row"
-          spacing={1}
-          justify="center"
-          alignItems="center"
-        >
-          {config.photoUploadEnabled && (
-            <Grid
-              item
-              xs={12}
-              sm={'auto'}
-            >
-              <ImageSelectorInput
-                onImageSelected={handleImageAsFile}
-                disabled={isUploading}
-              />
-            </Grid>
-          )}
-          {config.photoUploadEnabled && config.cameraInlineEnabled && (
-            <Grid
-              xs={12}
-              sm={2}
-              item>
-              <Divider
-                label="OR"
-                isVertical={true} />
-            </Grid>
-          )}
-          {config.cameraInlineEnabled && (
-            <Grid
-              item
-              xs={12}
-              sm={'auto'}
-            >
-              <Button
-                disabled={isUploading}
-                onClick={handleShowCamera}
-              >
-                <span>Take a Photo</span>
-              </Button>
-            </Grid>
-          )}
-        </Grid>
+        <Container>
+          <Row>
+            <Col width="full">
+              {config.photoUploadEnabled && (
+                <Container>
+                  <Row>
+                    <Col width="full">
+                      <ImageSelectorInput
+                        onImageSelected={handleImageAsFile}
+                        disabled={isUploading}
+                      />
+                    </Col></Row></Container>
+              )}
+              {config.photoUploadEnabled && config.cameraInlineEnabled && (
+                <Container>
+                  <Row>
+                    <Col width="full">
+
+                      <Divider
+                        label="OR"
+                        isVertical={true} />
+                    </Col>
+                  </Row>
+                </Container>
+              )}
+              {config.cameraInlineEnabled && (
+                <Container>
+                  <Row>
+                    <Col width="full">
+
+                      <Button
+                        disabled={isUploading}
+                        onClick={handleShowCamera}
+                      >
+                        <span>Take a Photo</span>
+                      </Button>
+                    </Col>
+                  </Row>
+                </Container>
+              )}
+            </Col>
+          </Row>
+        </Container>
       )}
       {(cameraEnabled || imageAsURI || imageUploadedURL) && (
         <div>
@@ -209,30 +204,36 @@ const TestResultPhotoUploader = () => {
             )}
             {imageAsURI && (
               <div>
-                <Grid
-                  container
-                  spacing={3}>
-                  <Grid
-                    item
-                    xs={6}>
-                    <Button
-                      disabled={isUploading}
-                      onClick={handleUpload}
-                    >
-                      <span>{imageUploadedURL ? "Upload New File" : "Upload"}</span>
-                    </Button>
-                  </Grid>
-                  <Grid
-                    item
-                    xs={6}>
-                    <Button
-                      disabled={isUploading}
-                      onClick={handleShowCamera}
-                    >
-                      <span>{imageAsFile ? "Take Photo" : "Retake"}</span>
-                    </Button>
-                  </Grid>
-                </Grid>
+                <Container>
+                  <Row>
+                    <Col width="full">
+                      <Container>
+                        <Row>
+                          <Col width="full">
+                            <Button
+                              disabled={isUploading}
+                              onClick={handleUpload}
+                            >
+                              <span>{imageUploadedURL ? "Upload New File" : "Upload"}</span>
+                            </Button>
+                          </Col>
+                        </Row>
+                      </Container>
+                      <Container>
+                        <Row>
+                          <Col width="full">
+                            <Button
+                              disabled={isUploading}
+                              onClick={handleShowCamera}
+                            >
+                              <span>{imageAsFile ? "Take Photo" : "Retake"}</span>
+                            </Button>
+                          </Col>
+                        </Row>
+                      </Container>
+                    </Col>
+                  </Row>
+                </Container>
               </div>
             )}
           </div>

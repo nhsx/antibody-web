@@ -21,12 +21,10 @@ export default (props: StepProps) => {
           <li>Remove pipette and test device from packaging</li>
           <li>Carefully twist and pull cap off lancet</li>
         </ul>
+        <ContinueButton
+          href={props.next}
+        />
       </Col>
-      <ContinueButton
-        href={props.next}
-        size="large"
-        type="submit"
-      />
     </Row>
 
   );

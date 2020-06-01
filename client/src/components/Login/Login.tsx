@@ -1,5 +1,5 @@
 import React, { useState, SyntheticEvent } from "react";
-import { Row, Col, Form, Input, Button } from "nhsuk-react-components";
+import { Row, Col, Form, Input, Button, Container } from "nhsuk-react-components";
 
 interface LoginProps {
   formSubmit: Function;
@@ -15,18 +15,27 @@ export default (props: LoginProps) => {
   };
 
   return (
-    <Row>
-      <Col width="full">
-        <Form onSubmit={onFormSubmit}>
-          <Input
-            id="input-example"
-            name="test-name"
-            label="Sign In ID"
-            onChange={(e) => setSignInId(e.currentTarget.value)}
-          />
-          <Button type="submit">Submit</Button>
-        </Form>
-      </Col>
-    </Row>
+    <Form onSubmit={onFormSubmit}>
+      <Container>
+        <Row>
+          <Col width="one-half">
+            <Input
+              id="sign-in-id"
+              name="sign-in-id"
+              label="Sign In ID"
+              onChange={(e) => setSignInId(e.currentTarget.value)}
+            />
+          </Col>
+        </Row>
+      </Container>
+      <br />
+      <Container>
+        <Row>
+          <Col width="full">
+            <Button type="submit">Submit</Button>
+          </Col>
+        </Row>
+      </Container>
+    </Form>
   );
 };
