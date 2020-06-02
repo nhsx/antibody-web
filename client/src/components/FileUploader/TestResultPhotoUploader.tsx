@@ -125,12 +125,12 @@ const TestResultPhotoUploader = () => {
         }
 
       } catch (error) {
+        console.log('uploading error!');
         setIsUploading(false);
         setAppError({
           code: "UPL1",
           onFix: handleRetry
         });
-        throw error;
       }
     },
     [imageAsFile, imageAsURI, setIsUploading, testApi, handleRetry, setAppError, testRecord]

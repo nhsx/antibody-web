@@ -4,8 +4,8 @@ import AppError from "errors/AppError";
 
 export interface AppState {
   locale: string;
-  user?: any; // @TODO: Replace with proper typing once we know what our user data / auth flow looks like
   error?: AppError;
+  token?: string;
 }
 
 export type AppAction = {
@@ -16,14 +16,13 @@ export type AppAction = {
   error: AppError | null;
 } | {
   type: "LOGIN_SUCCESS";
-  user: any;
+  token: string;
 } | {
   type: "LOGOUT";
 };
 
 export const initialState: AppState = {
-  locale: 'en-gb',
-  user: null
+  locale: 'en-gb'
 };
 
 export const appReducer: Reducer<AppState, AppAction> = (state, action): AppState => {
@@ -41,7 +40,7 @@ export const appReducer: Reducer<AppState, AppAction> = (state, action): AppStat
     case "LOGIN_SUCCESS":
       return {
         ...state,
-        user: action.user
+        token: action.token
       };
     case "LOGOUT":
       return initialState;

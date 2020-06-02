@@ -2,3 +2,4 @@
 **/build/*
 **/dist/*
 jest.config.js
+serverless/handlers/authorizer.js

@@ -38,7 +38,7 @@ functions:
           method: POST
           path: generate
           cors: true
-    
+          authorizer: authorizer
   update:
     handler: handlers/update.handler
     events:
@@ -46,6 +46,10 @@ functions:
           method: POST
           path: update
           cors: true
+          authorizer: authorizer
+  authorizer:
+    type: TOKEN
+    handler: handlers/authorizer.handler
 custom:
   serverless-offline:
     httpPort: 4000

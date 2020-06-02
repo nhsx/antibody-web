@@ -5,10 +5,6 @@ import _ from 'lodash';
 
 const Thrower = () => {
   throw new Error("Test Error");
-  return (
-    <div>
-    </div>
-  );
 };
 
 describe("<ErrorBoundary>", () => {
