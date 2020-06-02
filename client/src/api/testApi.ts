@@ -11,6 +11,7 @@ export interface TestApi {
 
 const testApi: TestApi = {
   generateTest: async (parameters: GenerateTestRequest): Promise<GenerateTestResponse> => {
+    console.log("apibase=>", apiBase);
     const response = await fetch(`${apiBase}/generate`, {
       method: "POST",
       body: JSON.stringify(parameters),
