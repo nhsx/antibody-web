@@ -1,4 +1,4 @@
-import TestRecord from "models/TestRecord";
+import TestRecord from "../models/TestRecord";
 export interface GenerateTestRequest {
     guid?: string;
 }

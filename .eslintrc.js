@@ -2,12 +2,7 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   plugins: ['@typescript-eslint', 'prettier', 'jest'],
   extends: [
-    "react-app",
-    'eslint:recommended',
-    "plugin:react/recommended",
-    'plugin:@typescript-eslint/eslint-recommended',
-    'plugin:@typescript-eslint/recommended',
-    'prettier'
+    "react-app"
   ],
   env: {
       'browser': true,
@@ -16,7 +11,7 @@ module.exports = {
   },
   settings: {
     'import/parsers': {
-      '@typescript-eslint/parser': ['.ts', '.tsx'],
+      '@typescript-eslint/parser': ['.ts', '.tsx', '.js'],
     },
     'import/resolver': {
       typescript: {},

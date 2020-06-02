@@ -13,7 +13,6 @@ export interface ContinueButtonProps {
 export const ContinueButton: FunctionComponent<ContinueButtonProps> = (
   props: ContinueButtonProps
 ) => {
-  console.log("continue button props=>", props);
   return (
     <ActionLink href={props.href ? props.href : ""} >{props.text ? props.text : 'Next'}</ActionLink>
   );

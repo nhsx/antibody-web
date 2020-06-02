@@ -1,28 +1,37 @@
 import config from './config';
-import { GenerateTestRequest, GenerateTestResponse } from 'abt-lib/requests/GenerateTest';
+import { GenerateTestResponse } from 'abt-lib/requests/GenerateTest';
 import { UpdateTestRequest, UpdateTestResponse } from 'abt-lib/requests/UpdateTest';
+import cookies from 'js-cookie';
 const { apiBase } = config;
 
 export interface TestApi {
-  generateTest(parameters: GenerateTestRequest): Promise<GenerateTestResponse>;
+  generateTest(): Promise<GenerateTestResponse>;
   uploadImage(url: string, file: any);
   updateTest(parameters: any);
 }
 
+
+function handleErrors(response) {
+  if (!response.ok) {
+    throw Error(response.statusText);
+  }
+  return response;
+}
+
 const testApi: TestApi = {
-  generateTest: async (parameters: GenerateTestRequest): Promise<GenerateTestResponse> => {
-    console.log("apibase=>", apiBase);
+  generateTest: async (): Promise<GenerateTestResponse> => {
     const response = await fetch(`${apiBase}/generate`, {
       method: "POST",
-      body: JSON.stringify(parameters),
       headers: {
+        "Authorization": cookies.get('login-token'),
         "Content-Type": "application/json"
       }
-    });
-    return await response.json();
+    }).then(handleErrors);
+    return response.json();
+    
   },
 
-  uploadImage: (url, file) => {
+  uploadImage: async (url, file) => {
     let type;
     // If this is a file upload
     if (file.type) {
@@ -31,13 +40,14 @@ const testApi: TestApi = {
     // Otherwise they've used the camera
       type = 'image/png';
     }
-    return fetch(url, {
+    const response = await fetch(url, {
       method: "PUT",
       body: file,
       "headers": {
         "Content-Type": type
       }
-    });
+    }).then(handleErrors);
+    return response.json();
   },
 
   updateTest: async (parameters: UpdateTestRequest): Promise<UpdateTestResponse> => {
@@ -45,10 +55,12 @@ const testApi: TestApi = {
       method: "POST",
       body: JSON.stringify(parameters),
       headers: {
+        // @TODO: Change to actual jwt token once auth flow is settled
+        "Authorization": cookies.get('login-token'),
         "Content-Type": "application/json"
       }
-    });
-    return await response.json();
+    }).then(handleErrors);
+    return response.json();
   }
 };
 

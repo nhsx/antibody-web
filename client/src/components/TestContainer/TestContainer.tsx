@@ -22,28 +22,39 @@ const TestContainer = (props: TestContainerProps) => {
   const history = useHistory();
   const [testRecord, updateTest] = useTestData();
 
-  const { setAppError, container: { getTestApi } } = app;
+  const { setAppError, state: { error }, container: { getTestApi } } = app;
 
   const testApi = useRef(getTestApi()).current;
   
-  const [isFetchingTest, setIsFetchingTest] = useState<boolean>(true);
+  const [isFetchingTest, setIsFetchingTest] = useState<boolean>(false);
 
   const [cookies] = useCookies(['login-token']);
 
   useEffect(() => {
     const fetchTest = async() => {
+      if (isFetchingTest || testRecord || error) {
+        return;
+      }
       try {
+        setIsFetchingTest(true);
         // If the user already as an ongoing test with that guid, this will return their current info
-        
-        const { testRecord }: { testRecord: TestRecord} = await testApi.generateTest({ guid: cookies['login-token'] });
+        const { testRecord }: { testRecord: TestRecord} = await testApi.generateTest();
         
         dispatch({
           type: "SAVE_TEST",
           testRecord
         });
-        history.push(`/test/${testRecord.step}`);
+
+        // If the record has a step already set and we're not on it already, send the user to it
+        if (testRecord?.step && testRecord.step !== step) {
+          history.push(`/test/${testRecord.step}`);
+        }
         setIsFetchingTest(false);
       } catch (error) {
+        // If our token has expired or is invalid, send the user to the login
+        if (error.statusCode === 403 || error.statusCode === 401) {
+          history.push("/");
+        }
         setIsFetchingTest(false);
         setAppError({
           code: "GEN1"
@@ -52,17 +63,21 @@ const TestContainer = (props: TestContainerProps) => {
     };
 
     fetchTest();
-  }, [cookies, dispatch, setAppError, history, testApi]);
+  }, [cookies, dispatch, history, testApi, setAppError, testRecord, isFetchingTest, step, error]);
 
   useEffect(() => {
-    if (step && step !== testRecord?.step) {
+    if (!error && step && testRecord && step !== testRecord.step) {
+      // Make sure we clear out the application error if they are navigating back a step, for instance
       updateTest({
         ...testRecord,
         step
       });
+      if (error) {
+        setAppError(null);
+      }
     }
     
-  }, [step, testRecord, updateTest]);
+  }, [step, updateTest, error, setAppError, testRecord]);
 
 
   if (isFetchingTest) {

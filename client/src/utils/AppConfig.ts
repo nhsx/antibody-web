@@ -11,13 +11,10 @@ import appConfigOverrides from '../config/AppConfigOverrides';
 const MasterConfig: AppConfig = {
   cameraFullScreenEnabled: true,
   cameraInlineEnabled: true,
-  cameraLiveMLRecognitionEnabled: true,
+  cameraLiveMLRecognitionEnabled: false,
   cameraOverlayEnabled: true,
-
   photoUploadEnabled: true,
-
   staticPhotoMLRecognitionEnabled: true,
-
   landingPage: 'NEWTESTRUN',
 };
 
