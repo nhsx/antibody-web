@@ -1,6 +1,6 @@
 import * as AWSMock from 'aws-sdk-mock';
 import { AWS } from '../../api/aws';
-import { handler } from 'handlers/generate/handler';
+import { handler } from '../generate/handler';
 import { resolve } from 'path';
 import { START_STEP } from 'abt-lib/dist/models/Steps';
 import { getAuthorisedEvent, mockPrincipalId } from './utils';
@@ -15,7 +15,7 @@ describe('generate', () => {
   });
 
   it('should throw an error if no auth token is supplied', async () => {
-    const result = await handler({} as any);
+    const result = await handler({ requestContext: {} } as any);
     
     expect(JSON.parse(result.body)).toMatchObject({
       error: expect.stringContaining("Missing user id"),  

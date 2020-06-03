@@ -7,7 +7,6 @@ import TestRecord from 'abt-lib/models/TestRecord';
 export const handler = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
 
   const guid = event.requestContext.authorizer?.principalId;
-  console.log(guid);
 
   if (!guid) {
     return {

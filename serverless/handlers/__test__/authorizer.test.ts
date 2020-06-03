@@ -1,4 +1,4 @@
-import { handler } from 'handlers/authorizer/handler';
+import { handler } from '../authorizer/handler';
 import { resolve } from 'path';
 //import createEvent from '@serverless/event-mocks';
 

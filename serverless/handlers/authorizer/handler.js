@@ -10,7 +10,7 @@
 export async function handler(event) {
 
   //@TODO: Implement proper token decryption
-  if (!event.authorizationToken.startsWith('TEMP_ALLOW')) {
+  if (!event.authorizationToken?.startsWith('TEMP_ALLOW')) {
     throw new Error("Unauthorized");
   }
   const user = decodeToken(event.authorizationToken);
