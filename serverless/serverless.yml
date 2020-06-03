@@ -11,6 +11,7 @@ provider:
     - Effect: Allow
       Action:
         - dynamodb:PutItem
+        - dynamodb:GetItem
       Resource: 
         Fn::GetAtt: 
           - DynamoDB
@@ -26,13 +27,13 @@ provider:
             - Ref: S3
             - '/*'
 plugins:
-  - serverless-plugin-typescript
+  - serverless-webpack
   - serverless-offline
   - serverless-jest-plugin
 environment:
 functions:
   generate:
-    handler: handlers/generate.handler
+    handler: handlers/generate/handler.handler
     events:
       - http:
           method: POST
@@ -40,7 +41,7 @@ functions:
           cors: true
           authorizer: authorizer
   update:
-    handler: handlers/update.handler
+    handler: handlers/update/handler.handler
     events:
       - http:
           method: POST
@@ -49,12 +50,15 @@ functions:
           authorizer: authorizer
   authorizer:
     type: TOKEN
-    handler: handlers/authorizer.handler
+    handler: handlers/authorizer/handler.handler
 custom:
   serverless-offline:
     httpPort: 4000
     stage: dev
-    
+  webpack:
+    includeModules: true   # Node modules configuration for packaging
+    packager: 'yarn'   # Packager that will be used to package your external modules
+    excludeFiles: '**/*.test.ts' # Provide a glob for files to ignore
 resources:
   Resources:
     S3:
@@ -87,6 +91,15 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 2
           WriteCapacityUnits: 2
+    GatewayResponseDefault4XX:
+      Type: 'AWS::ApiGateway::GatewayResponse'
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        ResponseType: DEFAULT_4XX
+        RestApiId:
+          Ref: 'ApiGatewayRestApi'
     ClientS3:
       Type: AWS::S3::Bucket
       Properties:

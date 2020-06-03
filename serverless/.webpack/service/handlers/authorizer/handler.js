@@ -1,5 +1,102 @@
-import config from './config'
+module.exports =
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = "./handlers/authorizer/handler.js");
+/******/ })
+/************************************************************************/
+/******/ ({
 
+/***/ "./handlers/authorizer/handler.js":
+/*!****************************************!*\
+  !*** ./handlers/authorizer/handler.js ***!
+  \****************************************/
+/*! exports provided: handler */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "handler", function() { return handler; });
 /*
 * Copyright 2015-2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 *
@@ -9,69 +106,49 @@ import config from './config'
 *
 * or in the "license" file accompanying this file. This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 */
-console.log('Loading function');
-
-export async function handler(event, context, callback) {
-
+async function handler(event) {
   //@TODO: Implement proper token decryption
-  if (!event.authorizationToken?.startsWith('TEMP_ALLOW')) {
-    throw new Error("Unauthorized")
+  if (!event.authorizationToken.startsWith('TEMP_ALLOW')) {
+    throw new Error("Unauthorized");
   }
-  const user = decodeToken(event.authorizationToken)
 
-
-  // if the token is valid, a policy must be generated which will allow or deny access to the client
-
+  const user = decodeToken(event.authorizationToken); // if the token is valid, a policy must be generated which will allow or deny access to the client
   // if access is denied, the client will receive a 403 Access Denied response
   // if access is allowed, API Gateway will proceed with the backend integration configured on the method that was called
-
   // build apiOptions for the AuthPolicy
+
   var apiOptions = {};
   var tmp = event.methodArn.split(':');
   var apiGatewayArnTmp = tmp[5].split('/');
   var awsAccountId = tmp[4];
   apiOptions.region = tmp[3];
   apiOptions.restApiId = apiGatewayArnTmp[0];
-  apiOptions.stage = apiGatewayArnTmp[1];
-  var method = apiGatewayArnTmp[2];
-  var resource = '/'; // root resource
-  if (apiGatewayArnTmp[3]) {
-    resource += apiGatewayArnTmp.slice(3, apiGatewayArnTmp.length).join('/');
-  }
-
-  // this function must generate a policy that is associated with the recognized principal user identifier.
+  apiOptions.stage = apiGatewayArnTmp[1]; // this function must generate a policy that is associated with the recognized principal user identifier.
   // depending on your use case, you might store policies in a DB, or generate them on the fly
-
   // keep in mind, the policy is cached for 5 minutes by default (TTL is configurable in the authorizer)
   // and will apply to subsequent calls to any method/resource in the RestApi
   // made with the same token
 
-  var policy = new AuthPolicy(user.user_id, awsAccountId, apiOptions);
-  
-  // All authentication is presumably through the same endpoint, so we can allow access to all lambdas
-  policy.allowAllMethods();
+  var policy = new AuthPolicy(user.user_id, awsAccountId, apiOptions); // All authentication is presumably through the same endpoint, so we can allow access to all lambdas
 
-  // finally, build the policy
-  var authResponse = policy.build();
+  policy.allowAllMethods(); // finally, build the policy
 
-  // new! -- add additional key-value pairs
+  var authResponse = policy.build(); // new! -- add additional key-value pairs
   // these are made available by APIGW like so: $context.authorizer.<key>
   // additional context is cached
-  authResponse.context = {
-    user
-  };
 
-  return authResponse
-};
+  authResponse.context = {};
+  return authResponse;
+}
+;
 
 function decodeToken(token) {
   //@TODO: Assuming they do use a JWT approach we will need WS2's secret key here.
   // For now just pull the id out of their auth token
   return {
     user_id: token.split("TEMP_ALLOW_")[1]
-  }
+  };
 }
-
 /**
  * AuthPolicy receives a set of allowed and denied methods and generates a valid
  * AWS policy for the API Gateway authorizer. The constructor receives the calling
@@ -92,6 +169,8 @@ function decodeToken(token) {
  * @class AuthPolicy
  * @constructor
  */
+
+
 function AuthPolicy(principal, awsAccountId, apiOptions) {
   /**
      * The AWS account id the policy will be generated for. This is used to create
@@ -101,7 +180,6 @@ function AuthPolicy(principal, awsAccountId, apiOptions) {
      * @type {String}
      */
   this.awsAccountId = awsAccountId;
-
   /**
      * The principal used for the policy, this should be a unique identifier for
      * the end user.
@@ -109,8 +187,8 @@ function AuthPolicy(principal, awsAccountId, apiOptions) {
      * @property principalId
      * @type {String}
      */
-  this.principalId = principal;
 
+  this.principalId = principal;
   /**
      * The policy version used for the evaluation. This should always be "2012-10-17"
      *
@@ -118,8 +196,8 @@ function AuthPolicy(principal, awsAccountId, apiOptions) {
      * @type {String}
      * @default "2012-10-17"
      */
-  this.version = "2012-10-17";
 
+  this.version = "2012-10-17";
   /**
      * The regular expression used to validate resource paths for the policy
      *
@@ -127,13 +205,13 @@ function AuthPolicy(principal, awsAccountId, apiOptions) {
      * @type {RegExp}
      * @default '^\/[/.a-zA-Z0-9-\*]+$'
      */
-  this.pathRegex = new RegExp('^[/.a-zA-Z0-9-\*]+$');
 
-  // these are the internal lists of allowed and denied methods. These are lists
+  this.pathRegex = new RegExp('^[/.a-zA-Z0-9-\*]+$'); // these are the internal lists of allowed and denied methods. These are lists
   // of objects and each object has 2 properties: A resource ARN and a nullable
   // conditions statement.
   // the build method processes these lists and generates the approriate
   // statements for the final policy
+
   this.allowMethods = [];
   this.denyMethods = [];
 
@@ -142,18 +220,21 @@ function AuthPolicy(principal, awsAccountId, apiOptions) {
   } else {
     this.restApiId = apiOptions.restApiId;
   }
+
   if (!apiOptions || !apiOptions.region) {
     this.region = "*";
   } else {
     this.region = apiOptions.region;
   }
+
   if (!apiOptions || !apiOptions.stage) {
     this.stage = "*";
   } else {
     this.stage = apiOptions.stage;
   }
-};
+}
 
+;
 /**
  * A set of existing HTTP verbs supported by API Gateway. This property is here
  * only to avoid spelling mistakes in the policy.
@@ -161,18 +242,19 @@ function AuthPolicy(principal, awsAccountId, apiOptions) {
  * @property HttpVerb
  * @type {Object}
  */
+
 AuthPolicy.HttpVerb = {
-  GET     : "GET",
-  POST    : "POST",
-  PUT     : "PUT",
-  PATCH   : "PATCH",
-  HEAD    : "HEAD",
-  DELETE  : "DELETE",
-  OPTIONS : "OPTIONS",
-  ALL     : "*"
+  GET: "GET",
+  POST: "POST",
+  PUT: "PUT",
+  PATCH: "PATCH",
+  HEAD: "HEAD",
+  DELETE: "DELETE",
+  OPTIONS: "OPTIONS",
+  ALL: "*"
 };
 
-AuthPolicy.prototype = (function() {
+AuthPolicy.prototype = function () {
   /**
    * Adds a method to the internal lists of allowed or denied methods. Each object in
    * the internal list contains a resource ARN and a condition statement. The condition
@@ -186,7 +268,7 @@ AuthPolicy.prototype = (function() {
    * @param {Object} The conditions object in the format specified by the AWS docs.
    * @return {void}
    */
-  var addMethod = function(effect, verb, resource, conditions) {
+  var addMethod = function (effect, verb, resource, conditions) {
     if (verb != "*" && !AuthPolicy.HttpVerb.hasOwnProperty(verb)) {
       throw new Error("Invalid HTTP verb " + verb + ". Allowed verbs in AuthPolicy.HttpVerb");
     }
@@ -196,30 +278,25 @@ AuthPolicy.prototype = (function() {
     }
 
     var cleanedResource = resource;
-    if (resource.substring(0, 1) == "/") {
+
+    if (resource.substring(0, 1) === "/") {
       cleanedResource = resource.substring(1, resource.length);
     }
-    var resourceArn = "arn:aws:execute-api:" +
-      this.region + ":" +
-      this.awsAccountId + ":" +
-      this.restApiId + "/" +
-      this.stage + "/" +
-      verb + "/" +
-      cleanedResource;
 
-    if (effect.toLowerCase() == "allow") {
+    var resourceArn = "arn:aws:execute-api:" + this.region + ":" + this.awsAccountId + ":" + this.restApiId + "/" + this.stage + "/" + verb + "/" + cleanedResource;
+
+    if (effect.toLowerCase() === "allow") {
       this.allowMethods.push({
         resourceArn: resourceArn,
         conditions: conditions
       });
-    } else if (effect.toLowerCase() == "deny") {
+    } else if (effect.toLowerCase() === "deny") {
       this.denyMethods.push({
         resourceArn: resourceArn,
         conditions: conditions
       });
     }
   };
-
   /**
    * Returns an empty statement object prepopulated with the correct action and the
    * desired effect.
@@ -229,16 +306,16 @@ AuthPolicy.prototype = (function() {
    * @return {Object} An empty statement object with the Action, Effect, and Resource
    *                  properties prepopulated.
    */
-  var getEmptyStatement = function(effect) {
+
+
+  var getEmptyStatement = function (effect) {
     effect = effect.substring(0, 1).toUpperCase() + effect.substring(1, effect.length).toLowerCase();
     var statement = {};
     statement.Action = "execute-api:Invoke";
     statement.Effect = effect;
     statement.Resource = [];
-
     return statement;
   };
-
   /**
    * This function loops over an array of objects containing a resourceArn and
    * conditions statement and generates the array of statements for the policy.
@@ -249,7 +326,9 @@ AuthPolicy.prototype = (function() {
    *                and the conditions for the policy
    * @return {Array} an array of formatted statements for the policy.
    */
-  var getStatementsForEffect = function(effect, methods) {
+
+
+  var getStatementsForEffect = function (effect, methods) {
     var statements = [];
 
     if (methods.length > 0) {
@@ -257,6 +336,7 @@ AuthPolicy.prototype = (function() {
 
       for (var i = 0; i < methods.length; i++) {
         var curMethod = methods[i];
+
         if (curMethod.conditions === null || curMethod.conditions.length === 0) {
           statement.Resource.push(curMethod.resourceArn);
         } else {
@@ -283,7 +363,7 @@ AuthPolicy.prototype = (function() {
      *
      * @method allowAllMethods
      */
-    allowAllMethods: function() {
+    allowAllMethods: function () {
       addMethod.call(this, "allow", "*", "*", null);
     },
 
@@ -292,7 +372,7 @@ AuthPolicy.prototype = (function() {
      *
      * @method denyAllMethods
      */
-    denyAllMethods: function() {
+    denyAllMethods: function () {
       addMethod.call(this, "deny", "*", "*", null);
     },
 
@@ -306,7 +386,7 @@ AuthPolicy.prototype = (function() {
      * @param {string} The resource path. For example "/pets"
      * @return {void}
      */
-    allowMethod: function(verb, resource) {
+    allowMethod: function (verb, resource) {
       addMethod.call(this, "allow", verb, resource, null);
     },
 
@@ -320,7 +400,7 @@ AuthPolicy.prototype = (function() {
      * @param {string} The resource path. For example "/pets"
      * @return {void}
      */
-    denyMethod : function(verb, resource) {
+    denyMethod: function (verb, resource) {
       addMethod.call(this, "deny", verb, resource, null);
     },
 
@@ -336,7 +416,7 @@ AuthPolicy.prototype = (function() {
      * @param {Object} The conditions object in the format specified by the AWS docs
      * @return {void}
      */
-    allowMethodWithConditions: function(verb, resource, conditions) {
+    allowMethodWithConditions: function (verb, resource, conditions) {
       addMethod.call(this, "allow", verb, resource, conditions);
     },
 
@@ -352,7 +432,7 @@ AuthPolicy.prototype = (function() {
      * @param {Object} The conditions object in the format specified by the AWS docs
      * @return {void}
      */
-    denyMethodWithConditions : function(verb, resource, conditions) {
+    denyMethodWithConditions: function (verb, resource, conditions) {
       addMethod.call(this, "deny", verb, resource, conditions);
     },
 
@@ -365,9 +445,8 @@ AuthPolicy.prototype = (function() {
      * @method build
      * @return {Object} The policy object that can be serialized to JSON.
      */
-    build: function() {
-      if ((!this.allowMethods || this.allowMethods.length === 0) &&
-          (!this.denyMethods || this.denyMethods.length === 0)) {
+    build: function () {
+      if ((!this.allowMethods || this.allowMethods.length === 0) && (!this.denyMethods || this.denyMethods.length === 0)) {
         throw new Error("No statements defined for the policy");
       }
 
@@ -376,13 +455,15 @@ AuthPolicy.prototype = (function() {
       var doc = {};
       doc.Version = this.version;
       doc.Statement = [];
-
       doc.Statement = doc.Statement.concat(getStatementsForEffect.call(this, "Allow", this.allowMethods));
       doc.Statement = doc.Statement.concat(getStatementsForEffect.call(this, "Deny", this.denyMethods));
-
       policy.policyDocument = doc;
-
       return policy;
     }
   };
-})();
+}();
+
+/***/ })
+
+/******/ });
+//# sourceMappingURL=handler.js.map
