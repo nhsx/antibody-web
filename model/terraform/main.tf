@@ -5,6 +5,14 @@ provider "aws" {
 
 data "aws_caller_identity" "current" {}
 
+terraform {
+  backend "s3" {
+    bucket = "nhsx-antibody-terraform-state"
+    key    = "tfstate/terraform.state"
+    region = "eu-west-2"
+  }
+}
+
 resource "aws_vpc" "antibody-model" {
   cidr_block = "10.0.1.0/24"
 
