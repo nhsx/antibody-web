@@ -7561,10 +7561,10 @@ nhsuk-frontend@^3.0.1:
     accessible-autocomplete "^2.0.2"
     sass-mq "^5.0.1"
 
-nhsuk-react-components@^1.1.3:
-  version "1.1.3"
-  resolved "https://registry.yarnpkg.com/nhsuk-react-components/-/nhsuk-react-components-1.1.3.tgz#debbba7998c93c595fbcb7eaf04a749bd4fc0198"
-  integrity sha512-/1wV6Q2vkXrWW2w7e5VsCcGIiQ4DXcitXHUO6QIYsD4EV58n+Sg5+637sxlDBX1dhwzp38+OM3uaaN4L5PtLlg==
+nhsuk-react-components@1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/nhsuk-react-components/-/nhsuk-react-components-1.2.0.tgz#d7d1e6a4dfee47a2c99380cc9b0d2a5c8fac3cbd"
+  integrity sha512-HJNM95S0GjAaQhhIhoaExARN3nNp4Qt12R4tZC8xs8z6lICnTVNw4ZIntqFcoB+cKdok2PrLRUAQ0oGNLOhtEQ==
   dependencies:
     classnames "^2.2.6"
 

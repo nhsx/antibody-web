@@ -23,11 +23,8 @@ export default (props: PageContentProps) => (
       </Header.Container>
     </Header>
 
-    <section
-      className="padding-top: nhsuk-u-margin-top-4"
-      style={{ minHeight: "70vh" }}>
-      {props.children}
-    </section>
+    {props.children}
+
     <Footer>
       <Footer.List>
         <Footer.ListItem href={AUDERE_URL}>OpenRDT Powered by Audure</Footer.ListItem>
