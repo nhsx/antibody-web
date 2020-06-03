@@ -4,5 +4,6 @@ jspm_packages
 
 # Serverless directories
 .serverless
+.webpack
 .build
 !test.env

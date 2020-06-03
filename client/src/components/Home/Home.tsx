@@ -2,7 +2,7 @@
 //
 // Use of this source code is governed by an LGPL-3.0 license that
 // can be found in the LICENSE file distributed with this file.
-import React from "react";
+import React, { useCallback } from "react";
 import { useHistory } from "react-router-dom";
 import Login from "../Login/Login";
 import { AppContext, withApp } from "components/App/context";
@@ -17,7 +17,7 @@ export const Home = ({ app }: { app: AppContext }) => {
   const history = useHistory();
   const login = app.container.getLogin();
   
-  const handleLogin = async (signInId: string) => {
+  const handleLogin = useCallback(async (signInId: string) => {
     const response = await login(signInId);
 
     if (response.successful) {
@@ -35,7 +35,7 @@ export const Home = ({ app }: { app: AppContext }) => {
         type: "LOGOUT"
       });
     }
-  };
+  }, [dispatch, history, login, setCookie]);
 
   return (
     <Login

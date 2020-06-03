@@ -1,5 +1,3 @@
-import config from './config'
-
 /*
 * Copyright 2015-2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 *
@@ -9,16 +7,13 @@ import config from './config'
 *
 * or in the "license" file accompanying this file. This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 */
-console.log('Loading function');
-
-export async function handler(event, context, callback) {
+export async function handler(event) {
 
   //@TODO: Implement proper token decryption
   if (!event.authorizationToken?.startsWith('TEMP_ALLOW')) {
-    throw new Error("Unauthorized")
+    throw new Error("Unauthorized");
   }
-  const user = decodeToken(event.authorizationToken)
-
+  const user = decodeToken(event.authorizationToken);
 
   // if the token is valid, a policy must be generated which will allow or deny access to the client
 
@@ -33,12 +28,7 @@ export async function handler(event, context, callback) {
   apiOptions.region = tmp[3];
   apiOptions.restApiId = apiGatewayArnTmp[0];
   apiOptions.stage = apiGatewayArnTmp[1];
-  var method = apiGatewayArnTmp[2];
-  var resource = '/'; // root resource
-  if (apiGatewayArnTmp[3]) {
-    resource += apiGatewayArnTmp.slice(3, apiGatewayArnTmp.length).join('/');
-  }
-
+  
   // this function must generate a policy that is associated with the recognized principal user identifier.
   // depending on your use case, you might store policies in a DB, or generate them on the fly
 
@@ -58,10 +48,9 @@ export async function handler(event, context, callback) {
   // these are made available by APIGW like so: $context.authorizer.<key>
   // additional context is cached
   authResponse.context = {
-    user
   };
 
-  return authResponse
+  return authResponse;
 };
 
 function decodeToken(token) {
@@ -69,7 +58,7 @@ function decodeToken(token) {
   // For now just pull the id out of their auth token
   return {
     user_id: token.split("TEMP_ALLOW_")[1]
-  }
+  };
 }
 
 /**
@@ -187,7 +176,7 @@ AuthPolicy.prototype = (function() {
    * @return {void}
    */
   var addMethod = function(effect, verb, resource, conditions) {
-    if (verb != "*" && !AuthPolicy.HttpVerb.hasOwnProperty(verb)) {
+    if (verb !== "*" && !AuthPolicy.HttpVerb.hasOwnProperty(verb)) {
       throw new Error("Invalid HTTP verb " + verb + ". Allowed verbs in AuthPolicy.HttpVerb");
     }
 
@@ -196,7 +185,7 @@ AuthPolicy.prototype = (function() {
     }
 
     var cleanedResource = resource;
-    if (resource.substring(0, 1) == "/") {
+    if (resource.substring(0, 1) === "/") {
       cleanedResource = resource.substring(1, resource.length);
     }
     var resourceArn = "arn:aws:execute-api:" +
@@ -207,12 +196,12 @@ AuthPolicy.prototype = (function() {
       verb + "/" +
       cleanedResource;
 
-    if (effect.toLowerCase() == "allow") {
+    if (effect.toLowerCase() === "allow") {
       this.allowMethods.push({
         resourceArn: resourceArn,
         conditions: conditions
       });
-    } else if (effect.toLowerCase() == "deny") {
+    } else if (effect.toLowerCase() === "deny") {
       this.denyMethods.push({
         resourceArn: resourceArn,
         conditions: conditions
