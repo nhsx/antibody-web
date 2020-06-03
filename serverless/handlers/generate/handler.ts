@@ -1,13 +1,12 @@
 import { APIGatewayProxyResult, APIGatewayEvent } from 'aws-lambda';
-import { getUrls, getTestRecord, putTestRecord } from '../api/aws';
-import { validateGenerateEnvironment } from '../api/validate';
-import config from './config';
+import { getUrls, getTestRecord, putTestRecord } from '../../api/aws';
+import { validateGenerateEnvironment } from '../../api/validate';
+import config from '../config';
 import TestRecord from 'abt-lib/models/TestRecord';
 
 export const handler = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
 
   const guid = event.requestContext.authorizer?.principalId;
-  console.log(guid);
 
   if (!guid) {
     return {
