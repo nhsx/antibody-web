@@ -4,7 +4,6 @@
 // can be found in the LICENSE file distributed with this file.
 import React, { FunctionComponent } from 'react';
 import { ActionLink } from 'nhsuk-react-components';
-import { Link } from 'react-router-dom';
 
 export interface ContinueButtonProps {
   text?: string;
@@ -14,8 +13,7 @@ export interface ContinueButtonProps {
 export const ContinueButton: FunctionComponent<ContinueButtonProps> = (
   props: ContinueButtonProps
 ) => {
-
   return (
-    <ActionLink>{props.href ? <Link to={props.href}>{props.text ? props.text : 'Next'}</Link> : props.text}</ActionLink>
+    <ActionLink href={props.href ? props.href : ""} >{props.text ? props.text : 'Next'}</ActionLink>
   );
 };

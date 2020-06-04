@@ -15,9 +15,8 @@ export default interface TestRecord {
   step: string;
   timerStartedAt: number;
   predictionData: PredictionData,
-  result: string
+  result: string;
 }
-
 
 /* Retrieve the highest predicted result (e.g. [{ Negative: 0.029}, {Positive: 0.031}]) - this will return "Positive" */
 export function getResult (data: PredictionData) {
