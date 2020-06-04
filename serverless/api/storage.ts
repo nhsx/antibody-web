@@ -1,7 +1,15 @@
 import { DocumentClient } from "aws-sdk/clients/dynamodb";
 import TestRecord from "abt-lib/models/TestRecord";
 import AWSSDK from 'aws-sdk';
+import { Readable } from "stream";
 export const AWS = AWSSDK;
+
+
+export interface FileResponse {
+  body: any;
+  length: string;
+  type: string;
+}
 
 interface UrlResponse {
   uploadUrl: string;
@@ -29,6 +37,13 @@ export async function getUrls(bucket: string, guid: string): Promise<UrlResponse
     uploadUrl,
     downloadUrl
   };
+}
+
+export function getFileStream(bucket: string, guid: string): Readable {
+  const s3 = new AWS.S3();
+  const request = s3.getObject({ Bucket: bucket, Key: `rdt-images/${guid}` });
+
+  return request.createReadStream();
 }
 
 export async function putTestRecord(table: string, record: TestRecord) {

@@ -5183,7 +5183,7 @@ http-errors@~1.7.2:
     statuses ">= 1.5.0 < 2"
     toidentifier "1.0.0"
 
-http-parser-js@>=0.5.1:
+http-parser-js@>=0.5.1, http-parser-js@^0.5.1:
   version "0.5.2"
   resolved "https://registry.yarnpkg.com/http-parser-js/-/http-parser-js-0.5.2.tgz#da2e31d237b393aae72ace43882dd7e270a8ff77"
   integrity sha512-opCO9ASqg5Wy2FNo7A0sxy71yGbbkJJXLdgMK04Tcypw9jr2MgWbyubb0+WdmDmGnFflO7fRbqbaihh/ENDlRQ==
@@ -8989,7 +8989,14 @@ request-promise-native@^1.0.5:
     stealthy-require "^1.1.1"
     tough-cookie "^2.3.3"
 
-request@^2.87.0, request@^2.88.0:
+request-to-curl@^0.1.6:
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/request-to-curl/-/request-to-curl-0.1.6.tgz#d756810a7626f7899e05daf700c0e28990b0761d"
+  integrity sha512-bdFayFhQqLb+Z1YIOxQ4pOXLsSRJ0HUxolkjSZKKaGcajlxuf8ac2dRGaczz+eoCPbQ55B6xoJTSvPbyG85elQ==
+  dependencies:
+    http-parser-js "^0.5.1"
+
+request@^2.87.0, request@^2.88.0, request@^2.88.2:
   version "2.88.2"
   resolved "https://registry.yarnpkg.com/request/-/request-2.88.2.tgz#d73c918731cb5a87da047e207234146f664d12b3"
   integrity sha512-MsvtOrfG9ZcrOwAW+Qi+F6HbD0CWXEh9ou77uOb7FM2WPhwT7smM833PzanhJLsgXjN89Ir6V2PczXNnMpwKhw==

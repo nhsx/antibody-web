@@ -6,5 +6,6 @@ module.exports = {
   ],
   transform: {
     '^.+\\.(js|ts|tsx)$': 'ts-jest',
-  }
+  },
+  setupFiles: ["./setUpTests.ts"]
 };
