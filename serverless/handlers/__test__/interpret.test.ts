@@ -64,7 +64,7 @@ describe('interpret', () => {
   });
 
 
-  it('should save the prediction against the users record', async () => {
+  it('should process the model output and save the prediction against the users record', async () => {
     const mockRecord = {
       Item: {
         test: 1
@@ -98,7 +98,8 @@ describe('interpret', () => {
       TableName: process.env.DYNAMO_TABLE,
       Item: expect.objectContaining({
         test: 1,
-        prediction: mockInterpretResponse
+        result: "Positive",
+        predictionData: mockInterpretResponse
       })
     }),
     expect.anything()
@@ -117,13 +118,14 @@ describe('interpret', () => {
       {
         "Negative": 0.06485184282064438
       }
-    ];  
+    ];
     
     const interpretScope = nock(process.env.ML_API_BASE as string).post(`/${config.modelPath}`).reply(200, mockInterpretResponse);
     const response = await handler(interpretEvent);    
 
     expect(response.statusCode).toEqual(200);
-    expect(JSON.parse(response.body).testRecord.prediction[0].Positive).toEqual(mockInterpretResponse[0].Positive);
+    expect(JSON.parse(response.body).testRecord.predictionData[0].Positive).toEqual(mockInterpretResponse[0].Positive);
+    expect(JSON.parse(response.body).testRecord.result).toEqual("Positive");
     interpretScope.done();
   });
 });
