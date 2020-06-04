@@ -58,3 +58,16 @@ export const useAnimateBgAndColor = makeStyles(() =>
 export const toCSSPercent = (x: number): string => {
   return x * 100 + '%';
 };
+
+let isInputCaptureSupported: boolean | undefined = undefined;
+
+export const inputCaptureSupported = () => {
+  if (isInputCaptureSupported !== undefined) {
+    return isInputCaptureSupported;
+  }
+  const testElement = document.createElement("input");
+  testElement.setAttribute("capture", "true");
+  isInputCaptureSupported = !!testElement["capture"];
+  testElement.remove();
+  return isInputCaptureSupported;
+};

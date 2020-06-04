@@ -5,14 +5,13 @@ import { StepProps } from './Step';
 import TestResultPhotoUploader from 'components/FileUploader/TestResultPhotoUploader';
 
 export default (props: StepProps) => {
+  const [ready, setReady] = React.useState(false);
 
   return (
     <Row>
       <Col width="full">
-        <TestResultPhotoUploader />
-        <ContinueButton
-          href={props.next}
-        />
+        <TestResultPhotoUploader onFileUploadComplete={setReady} />
+        {ready && <ContinueButton href={props.next} />}
       </Col>
     </Row>
   );

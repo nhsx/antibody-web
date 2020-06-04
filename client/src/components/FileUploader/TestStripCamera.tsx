@@ -18,7 +18,6 @@ import Camera from 'react-html5-camera-photo';
 import DetectionBoxOverlay from './DetectionBoxOverlay';
 import { ImageCapture } from 'image-capture';
 import Measure from 'react-measure';
-import { confirmAlert } from '../../utils/confirmAlert';
 import { cx } from 'style/utils';
 import { getAppConfig } from 'utils/AppConfig';
 import useFullscreenStatus from './useFullscreenStatus';
@@ -70,6 +69,23 @@ const TRIGGER_PADDING = 15;
 const STRIP_IMAGE_HEIGHT = 426;
 const STRIP_IMAGE_WIDTH = 26;
 
+// NOTE 1: We have to work around some bugs in react-html5-camera-photo.
+//
+// Bug 1: If the idealResolution prop changes at all, the <Camera> component
+// will tear down the MediaStream and create a new one.
+//
+// Bug 2: The <Camera> component doesn't handle changing the MediaStream very
+// well.  It often gets stuck in an infinite loop where it continually tears
+// down the MediaStream and creates a new one.
+//
+// To avoid these bugs, we must ensure that the idealResolution prop never
+// changes during the lifecycle of the <Camera> component.
+//
+// NOTE 2:  2240 pixels is a bit arbitrary.  We want the dimensions of the final
+// test area to be at least 224x224 pixels.  We choose 2240 pixels so that the
+// test area can be as small as 10% of the original image width.
+const IDEAL_RESOLUTION = { width: 2240 };
+
 const getFullPhotoUri = (frame: ImageBitmap): string => {
   const canvas = document.createElement('canvas');
   canvas.height = frame.height;
@@ -93,8 +109,9 @@ const config = getAppConfig();
 
 const TestStripCamera = (props: {
   onPhotoTaken: (dataURI: string) => void;
+  onError: (error: any) => void;
 }) => {
-  const { onPhotoTaken } = props;
+  const { onPhotoTaken, onError } = props;
   const classes = useStyle();
   // dimensions of the video
   const [dimensions, setDimensions] = useState({ width: -1, height: -1 });
@@ -124,7 +141,7 @@ const TestStripCamera = (props: {
     const token = setTimeout(async () => {
       if (track) {
         const capture = new ImageCapture(track);
-        let frame;
+        let frame: any;
         try {
           frame = await capture.grabFrame();
 
@@ -171,13 +188,6 @@ const TestStripCamera = (props: {
     handleTakePhotoAnimationDone,
   ]);
 
-  const onCameraError = useCallback(() => {
-    confirmAlert(
-      'Error initializing Camera',
-      'Try uploading a picture instead.'
-    );
-  }, []);
-
   const onCameraStart = useCallback(
     (stream: MediaStream) => {
       if (stream.getVideoTracks()[0]) {
@@ -220,11 +230,11 @@ const TestStripCamera = (props: {
               ref={refCamera}>
               <Camera
                 onTakePhotoAnimationDone={handleTakePhotoAnimationDone}
-                onCameraError={onCameraError}
+                onCameraError={onError}
                 idealFacingMode={FACING_MODES.ENVIRONMENT}
+                idealResolution={IDEAL_RESOLUTION}
                 imageType={IMAGE_TYPES.PNG}
                 imageCompression={0.97}
-                isMaxResolution={true}
                 isImageMirror={false}
                 isSilentMode={false}
                 isDisplayStartCameraError={true}
