@@ -5,6 +5,7 @@ import CheckYourKit from "components/TestRun/ContentComponent/CheckYourKit";
 import WashAndDryHands from "components/TestRun/ContentComponent/WashAndDryHands";
 import SetUpTest from "components/TestRun/ContentComponent/SetUpTest";
 import SelectAFinger from "components/TestRun/ContentComponent/SelectAFinger";
+import PrickFinger from "components/TestRun/ContentComponent/PrickFinger";
 import Wait from "components/TestRun/ContentComponent/Wait";
 import ScanKit from "components/TestRun/ContentComponent/ScanKit";
 import Results from "components/TestRun/ContentComponent/Results";
@@ -30,23 +31,27 @@ export const TestRoutes = () => (
     <TestRoute
       component={WashAndDryHands}
       path="/test/washAndDryHands"
-      next="/test/setUpTest" />  
+      next="/test/setUpTest" />
     <TestRoute
       component={SetUpTest}
       path="/test/setUpTest"
-      next="/test/selectAFinger" />  
+      next="/test/selectAFinger" />
     <TestRoute
       component={SelectAFinger}
       path="/test/selectAFinger"
-      next="/test/wait" />  
+      next="/test/prickFinger" />
+    <TestRoute
+      component={PrickFinger}
+      path="/test/prickFinger"
+      next="/test/wait" />
     <TestRoute
       component={Wait}
       path="/test/wait"
-      next="/test/scanKit" />  
+      next="/test/scanKit" />
     <TestRoute
       component={ScanKit}
       path="/test/scanKit"
-      next="/test/results" />  
+      next="/test/results" />
     <TestRoute
       component={Results}
       path="/test/results"
@@ -58,9 +63,9 @@ export default () => (
   <Route
     path="/test/:step?"
     render={({ match }) => (
-      <TestContainer step={match.params.step}> 
+      <TestContainer step={match.params.step}>
         <TestRoutes />
       </TestContainer>
-    )}>   
+    )}>
   </Route>
 );
