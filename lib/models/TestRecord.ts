@@ -15,7 +15,7 @@ export default interface TestRecord {
   step: string;
   timerStartedAt: number;
   predictionData: PredictionData,
-  result: PredictionKey
+  result: string
 }
 
 
