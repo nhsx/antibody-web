@@ -116,8 +116,9 @@ export default (props: TimerProps) => {
   let label;
 
   if (!completed) {
-    const minutes = Math.floor(timeRemaining / 60000);
-    const seconds = Math.round((timeRemaining % 60000) / 1000);
+    const remainingSeconds = Math.ceil(timeRemaining / 1000);
+    const minutes = Math.floor(remainingSeconds / 60);
+    const seconds = remainingSeconds % 60;
     label = `${minutes | 0}:${seconds < 10 ? '0' + seconds : seconds}`;
   } else {
     label = 'DONE!';
