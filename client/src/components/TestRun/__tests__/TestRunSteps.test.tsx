@@ -18,8 +18,8 @@ describe("TestRunSteps", () => {
     expect(content).not.toBeUndefined();
   });
 
-  it("There is a next link ", async () => {
-    const content = await screen.findByText(/Next/);
+  it("There is a continue link ", async () => {
+    const content = await screen.findByText(/Continue/);
     expect(content).not.toBeUndefined();
   });
 });

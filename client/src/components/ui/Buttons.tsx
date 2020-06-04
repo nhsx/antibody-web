@@ -17,7 +17,7 @@ export const ContinueButton: FunctionComponent<ContinueButtonProps> = (
     <Link
       className="nhsuk-button"
       to={props.href ? props.href : ""}>
-      {props.text ? props.text : 'Next'}
+      {props.text ? props.text : 'Continue'}
     </Link>
   );
 };
