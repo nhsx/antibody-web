@@ -8,7 +8,6 @@ import TestRecord, { Prediction } from 'abt-lib/dist/models/TestRecord';
 
 export const handler = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
 
-
   const UPLOAD_BUCKET: string = process.env.UPLOAD_BUCKET as string;
   const ML_API_BASE: string = process.env.ML_API_BASE as string;
   const DYNAMO_TABLE: string = process.env.DYNAMO_TABLE as string;
@@ -47,7 +46,7 @@ export const handler = async (event: APIGatewayEvent): Promise<APIGatewayProxyRe
     return {
       statusCode: 404,
       body: JSON.stringify({
-        error: "Missing RDT image"
+        error: "Could not retrieve user image"
       }),
       headers: config.defaultHeaders
     };
@@ -72,9 +71,7 @@ export const handler = async (event: APIGatewayEvent): Promise<APIGatewayProxyRe
     return {
       statusCode: 200,
       body: JSON.stringify({
-        testRecord: {
-          prediction
-        }
+        testRecord: newRecord
       }),
       headers: config.defaultHeaders
     };  
