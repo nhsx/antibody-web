@@ -157,8 +157,8 @@ resource "aws_ecs_task_definition" "antibody-model-task-definition" {
   family                   = "antibody-model"
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
-  memory                   = 512
-  cpu                      = 256
+  memory                   = 2048
+  cpu                      = 1024
   container_definitions    = templatefile("task-definitions/service.json", { account_id = data.aws_caller_identity.current.account_id })
   execution_role_arn       = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/ecsTaskExecutionRole"
 }
