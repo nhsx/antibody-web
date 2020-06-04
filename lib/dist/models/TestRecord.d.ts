@@ -1,8 +1,8 @@
-export interface PredictionItem {
-    Positive?: string;
-    Negative?: string;
-}
-export interface Prediction extends Array<PredictionItem> {
+export declare type PredictionKey = "Positive" | "Negative";
+declare type PredictionItem = {
+    [K in PredictionKey]?: string;
+};
+export interface PredictionData extends Array<PredictionItem> {
 }
 export default interface TestRecord {
     guid: string;
@@ -10,5 +10,8 @@ export default interface TestRecord {
     downloadUrl: string;
     step: string;
     timerStartedAt: number;
-    prediction: Prediction;
+    predictionData: PredictionData;
+    result: PredictionKey;
 }
+export declare function getResult(data: PredictionData): string;
+export {};

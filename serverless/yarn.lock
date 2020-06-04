@@ -1919,6 +1919,11 @@
   dependencies:
     "@types/aws-lambda" "*"
 
+"@types/lodash@^4.14.155":
+  version "4.14.155"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.155.tgz#e2b4514f46a261fd11542e47519c20ebce7bc23a"
+  integrity sha512-vEcX7S7aPhsBCivxMwAANQburHBtfN9RdyXFk84IJmu2Z4Hkg1tOFgaslRiEqqvoLtbCBi6ika1EMspE+NZ9Lg==
+
 "@types/mime-types@^2.1.0":
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/@types/mime-types/-/mime-types-2.1.0.tgz#9ca52cda363f699c69466c2a6ccdaad913ea7a73"
@@ -2248,6 +2253,9 @@ abab@^2.0.0, abab@^2.0.3:
 
 abt-lib@./../lib:
   version "0.1.2"
+  dependencies:
+    "@types/lodash" "^4.14.155"
+    lodash "^4.17.15"
 
 acorn-globals@^4.1.0:
   version "4.3.4"

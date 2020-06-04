@@ -11,10 +11,14 @@
         "@types/jest": "^25.2.3",
         "@types/node": "^14.0.1",
         "@types/uuid": "^7.0.3",
+        "abt-lib": "./",
         "aws-sdk-mock": "^5.1.0",
         "jest": "^26.0.1",
         "ts-jest": "^25.5.1",
-        "typescript": "~3.7.2",
-        "abt-lib": "./"
+        "typescript": "~3.7.2"
+    },
+    "dependencies": {
+        "@types/lodash": "^4.14.155",
+        "lodash": "^4.17.15"
     }
 }

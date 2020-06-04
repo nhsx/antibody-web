@@ -4,7 +4,7 @@ import { validateInterpretEnvironment } from '../../api/validate';
 import config from '../../config';
 import got from 'got';
 import { Readable } from 'stream';
-import TestRecord, { Prediction } from 'abt-lib/dist/models/TestRecord';
+import TestRecord, { getResult, PredictionData } from 'abt-lib/dist/models/TestRecord';
 
 export const handler = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
 
@@ -53,7 +53,7 @@ export const handler = async (event: APIGatewayEvent): Promise<APIGatewayProxyRe
   }
 
   try {
-    const { body: prediction } = await got.post(predictionEndpoint, {
+    const { body: prediction } : { body: PredictionData } = await got.post(predictionEndpoint, {
       body: fileStream,
       responseType: 'json'
     });
@@ -63,7 +63,8 @@ export const handler = async (event: APIGatewayEvent): Promise<APIGatewayProxyRe
 
     const newRecord: TestRecord = {
       ...oldRecord,
-      prediction: prediction as Prediction
+      predictionData: prediction,
+      result: getResult(prediction)
     };
 
     await putTestRecord(DYNAMO_TABLE, newRecord);
@@ -79,7 +80,8 @@ export const handler = async (event: APIGatewayEvent): Promise<APIGatewayProxyRe
     return {
       statusCode: error.response?.statusCode,
       body: JSON.stringify({
-        error: "Prediction failed"
+        error: "Prediction failed",
+        original: process.env.STAGE === 'dev' ? error : undefined
       }),
       headers: config.defaultHeaders
     };
