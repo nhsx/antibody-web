@@ -1,8 +1,2 @@
 // NHS.UK frontend
 @import '~nhsuk-frontend/packages/nhsuk';
-
-// Hotfix to remove bottom margin from an incorrectly used class
-// https://github.com/NHSDigital/nhsuk-react-components/issues/28
-form.nhsuk-form-group--wrapper {
-  margin-bottom: 0;
-}
