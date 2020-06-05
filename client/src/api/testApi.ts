@@ -12,7 +12,7 @@ export interface TestApi {
 }
 
 
-function handleErrors(response) {
+function handleErrors(response: Response): Response {
   if (!response.ok) {
     throw Error(response.statusText);
   }
@@ -41,14 +41,13 @@ const testApi: TestApi = {
     // Otherwise they've used the camera
       type = 'image/png';
     }
-    const response = await fetch(url, {
+    return await fetch(url, {
       method: "PUT",
       body: file,
       "headers": {
         "Content-Type": type
       }
     }).then(handleErrors);
-    return response.json();
   },
 
   updateTest: async (parameters: UpdateTestRequest): Promise<UpdateTestResponse> => {

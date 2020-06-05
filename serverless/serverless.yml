@@ -7,6 +7,7 @@ provider:
   environment:
       UPLOAD_BUCKET: ${opt:stage, 'dev'}-covid19-antibody-uk
       DYNAMO_TABLE: ${opt:stage, 'dev'}-covid19-antibody-uk
+      ML_API_BASE: http://antibody-model-lb-1474317296.eu-west-2.elb.amazonaws.com
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -30,7 +31,6 @@ plugins:
   - serverless-webpack
   - serverless-offline
   - serverless-jest-plugin
-environment:
 functions:
   generate:
     handler: handlers/generate/handler.handler
@@ -46,6 +46,14 @@ functions:
       - http:
           method: POST
           path: update
+          cors: true
+          authorizer: authorizer
+  interpret:
+    handler: handlers/interpret/handler.handler
+    events:
+      - http:
+          method: POST
+          path: interpret
           cors: true
           authorizer: authorizer
   authorizer:

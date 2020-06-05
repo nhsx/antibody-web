@@ -11,7 +11,6 @@ import { AppConfig } from "../utils/ConfigTypes";
 
 const overrides: Partial<AppConfig> = {
   landingPage: "NEWTESTRUN",
-  photoUploadEnabled: process.env.REACT_APP_DISPLAY_UPLOAD_BUTTON === "yes",
 };
 
 export default overrides;

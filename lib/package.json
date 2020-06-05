@@ -1,20 +1,26 @@
 {
     "type": "module",
     "name": "abt-lib",
-    "version": "0.1.2",
+    "version": "0.1.3",
     "main": "dist/*.js",
     "types": "dist/*.d.ts",
     "scripts": {
-        "build": "tsc"
+        "build": "node_modules/.bin/rimraf dist && tsc",
+        "test": "node_modules/.bin/jest"
     },
     "devDependencies": {
         "@types/jest": "^25.2.3",
         "@types/node": "^14.0.1",
         "@types/uuid": "^7.0.3",
+        "abt-lib": "./",
         "aws-sdk-mock": "^5.1.0",
         "jest": "^26.0.1",
         "ts-jest": "^25.5.1",
-        "typescript": "~3.7.2",
-        "abt-lib": "./"
+        "typescript": "~3.7.2"
+    },
+    "dependencies": {
+        "@types/lodash": "^4.14.155",
+        "lodash": "^4.17.15",
+        "rimraf": "^3.0.2"
     }
 }

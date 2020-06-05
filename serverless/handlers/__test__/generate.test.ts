@@ -1,17 +1,19 @@
 import * as AWSMock from 'aws-sdk-mock';
-import { AWS } from '../../api/aws';
+import { AWS } from '../../api/storage';
 import { handler } from '../generate/handler';
-import { resolve } from 'path';
 import { START_STEP } from 'abt-lib/dist/models/Steps';
 import { getAuthorisedEvent, mockPrincipalId } from './utils';
-
-require('dotenv').config({ path: resolve(__dirname,"../../test.env") });
+import config from '../../config';
 
 const generateEvent = getAuthorisedEvent({});
 
 describe('generate', () => {
   beforeAll(() => {
     AWSMock.setSDKInstance(AWS);
+  });
+
+  afterEach(() => {
+    AWSMock.restore();
   });
 
   it('should throw an error if no auth token is supplied', async () => {
@@ -39,7 +41,7 @@ describe('generate', () => {
       'putObject',
       expect.objectContaining({
         Bucket: process.env.UPLOAD_BUCKET,
-        Key: expect.stringContaining(`rdt-images/${mockPrincipalId}`)
+        Key: config.rdtImagePath +  mockPrincipalId
       }),
       expect.anything()
     );
@@ -47,12 +49,10 @@ describe('generate', () => {
       'getObject',
       expect.objectContaining({
         Bucket: process.env.UPLOAD_BUCKET,
-        Key: expect.stringContaining(`rdt-images/${mockPrincipalId}`)
+        Key: config.rdtImagePath +  mockPrincipalId
       }),
       expect.anything()
     );
-    
-    AWSMock.restore();
   });
 
   it('should return an existing record', async () => {
@@ -82,11 +82,7 @@ describe('generate', () => {
     expect(JSON.parse(response.body)).toMatchObject({
       testRecord: true
     });
-    
-    AWSMock.restore();
   });
-
-  
 
   it('should create a new record in a dynamo DB table if no record is found', async () => {
     const mockUrl = "http://mockuploadurl.com";
@@ -114,7 +110,5 @@ describe('generate', () => {
       }),
       expect.anything()
     );
-
-    AWSMock.restore();  
   });
 });

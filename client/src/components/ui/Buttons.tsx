@@ -3,7 +3,6 @@
 // Use of this source code is governed by an LGPL-3.0 license that
 // can be found in the LICENSE file distributed with this file.
 import React, { FunctionComponent } from 'react';
-import { ActionLink } from 'nhsuk-react-components';
 import { Link } from 'react-router-dom';
 
 export interface ContinueButtonProps {
@@ -14,8 +13,11 @@ export interface ContinueButtonProps {
 export const ContinueButton: FunctionComponent<ContinueButtonProps> = (
   props: ContinueButtonProps
 ) => {
-
   return (
-    <ActionLink>{props.href ? <Link to={props.href}>{props.text ? props.text : 'Next'}</Link> : props.text}</ActionLink>
+    <Link
+      className="nhsuk-button"
+      to={props.href ? props.href : ""}>
+      {props.text ? props.text : 'Continue'}
+    </Link>
   );
 };

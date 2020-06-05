@@ -10,11 +10,6 @@ export interface AppConfig {
   cameraOverlayEnabled: boolean;
   // should we try to do image recognition on camera
   cameraLiveMLRecognitionEnabled: boolean;
-  // should we allow the camera at all
-  cameraInlineEnabled: boolean;
-
-  // should we show the option to upload a photo
-  photoUploadEnabled: boolean;
 
   // should we run image recognition on the photo taken or uploaded.
   staticPhotoMLRecognitionEnabled: boolean;

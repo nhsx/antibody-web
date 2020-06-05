@@ -21,14 +21,14 @@
   },
   "scripts": {
     "dev": "concurrently --kill-others \"npm --prefix client run start\" \"npm --prefix serverless run dev\"",
-    "test": "npm --prefix client run test -- --watch-all=false && npm --prefix serverless run test",
+    "test": "npm --prefix lib run test && npm --prefix client run test -- --watch-all=false && npm --prefix serverless run test",
     "lint": "./node_modules/.bin/eslint --ext .js,.ts,.tsx .",
     "postinstall": "(cd client && yarn install); (cd lib && yarn install); (cd serverless && yarn install)",
     "lib": "(npm --prefix lib run build); (cd client && yarn upgrade abt-lib); (cd serverless && yarn upgrade abt-lib)"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint -- --fix"
+      "pre-commit": "yarn run lint -- --fix"
     }
   },
   "dependencies": {}
