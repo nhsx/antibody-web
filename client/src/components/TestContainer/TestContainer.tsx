@@ -37,6 +37,7 @@ const TestContainer = (props: TestContainerProps) => {
       }
       try {
         setIsFetchingTest(true);
+        setAppError(null);
         // If the user already as an ongoing test with that guid, this will return their current info
         const { testRecord }: { testRecord: TestRecord} = await testApi.generateTest();
         
@@ -66,18 +67,15 @@ const TestContainer = (props: TestContainerProps) => {
   }, [cookies, dispatch, history, testApi, setAppError, testRecord, isFetchingTest, step, error]);
 
   useEffect(() => {
-    if (!error && step && testRecord && step !== testRecord.step) {
-      // Make sure we clear out the application error if they are navigating back a step, for instance
+    // Make sure we clear out the application error if they are navigating back a step, for instance
+    setAppError(null);
+    if (step && testRecord && step !== testRecord.step) {
       updateTest({
         ...testRecord,
         step
       });
-      if (error) {
-        setAppError(null);
-      }
     }
-    
-  }, [step, updateTest, error, setAppError, testRecord]);
+  }, [step, updateTest, setAppError, testRecord]);
 
 
   if (isFetchingTest) {

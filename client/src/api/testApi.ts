@@ -6,7 +6,7 @@ const { apiBase } = config;
 
 export interface TestApi {
   generateTest(): Promise<GenerateTestResponse>;
-  uploadImage(url: string, file: any);
+  uploadImage(url: string, file: File | string, onUploadProgress: Function);
   updateTest(parameters: any) : Promise<UpdateTestResponse>;
   interpretResult(): Promise<UpdateTestResponse>;
 }
@@ -29,25 +29,38 @@ const testApi: TestApi = {
       }
     }).then(handleErrors);
     return response.json();
-    
   },
 
-  uploadImage: async (url, file) => {
+  uploadImage: async (url, file, onUploadProgress) => {
     let type;
     // If this is a file upload
-    if (file.type) {
-      type = file.type;
+    if ((file as File).type) {
+      type = (file as File).type;
     } else {
     // Otherwise they've used the camera
       type = 'image/png';
     }
-    return await fetch(url, {
-      method: "PUT",
-      body: file,
-      "headers": {
-        "Content-Type": type
-      }
-    }).then(handleErrors);
+
+    return new Promise((resolve, reject) => {
+      let xhr = new XMLHttpRequest();
+
+      xhr.upload.onprogress = function(event) {
+        onUploadProgress(((event.loaded / event.total) * 100).toFixed(0));
+      };
+      
+      // track completion: both successful or not
+      xhr.onloadend = function() {
+        if (xhr.status === 200) {
+          resolve(xhr.response);
+        } else {
+          reject(xhr.response);
+        }
+      };
+
+      xhr.open("PUT", url);
+      xhr.setRequestHeader("Content-Type", type);
+      xhr.send(file);
+    });
   },
 
   updateTest: async (parameters: UpdateTestRequest): Promise<UpdateTestResponse> => {

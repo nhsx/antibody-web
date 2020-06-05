@@ -1,17 +1,21 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Row, Col } from "nhsuk-react-components";
-import { ContinueButton } from 'components/ui/Buttons';
 import { StepProps } from './Step';
 import TestResultPhotoUploader from 'components/FileUploader/TestResultPhotoUploader';
+import { useHistory } from 'react-router-dom';
 
 export default (props: StepProps) => {
-  const [ready, setReady] = React.useState(false);
+  const history = useHistory();
 
+  const handleGoToResults = useCallback(() => {
+    history.push(props.next as string);
+  }, [history, props.next]);
+  
   return (
     <Row>
       <Col width="full">
-        <TestResultPhotoUploader onFileUploadComplete={setReady} />
-        {ready && <ContinueButton href={props.next} />}
+        <TestResultPhotoUploader
+          onInterpret={handleGoToResults} />
       </Col>
     </Row>
   );

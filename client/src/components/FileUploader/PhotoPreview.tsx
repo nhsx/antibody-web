@@ -13,20 +13,21 @@ import LinearProgress from "@material-ui/core/LinearProgress";
 import PhotoUploadProgressOverlay from "./PhotoUploadProgressOverlay";
 import RDTImagePreview from "./RDTImagePreview";
 import appContext, { AppContext } from "../App/context";
-import testContext, { TestContext } from "../TestContainer/context";
+import useTestData from "hooks/useTestData";
+import testContext, { TestContext } from "components/TestContainer/context";
 
 export enum UPLOADING_STATES {
   OFF = 1, // default
   BACKGROUND, // uploading in the background
   UPLOADING, // uploading visible (on user click)
   DONE, // uploading done
-  ATTACHING_TO_TESTRUN, // linking photo uploaded to testrun.
+  INTERPRETING, // linking photo uploaded to testrun.
 }
 
 export function isUploadBlocking(state: UPLOADING_STATES) {
   return (
     state === UPLOADING_STATES.UPLOADING ||
-    state === UPLOADING_STATES.ATTACHING_TO_TESTRUN
+    state === UPLOADING_STATES.INTERPRETING
   );
 }
 
@@ -36,7 +37,8 @@ export interface PhotoPreviewProps {
   imageAsURI: string;
   imageAsFile: File | null;
   usedCamera: boolean;
-  onFileUploadComplete: (ready: boolean) => void;
+  onInterpret: () => void;
+  onInterpretFailure: () => void;
 }
 
 export default (props: PhotoPreviewProps) => {
@@ -46,16 +48,21 @@ export default (props: PhotoPreviewProps) => {
     imageAsURI,
     usedCamera,
     imageAsFile,
-    onFileUploadComplete,
+    onInterpret,
+    onInterpretFailure
   } = props;
+
   const {
     setAppError,
     container: { getTestApi },
-  } = useContext(appContext) as AppContext;
-  const testApi = getTestApi();
+  } : AppContext = useContext(appContext) as AppContext;
+
   const {
-    state: { testRecord },
+    dispatch: testDispatch
   } = useContext(testContext) as TestContext;
+
+  const testApi = getTestApi();
+  const [testRecord ]  = useTestData();
 
   // Monitors the upload state
   const [uploadingState, setUploadingState] = useState<UPLOADING_STATES>(
@@ -81,12 +88,12 @@ export default (props: PhotoPreviewProps) => {
     const uploadAsync = async function () {
       try {
         if (testRecord && (imageAsFile || imageAsURI)) {
+
           await testApi.uploadImage(
             testRecord.uploadUrl,
-            imageAsFile || imageAsURI
+            imageAsFile || imageAsURI,
+            setProgress
           );
-          // TODO: Implement a progress callback.
-          setProgress(100);
 
           if (isCancelled) {
             return;
@@ -97,17 +104,18 @@ export default (props: PhotoPreviewProps) => {
             return;
           }
           setUploadingState(UPLOADING_STATES.OFF);
+          
           setAppError({
             code: "UPL2",
             onFix: handleRetry,
           });
+          
         }
       } catch (error) {
         console.log("uploading error!");
         if (isCancelled) {
           return;
         }
-        setUploadingState(UPLOADING_STATES.OFF);
         setAppError({
           code: "UPL1",
           onFix: handleRetry,
@@ -117,24 +125,41 @@ export default (props: PhotoPreviewProps) => {
 
     setProgress(0);
     setUploadingState(UPLOADING_STATES.BACKGROUND);
-
     uploadAsync();
 
     return () => {
       isCancelled = true;
     };
-  }, [testApi, imageAsFile, imageAsURI, setAppError, testRecord, handleRetry]);
+  }, [testApi, imageAsFile, imageAsURI, setAppError, testRecord, handleRetry, onInterpretFailure]);
 
-  // Attach uploaded file to testrun.
+  // Once the file is uploaded, it's ready to be interpreted.
   const linkPhotoToTestrun = useCallback(async () => {
-    setUploadingState(UPLOADING_STATES.ATTACHING_TO_TESTRUN);
+    setUploadingState(UPLOADING_STATES.INTERPRETING);
 
-    // TODO: Implement the rest of the logic to:
-    // - Mark the uploaded image as "accepted" by the user,
-    // - Process the image, and
-    // - Redirect the user to the results page when done.
-    onFileUploadComplete(true);
-  }, [setUploadingState, onFileUploadComplete]);
+    try {
+      const response = await testApi.interpretResult();
+
+      testDispatch({
+        type: "SAVE_TEST",
+        testRecord: response.testRecord
+      });
+
+      setUploadingState(UPLOADING_STATES.OFF);
+      // Notify our parent step that our intepretation is finished, and we can send the user to their results
+      onInterpret();
+    } catch (error) {
+      // @TODO: Handle various issues with the image ->
+      // - too dark
+      // - blurred
+      // - no casette recognised
+      setUploadingState(UPLOADING_STATES.OFF);
+      setAppError({
+        code: "INT1",
+        onFix: onInterpretFailure
+      });
+    }
+    
+  }, [testApi, testDispatch, onInterpret, setAppError, onInterpretFailure]);
 
   // Photo is uploaded and the user has requested the upload.
   useEffect(() => {
@@ -164,7 +189,9 @@ export default (props: PhotoPreviewProps) => {
         {imageAsURI && <RDTImagePreview dataURI={imageAsURI} />}
         {(isUploadBlocking(uploadingState) ||
           (uploadingState === UPLOADING_STATES.DONE && uploadUserRequest)) && (
-          <PhotoUploadProgressOverlay progress={progress} />
+          <PhotoUploadProgressOverlay
+            progress={progress}
+            interpreting={uploadingState === UPLOADING_STATES.INTERPRETING}/>
         )}
         {(uploadingState === UPLOADING_STATES.BACKGROUND ||
           uploadingState === UPLOADING_STATES.DONE) && (
