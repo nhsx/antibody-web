@@ -7,7 +7,8 @@ const { apiBase } = config;
 export interface TestApi {
   generateTest(): Promise<GenerateTestResponse>;
   uploadImage(url: string, file: any);
-  updateTest(parameters: any);
+  updateTest(parameters: any) : Promise<UpdateTestResponse>;
+  interpretResult(): Promise<UpdateTestResponse>;
 }
 
 
@@ -56,6 +57,17 @@ const testApi: TestApi = {
       body: JSON.stringify(parameters),
       headers: {
         // @TODO: Change to actual jwt token once auth flow is settled
+        "Authorization": cookies.get('login-token'),
+        "Content-Type": "application/json"
+      }
+    }).then(handleErrors);
+    return response.json();
+  },
+
+  interpretResult: async (): Promise<UpdateTestResponse> => {
+    const response = await fetch(`${apiBase}/interpret`, {
+      method: "POST",
+      headers: {
         "Authorization": cookies.get('login-token'),
         "Content-Type": "application/json"
       }

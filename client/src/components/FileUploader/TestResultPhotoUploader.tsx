@@ -114,9 +114,8 @@ const TestResultPhotoUploader = () => {
           setImageUploadedURL(testRecord.downloadUrl);
           setIsUploading(false);
           setIsProcessing(true);
-          setTimeout(() => {
-            setIsProcessing(false);
-          }, 2000);
+          setIsProcessing(false);
+        
         } else {
           setAppError({
             code: "UPL2",
