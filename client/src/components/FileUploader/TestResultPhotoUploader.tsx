@@ -11,11 +11,11 @@ import PhotoPreview from "./PhotoPreview";
 import { useModelPreLoader } from "./RDTModelLoader";
 
 interface TestResultPhotoUploaderProps {
-  onFileUploadComplete: (ready: boolean) => void;
+  onInterpret: () => void;
 }
 
 const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
-  const { onFileUploadComplete } = props;
+  const { onInterpret } = props;
 
   // Preload model.
   useModelPreLoader();
@@ -42,9 +42,7 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
     // Reset other data
     setCameraOn(false);
 
-    // Hide the Next button.
-    onFileUploadComplete(false);
-  }, [onFileUploadComplete]);
+  }, []);
 
   // Occurs when the person chose to use its camera.
   const handleShowCamera = useCallback(() => {
@@ -54,10 +52,7 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
     // Reset other data
     setImageAsFile(null);
     setImageAsURI('');
-
-    // Disable the next button.
-    onFileUploadComplete(false);
-  }, [onFileUploadComplete]);
+  }, []);
 
   // Occurs when a photo is taken.
   const handlePhotoTaken = useCallback((dataURI: string) => {
@@ -70,6 +65,11 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
     setCameraHasError(true);
   }, []);
 
+  const handleInterpretFailure = useCallback(() => {
+    setImageAsURI('');
+    setImageAsFile(null);
+  }, []);
+
   if (imageAsURI) {
     return (
       <PhotoPreview
@@ -78,7 +78,8 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
         handleImageAsFile={handleImageAsFile}
         imageAsURI={imageAsURI}
         imageAsFile={imageAsFile}
-        onFileUploadComplete={onFileUploadComplete}
+        onInterpret={onInterpret}
+        onInterpretFailure={handleInterpretFailure}
       />
     );
   } else if (cameraHasError) {

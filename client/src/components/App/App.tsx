@@ -1,4 +1,4 @@
-import React, { useReducer } from "react";
+import React, { useReducer, useCallback } from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 import PageNotFound from "components/PageNotFound/PageNotFound";
@@ -21,19 +21,19 @@ const App = () => {
     initialState
   );
 
-  const setAppError = (error: AppError | null)  => {
+  const setAppError = useCallback((error: AppError | null)  => {
     dispatch({
       type: "SET_ERROR",
       error
     });
-  };
+  }, [dispatch]);
 
-  const setLocale = (locale: string) => {
+  const setLocale = useCallback((locale: string) => {
     dispatch({
       type: "SET_LOCALE",
       locale,
     });
-  };
+  }, []);
 
   const container = new AppContainer();
 

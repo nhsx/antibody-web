@@ -9,6 +9,7 @@ import Box from "@material-ui/core/Box";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import React from "react";
 import Typography from "@material-ui/core/Typography";
+import { FormattedMessage } from "react-intl";
 
 const useStyle = makeStyles((theme: Theme) =>
   createStyles({
@@ -35,10 +36,11 @@ const useStyle = makeStyles((theme: Theme) =>
 
 interface PhotoUploadProgressOverlayProps {
   progress: number;
+  interpreting: boolean;
 }
 
 export default (props: PhotoUploadProgressOverlayProps) => {
-  const { progress } = props;
+  const { progress, interpreting } = props;
   const classnames = useStyle();
 
   return (
@@ -63,18 +65,18 @@ export default (props: PhotoUploadProgressOverlayProps) => {
           right={0}
           top={10}
         >
-          <Typography
+          {!interpreting && <Typography
             className={classnames.label}
             component="div"
             variant="caption"
           >
             Uploading
-          </Typography>
+          </Typography>}
           <Typography
             className={classnames.label}
             component="div"
             variant="caption"
-          >{`${Math.round(progress)}%`}</Typography>
+          >{interpreting ? <FormattedMessage id="screens.scanKit.interpreting" /> :`${Math.round(progress)}%`}</Typography>
         </Box>
       </div>
     </Fade>
