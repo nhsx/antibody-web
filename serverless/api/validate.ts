@@ -8,6 +8,16 @@ export const validateGenerateRequest = (body: any) => {
   return schema.validate(body);
 };
 
+
+export const validateUpdateRequest = (body: any) => {
+  const schema: ObjectSchema = Joi.object({
+    testRecord: Joi.object().required()
+  });
+
+  return schema.validate(body);
+};
+
+
 export const validateGenerateEnvironment = (environment: any) => {
     
   const schema: ObjectSchema = Joi.object({
@@ -18,13 +28,14 @@ export const validateGenerateEnvironment = (environment: any) => {
   return schema.validate(environment, { allowUnknown: true });
 };
 
-
-export const validateUpdateRequest = (body: any) => {
+export const validateInterpretEnvironment = (environment: any) => {
+    
   const schema: ObjectSchema = Joi.object({
-    testRecord: Joi.object().required()
+    UPLOAD_BUCKET: Joi.string().required(),
+    DYNAMO_TABLE: Joi.string().required()
   });
 
-  return schema.validate(body);
+  return schema.validate(environment, { allowUnknown: true });
 };
 
 export const validateUpdateEnvironment = (environment: any) => {
@@ -35,3 +46,5 @@ export const validateUpdateEnvironment = (environment: any) => {
 
   return schema.validate(environment, { allowUnknown: true });
 };
+
+

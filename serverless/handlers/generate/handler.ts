@@ -1,7 +1,7 @@
 import { APIGatewayProxyResult, APIGatewayEvent } from 'aws-lambda';
-import { getUrls, getTestRecord, putTestRecord } from '../../api/aws';
+import { getUrls, getTestRecord, putTestRecord } from '../../api/storage';
 import { validateGenerateEnvironment } from '../../api/validate';
-import config from '../config';
+import config from '../../config';
 import TestRecord from 'abt-lib/models/TestRecord';
 
 export const handler = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {

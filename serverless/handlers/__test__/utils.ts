@@ -2,6 +2,7 @@
 
 export const mockPrincipalId = "123";
 
+/* Simulate an event that has been ok'd by our authorizer */
 
 export function getAuthorisedEvent(customBody: any) {
  
