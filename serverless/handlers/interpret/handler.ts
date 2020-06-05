@@ -4,7 +4,9 @@ import { validateInterpretEnvironment } from '../../api/validate';
 import config from '../../config';
 import got from 'got';
 import { Readable } from 'stream';
-import TestRecord, { getResult, PredictionData } from 'abt-lib/dist/models/TestRecord';
+import TestRecord from 'abt-lib/dist/models/TestRecord';
+import { PredictionData } from 'abt-lib/dist/models/Prediction';
+import getResult from 'abt-lib/dist/usecases/processResult';
 
 export const handler = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
 

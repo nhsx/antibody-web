@@ -1,9 +1,4 @@
-export declare type PredictionKey = "Positive" | "Negative";
-declare type PredictionItem = {
-    [K in PredictionKey]?: string;
-};
-export interface PredictionData extends Array<PredictionItem> {
-}
+import { PredictionData, PredictionKey } from "./Prediction";
 export default interface TestRecord {
     guid: string;
     uploadUrl: string;
@@ -11,7 +6,5 @@ export default interface TestRecord {
     step: string;
     timerStartedAt: number;
     predictionData: PredictionData;
-    result: string;
+    result: PredictionKey;
 }
-export declare function getResult(data: PredictionData): string;
-export {};

@@ -1,11 +1,11 @@
 {
     "type": "module",
     "name": "abt-lib",
-    "version": "0.1.2",
+    "version": "0.1.3",
     "main": "dist/*.js",
     "types": "dist/*.d.ts",
     "scripts": {
-        "build": "tsc",
+        "build": "node_modules/.bin/rimraf dist && tsc",
         "test": "node_modules/.bin/jest"
     },
     "devDependencies": {
@@ -20,6 +20,7 @@
     },
     "dependencies": {
         "@types/lodash": "^4.14.155",
-        "lodash": "^4.17.15"
+        "lodash": "^4.17.15",
+        "rimraf": "^3.0.2"
     }
 }

@@ -1,9 +1,9 @@
 {
-  "base": true,
   "compilerOptions": {
     "target": "es2015",
     "module": "commonjs",
     "outDir": "./dist",
+    "declaration": true,
     "strict": true,
     "baseUrl": "./",
     "allowJs": true,
@@ -17,5 +17,5 @@
     "esModuleInterop": true,
     "inlineSourceMap": true
   },
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "dist", "**/*.test.*"]
 }
