@@ -5,7 +5,8 @@
     "main": "dist/*.js",
     "types": "dist/*.d.ts",
     "scripts": {
-        "build": "tsc"
+        "build": "tsc",
+        "test": "node_modules/.bin/jest"
     },
     "devDependencies": {
         "@types/jest": "^25.2.3",
