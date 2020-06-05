@@ -8,6 +8,8 @@ import { Button } from 'nhsuk-react-components';
 interface ImageSelectorInputProps {
   onImageSelected: (image: File) => void;
   disabled: boolean;
+  label: string;
+  secondary?: boolean;
 }
 
 export default (props: ImageSelectorInputProps) => {
@@ -37,9 +39,12 @@ export default (props: ImageSelectorInputProps) => {
         }}
         type="file"
         onChange={handleChange}
+        capture
+        accept="image/*"
       />
       <Button
         disabled={props.disabled}
+        secondary={props.secondary}
         onClick={() => {
           if (!inputRef || !inputRef.current) {
             return;
@@ -48,7 +53,7 @@ export default (props: ImageSelectorInputProps) => {
           }
         }}
       >
-        <span>Upload a Photo</span>
+        <span>{props.label}</span>
       </Button>
     </div>
   );
