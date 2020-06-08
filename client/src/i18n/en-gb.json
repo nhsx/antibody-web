@@ -1,17 +1,20 @@
 {
-    "app": {
-        
+    "kit": {
+        "whatIsBroken": "What is broken?",
+        "whatIsMissing": "What is missing?",
+        "lancet": "lancet",
+        "testDevice": "test device",
+        "pipette": "pipette",
+        "smallBottle": "small bottle",
+        "biohazardWasteBag": "biohazard waste bag"
     },
     "screens": {
-        "home": {
-            "title": "Take an COVID-19 Antibody Test"
-        },
-        "perform-test": {
-            "title": "Perform Test"
-        },
-        "start_test": {
-            "title": "Start Test"
+        "checkYourKit": {
+            "title": "Before You Start"
         }
+    },
+    "app": {
+        "stepCount": "Step {current} of {total}"
     },
     "error": {
         "header": "Placeholder error header",

@@ -21,3 +21,16 @@ export const ContinueButton: FunctionComponent<ContinueButtonProps> = (
     </Link>
   );
 };
+
+
+export const SecondaryButton: FunctionComponent<ContinueButtonProps> = (
+  props: ContinueButtonProps
+) => {
+  return (
+    <Link
+      className="nhsuk-button nhsuk-button--secondary"
+      to={props.href ? props.href : ""}>
+      {props.text ? props.text : 'Cancel'}
+    </Link>
+  );
+};
