@@ -33,8 +33,8 @@ export default (props: ReportProps) => {
       </div>
       <div>
         <ContinueButton
-          href="/test/missing"
-          text="Submit"
+          href="/test/reorder"
+          text="Order a test kit"
         />
       </div>
     </Col>

@@ -1,14 +1,14 @@
 import React from 'react';
-import { Row, Col, BodyText, Images } from 'nhsuk-react-components';
-import { ContinueButton, SecondaryButton } from 'components/ui/Buttons';
+import { Row, Col, BodyText, Images, Label, InsetText } from 'nhsuk-react-components';
+import { ContinueButton } from 'components/ui/Buttons';
 import { StepProps } from './Step';
-import Heading from 'components/ui/Heading';
+import { Link } from 'react-router-dom';
 
 export default (props: StepProps) => {
   
   return <Row>
     <Col width="full">
-      <Heading>Check Your Kit</Heading>
+      <Label size="m">Check Your Kit</Label>
       <BodyText>Take out the items in your test kit</BodyText>
       <BodyText>Do not unwrap or open them</BodyText>
       <BodyText>Do not squeeze or bend them - handle gently</BodyText>
@@ -40,11 +40,13 @@ export default (props: StepProps) => {
       <BodyText>
         You will need: 2 clean tissues and 1 plaster (or alternative). These are not supplied.
       </BodyText>
-      <BodyText>Not supplied but needed: plaster/tissue</BodyText>
-      <SecondaryButton
-        href="/test/whatIsWrong"
-        text="Something is missing or damaged" />
+      <InsetText>If something is missing or damaged
+        <Link
+          to="/test/whatIsWrong"
+        > order a replacement kit</Link>
+      </InsetText>
       <ContinueButton
+        text="Begin Test"
         href={props.next}
       />
     </Col>

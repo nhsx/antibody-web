@@ -15,6 +15,11 @@ import Caption from "components/ui/Caption";
 import { Portal } from 'react-portal';
 import WhatIsWrong from "components/TestRun/ContentComponent/WhatIsWrong";
 import ReportKit from "components/TestRun/ContentComponent/ReportKit";
+import ReorderKit from "components/TestRun/ContentComponent/ReorderKit";
+import CollectBloodSample from "components/TestRun/ContentComponent/CollectBloodSample";
+import CoverCut from "components/TestRun/ContentComponent/CoverCut";
+import AddBloodSample from "components/TestRun/ContentComponent/AddBloodSample";
+import TestBloodSample from "components/TestRun/ContentComponent/TestBloodSample";
 
 export interface TestRouteProps extends RouteProps {
   component: any;
@@ -37,11 +42,7 @@ const TestRoute = (props: TestRouteProps) => {
 };
 
 const testRoutes = [
-  {
-    component: CheckYourKit,
-    path:"checkYourKit",
-    next: "washAndDryHands",
-  },
+
   {
     component: WashAndDryHands,
     path: "washAndDryHands",
@@ -60,6 +61,26 @@ const testRoutes = [
   {
     component: PrickFinger,
     path:"prickFinger",
+    next: "collectBloodSample"
+  },
+  {
+    component: CollectBloodSample,
+    path:"collectBloodSample",
+    next: "coverCut"
+  },
+  {
+    component: CoverCut,
+    path:"coverCut",
+    next: "addBloodSample"
+  },
+  {
+    component: AddBloodSample,
+    path:"addBloodSample",
+    next: "testBloodSample"
+  },
+  {
+    component: TestBloodSample,
+    path:"testBloodSample",
     next: "wait"
   },
   {
@@ -71,15 +92,16 @@ const testRoutes = [
     component: ScanKit,
     path:"scanKit",
     next: "results"
-  },
-  {
-    component: Results,
-    path:"results"
   }
 ];
 
 const supportRoutes = [
-  // Non core routes
+  // Routes without a step counter
+  {
+    component: CheckYourKit,
+    path:"checkYourKit",
+    next: "washAndDryHands",
+  },
   {
     component: WhatIsWrong,
     path: "whatIsWrong"
@@ -94,6 +116,14 @@ const supportRoutes = [
     type: "Broken",
     path: "damaged"
   },
+  {
+    component: ReorderKit,
+    path: "reorder"
+  },
+  {
+    component: Results,
+    path:"results"
+  }
 ];
 
 export const TestRoutes = () => (

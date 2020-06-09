@@ -6,11 +6,15 @@
         "testDevice": "test device",
         "pipette": "pipette",
         "smallBottle": "small bottle",
-        "biohazardWasteBag": "biohazard waste bag"
+        "biohazardWasteBag": "biohazard waste bag",
+        "reorder": "Re-order test kit"
     },
     "screens": {
         "checkYourKit": {
             "title": "Before You Start"
+        },
+        "results": {
+            "title": "Your Results"
         }
     },
     "app": {
