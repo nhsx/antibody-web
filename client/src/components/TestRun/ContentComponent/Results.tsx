@@ -44,7 +44,6 @@ export default () => {
         <BodyText>
           By taking this test you're helping scientists and the NHS learn more about Covid-19. For example, where the virus is spreading in the UK and how it is affecting different people.
         </BodyText>
-
         <ContinueButton
           text="Return to main menu"
           href={`/`}

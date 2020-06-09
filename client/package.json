@@ -27,7 +27,7 @@
     "js-cookie": "^2.2.1",
     "lodash": "^4.17.15",
     "nhsuk-frontend": "^3.0.1",
-    "nhsuk-react-components": "1.2.0",
+    "nhsuk-react-components": "1.2.3",
     "node-sass": "^4.14.1",
     "react": "^16.13.1",
     "react-confirm-alert": "^2.6.1",
