@@ -20,6 +20,7 @@ import CollectBloodSample from "components/TestRun/ContentComponent/CollectBlood
 import CoverCut from "components/TestRun/ContentComponent/CoverCut";
 import AddBloodSample from "components/TestRun/ContentComponent/AddBloodSample";
 import TestBloodSample from "components/TestRun/ContentComponent/TestBloodSample";
+import WhatDoYouSee from "components/TestRun/ContentComponent/WhatDoYouSee";
 
 export interface TestRouteProps extends RouteProps {
   component: any;
@@ -91,6 +92,11 @@ const testRoutes = [
   {
     component: ScanKit,
     path:"scanKit",
+    next: "whatDoYouSee"
+  },
+  {
+    component: WhatDoYouSee,
+    path:"whatDoYouSee",
     next: "results"
   }
 ];

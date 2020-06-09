@@ -11,19 +11,28 @@
     },
     "screens": {
         "checkYourKit": {
-            "title": "Before You Start"
+            "title": "Before you start"
+        },
+        "washAndDryHands": {
+            "title": "Take the test"
+        },
+        "setUpTest": {
+            "title": "Take the test"
+        },
+        "prepareFinger": {
+            "title": "Take the test"
         },
         "results": {
-            "title": "Your Results"
+            "title": "Your results"
         },
         "home": {
-            "title": "Take an COVID-19 Antibody Test"
+            "title": "Take an COVID-19 antibody test"
         },
         "performTest": {
-            "title": "Perform Test"
+            "title": "Perform test"
         },
         "startTest": {
-            "title": "Start Test"
+            "title": "Start test"
         },
         "scanKit": {
             "interpreting": "Reading Kit..."   

@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 
 export interface ContinueButtonProps {
   text?: string;
-  href?: string;
+  href?: string | undefined;
 }
 
 export const ContinueButton: FunctionComponent<ContinueButtonProps> = (
@@ -21,7 +21,6 @@ export const ContinueButton: FunctionComponent<ContinueButtonProps> = (
     </Link>
   );
 };
-
 
 export const SecondaryButton: FunctionComponent<ContinueButtonProps> = (
   props: ContinueButtonProps
