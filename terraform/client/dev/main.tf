@@ -14,7 +14,7 @@ terraform {
 }
 
 locals {
-  s3_bucket_name = "dev-covid19-antibody-client-terraform"
+  s3_bucket_name = "dev-covid19-antibody-uk-client-terraform"
   s3_origin_id   = "dev-antibody-client-origin"
 }
 
@@ -78,7 +78,7 @@ resource "aws_cloudfront_distribution" "antibody-client" {
     allowed_methods        = ["GET", "HEAD", "OPTIONS"]
     cached_methods         = ["GET", "HEAD"]
     target_origin_id       = "${local.s3_origin_id}"
-    viewer_protocol_policy = "allow-all"
+    viewer_protocol_policy = "redirect-to-https"
 
     forwarded_values {
       query_string = false
