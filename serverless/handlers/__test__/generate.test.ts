@@ -60,6 +60,8 @@ describe('generate', () => {
       callback(null, 'someurl');
     });
 
+    AWSMock.mock('DynamoDB.DocumentClient', 'put', () => Promise.resolve());
+
     const mockGet = jest.fn().mockResolvedValue({
       Item: true
     });
@@ -80,7 +82,10 @@ describe('generate', () => {
     );
 
     expect(JSON.parse(response.body)).toMatchObject({
-      testRecord: true
+      testRecord: {
+        uploadUrl: 'someurl',
+        downloadUrl: 'someurl'
+      }
     });
   });
 

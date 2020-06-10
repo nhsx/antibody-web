@@ -20,7 +20,8 @@ export default (props: PageContentProps) => (
         <Header.ServiceName href="/">
           <span
             data-testid="service-name"
-            id="portal-header">
+            id="portal-header"
+          >
           </span>
         </Header.ServiceName>
       </Header.Container>

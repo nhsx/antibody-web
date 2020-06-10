@@ -4,7 +4,7 @@
 // can be found in the LICENSE file distributed with this file.
 import React, { useEffect, useState } from 'react';
 import {  createStyles, makeStyles } from '@material-ui/core';
-
+import _ from 'lodash';
 import { cx } from '../../style/utils';
 
 const useStyle = makeStyles(() =>
@@ -73,16 +73,24 @@ const COLORS = [
   },
 ];
 
+
+export interface Notification {
+  time: number;
+  onNotify(time: number) : void;
+}
+
 export interface TimerProps {
   duration: number; // timer length in milliseconds.
   startTime?: number; // when did the time start.
   onTimerComplete?: () => void;
+  notifications?: Notification[];
 }
 
 export default (props: TimerProps) => {
   const classes = useStyle();
-  const { duration, onTimerComplete } = props;
+  const { duration, onTimerComplete, notifications } = props;
   const startTime = props.startTime;
+  const [ firedNotifications, setFiredNotifications ] = useState<Notification[]>([]);
 
   const [startTimeInternal, setStartTimeInternal] = useState(
     startTime || Date.now()
@@ -90,6 +98,7 @@ export default (props: TimerProps) => {
   const [timeRemaining, setTimeRemaining] = useState(
     Math.max(0, duration - (Date.now() - startTimeInternal))
   );
+
   const [completed, setCompleted] = useState(false);
 
   if (startTime && startTimeInternal !== startTime) {
@@ -111,7 +120,19 @@ export default (props: TimerProps) => {
         clearTimeout(timeoutKey);
       };
     }
+    // Get any notifications we need to trigger
   });
+
+  useEffect(() => {
+    const notificationsToFire = _.filter(notifications, n => {
+      return !firedNotifications.includes(n) && timeRemaining <= n.time;
+    });
+
+    if (notificationsToFire?.length) {
+      notificationsToFire.forEach(n => n.onNotify(n.time));
+      setFiredNotifications([...firedNotifications, ...notificationsToFire]);
+    }
+  }, [firedNotifications, notifications, timeRemaining]);
 
   let label;
 

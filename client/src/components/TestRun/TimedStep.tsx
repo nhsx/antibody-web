@@ -4,7 +4,7 @@
 // can be found in the LICENSE file distributed with this file.
 import React, { useCallback, useEffect, useState } from 'react';
 import {  createStyles, makeStyles } from '@material-ui/core';
-import Timer from 'components/ui/Timer';
+import Timer, { Notification } from 'components/ui/Timer';
 
 const useStyle = makeStyles(() =>
   createStyles({
@@ -25,10 +25,11 @@ export interface InterfaceTimedStepProps {
   //testRunUID: string;
   setStepReady: (ready: boolean) => void;
   description: string;
+  notifications?: Notification[]
 }
 
 export default (props: InterfaceTimedStepProps) => {
-  const { duration, setStepReady, description } = props;
+  const { duration, setStepReady, description, notifications } = props;
   const classes = useStyle();
 
   // Time is complete, enable the "next" button.
@@ -36,7 +37,6 @@ export default (props: InterfaceTimedStepProps) => {
     setStepReady && setStepReady(true);
   }, [setStepReady]);
 
-  // @TODO : Fetch our test state from wherever we're storing it
 
   // store the timer start time, will be updated via fastforward click.
   const [startTimeInternal, setStartTimeInternal] = useState<number>(
@@ -71,6 +71,7 @@ export default (props: InterfaceTimedStepProps) => {
             duration={duration}
             startTime={startTimeInternal!}
             onTimerComplete={timerCompleteCallback}
+            notifications={notifications}
           />
         </div>
       </div>

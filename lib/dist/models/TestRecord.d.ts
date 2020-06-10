@@ -7,4 +7,5 @@ export default interface TestRecord {
     timerStartedAt: number;
     predictionData: PredictionData;
     result: PredictionKey;
+    interpretError?: string;
 }

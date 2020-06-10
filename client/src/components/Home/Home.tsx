@@ -27,7 +27,7 @@ export const Home = ({ app }: { app: AppContext }) => {
       });
 
       // For now, just generate a uuid on login if one isn't set
-      setCookie('login-token', response.token);
+      setCookie('login-token', response.token, { path: '/' });
       
       history.push("/test");
     } else {

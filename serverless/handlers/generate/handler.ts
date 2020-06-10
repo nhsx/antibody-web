@@ -39,19 +39,27 @@ export const handler = async (event: APIGatewayEvent): Promise<APIGatewayProxyRe
   // Check if this user already has a test in progress
   record = await getTestRecord(DYNAMO_TABLE, guid);
 
-  // If not, generate their signed urls and their test record
-  if (!record) {
-    const { uploadUrl, downloadUrl } = await getUrls(UPLOAD_BUCKET, guid);
+  // Generate new s3 urls on login
+  const { uploadUrl, downloadUrl } = await getUrls(UPLOAD_BUCKET, guid);
 
+  // Save the new urls if this is an existing user
+  if (record) {
+    record = {
+      ...record as TestRecord,
+      uploadUrl,
+      downloadUrl
+    };
+  // Or create the record entirely
+  } else {
     record = {
       guid,
       uploadUrl,
       downloadUrl,
       step: "checkYourKit"
     } as TestRecord;
-
-    await putTestRecord(DYNAMO_TABLE, record);
   }
+  
+  await putTestRecord(DYNAMO_TABLE, record);
   
   //Response
   return {

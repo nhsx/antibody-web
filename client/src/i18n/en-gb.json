@@ -10,6 +10,9 @@
         "reorder": "Re-order test kit"
     },
     "screens": {
+        "login": {
+            "title": "Take a COVID-19 antibody test"
+        },
         "checkYourKit": {
             "title": "Before you start"
         },
@@ -25,18 +28,22 @@
         "results": {
             "title": "Your results"
         },
-        "home": {
-            "title": "Take an COVID-19 antibody test"
-        },
         "performTest": {
             "title": "Perform test"
         },
         "startTest": {
             "title": "Start test"
         },
+        "home": {
+            "title": "Take a COVID-19 antibody test"
+        },
+        "wait": {
+            "title": "Take the test"
+        },
         "scanKit": {
+            "title": "Take the test",
             "interpreting": "Reading Kit..."   
-        }
+        } 
     },
     "app": {
         "stepCount": "Step {current} of {total}"
