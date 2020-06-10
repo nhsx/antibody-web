@@ -1,12 +1,12 @@
 import React from "react";
 import { MemoryRouter } from "react-router-dom";
-import { render, screen } from "@testing-library/react";
+import {  screen } from "@testing-library/react";
 import { TestRoutes } from "routes/TestRoutes";
-
+import { renderWithReactIntl } from "utils/testUtils";
 
 describe("TestRunSteps", () => {
   beforeEach(() => {
-    render(
+    renderWithReactIntl(
       <MemoryRouter initialEntries={["/test/checkYourKit"]}>
         <TestRoutes />
       </MemoryRouter>
@@ -14,12 +14,12 @@ describe("TestRunSteps", () => {
   });
 
   it("Renders the content component", async () => {
-    const content = await screen.findByText(/Your test kit should include/);
+    const content = await screen.findByText(/Check Your Kit/);
     expect(content).not.toBeUndefined();
   });
 
-  it("There is a continue link ", async () => {
-    const content = await screen.findByText(/Continue/);
+  it("There is a begin test link ", async () => {
+    const content = await screen.findByText(/Begin/);
     expect(content).not.toBeUndefined();
   });
 });
