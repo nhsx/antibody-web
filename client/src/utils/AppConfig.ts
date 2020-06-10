@@ -12,7 +12,7 @@ const MasterConfig: AppConfig = {
   cameraFullScreenEnabled: true,
   cameraLiveMLRecognitionEnabled: false,
   cameraOverlayEnabled: true,
-  staticPhotoMLRecognitionEnabled: true,
+  staticPhotoMLRecognitionEnabled: false,
   landingPage: 'NEWTESTRUN',
 };
 
