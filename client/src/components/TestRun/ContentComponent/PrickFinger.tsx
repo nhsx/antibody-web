@@ -11,10 +11,8 @@ export default (props: StepProps) => {
       <Row>
         <Col width="full">
           <Asset
-            src="kit.png"
-            alt="Image of the test kit"
-            width={201}
-            height={203}
+            src="prick.png"
+            alt="Image of pricking finger with lancet"
           />
           <ul className="nhsuk-list nhsuk-list--bullet">
             <li>Stand up (if you can)</li>

@@ -13,8 +13,6 @@ export default (props: StepProps) => {
           <Asset
             src="wash-and-dry-your-hands.png"
             alt="Wash and dry your hands icon"
-            width={201}
-            height={201}
           />
           <ul className="nhsuk-list nhsuk-list--bullet">
             <li>Wash hands for 20 seconds using warm water and soap</li>

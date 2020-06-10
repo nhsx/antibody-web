@@ -1,13 +1,17 @@
 import React from 'react';
-import { Row, Col, BodyText, Images } from 'nhsuk-react-components';
+import { Row, Col, BodyText, Images, Label, InsetText } from 'nhsuk-react-components';
 import { ContinueButton } from 'components/ui/Buttons';
 import { StepProps } from './Step';
+import { Link } from 'react-router-dom';
 
 export default (props: StepProps) => {
   
   return <Row>
     <Col width="full">
-      <BodyText>Your test kit should include:</BodyText>
+      <Label size="m">Check Your Kit</Label>
+      <BodyText>Take out the items in your test kit</BodyText>
+      <BodyText>Do not unwrap or open them</BodyText>
+      <BodyText>Do not squeeze or bend them - handle gently</BodyText>
       <Images
         srcSet="/assets/images/check-your-test-kit/lancet.png 325w"
         alt="Image of the lancet"
@@ -34,10 +38,15 @@ export default (props: StepProps) => {
         caption="Special bag to dispose of the kit"
       />
       <BodyText>
-        Keep them wrapped and do not squeeze or bend them - handle gently
+        You will need: 2 clean tissues and 1 plaster (or alternative). These are not supplied.
       </BodyText>
-      <BodyText>Not supplied but needed: plaster/tissue</BodyText>
+      <InsetText>If something is missing or damaged
+        <Link
+          to="/test/whatIsWrong"
+        > order a replacement kit</Link>
+      </InsetText>
       <ContinueButton
+        text="Begin Test"
         href={props.next}
       />
     </Col>

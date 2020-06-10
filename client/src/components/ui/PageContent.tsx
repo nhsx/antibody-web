@@ -6,6 +6,8 @@ import React, { ReactNode } from 'react';
 import { Header, Footer } from 'nhsuk-react-components';
 import { AUDERE_URL } from 'utils/globalConstants';
 
+
+
 interface PageContentProps {
   children: ReactNode;
 }
@@ -16,8 +18,9 @@ export default (props: PageContentProps) => (
       <Header.Container>
         <Header.Logo href="/" />
         <Header.ServiceName href="/">
-          <span data-testid="service-name">
-            Take a COVID-19 Antibody Test
+          <span
+            data-testid="service-name"
+            id="portal-header">
           </span>
         </Header.ServiceName>
       </Header.Container>

@@ -14,8 +14,6 @@ export default (props: StepProps) => {
           <Asset
             src="select-a-finger.png"
             alt="Image showing arrows pointing to the middle and ring finger"
-            width={325}
-            height={201}
           />
           <ul className="nhsuk-list nhsuk-list--bullet">
             <li>Choose either your middle or ring finger on the hand you do not write with</li>
