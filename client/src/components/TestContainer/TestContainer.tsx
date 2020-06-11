@@ -54,6 +54,7 @@ const TestContainer = (props: TestContainerProps) => {
       } catch (error) {
         // If our token has expired or is invalid, send the user to the login
 
+        console.log(error.statusCode);
         setIsFetchingTest(false);
         setAppError({
           code: "GEN1"

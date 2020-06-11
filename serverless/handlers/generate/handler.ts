@@ -9,6 +9,7 @@ export const baseHandler = async (event: APIGatewayEvent): Promise<APIGatewayPro
 
   const guid = event.requestContext.authorizer?.principalId;
 
+
   if (!guid) {
     return {
       statusCode: 400,

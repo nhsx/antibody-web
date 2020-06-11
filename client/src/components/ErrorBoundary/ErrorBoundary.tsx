@@ -1,42 +1,60 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useState } from 'react';
 import { ErrorSummary, Container } from 'nhsuk-react-components';
 import { FormattedMessage } from 'react-intl';
 import PageContent from 'components/ui/PageContent';
 import MainContent from 'components/ui/MainContent';
+import * as Sentry from '@sentry/browser';
 
 interface ErrorState {
   hasError: boolean;
+  eventId: string;
 }
 
 interface ErrorBoundaryProps {
   errorComponent?: ReactElement;
 }
 
-const DefaultError = () => (
-  <ErrorSummary
+interface DefaultErrorProps {
+  eventId: string
+}
+
+const DefaultError = (props: DefaultErrorProps) => {
+
+  const [showingCode, setShowingCode] = useState<Boolean>(false);
+
+
+  return (<ErrorSummary
     data-testid="default-error"
     aria-labelledby="error-summary-title"
     role="alert"
     tabIndex={-1}>
-    <ErrorSummary.Title id="error-summary-title">
+    <ErrorSummary.Title
+      id="error-summary-title"
+    >
       <FormattedMessage id="error.title"/>
     </ErrorSummary.Title>
     <ErrorSummary.Body>
+    
       <p><FormattedMessage id="error.body" /></p>
       <ErrorSummary.List>
-        <ErrorSummary.Item href="#example-error-1">
+        <ErrorSummary.Item
+          href="#example-error-1"
+          onClick={() => setShowingCode(!showingCode)}>
           <FormattedMessage id="error.fix" />
         </ErrorSummary.Item>            
       </ErrorSummary.List>
+      {showingCode && <FormattedMessage
+        id="error.reference"
+        values={{ eventId: props.eventId }} />}
     </ErrorSummary.Body>
-  </ErrorSummary>
-);
+  </ErrorSummary>);
+};
 
 
 export default class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorState> {
   constructor(props) {
     super(props);
-    this.state = { hasError: false };
+    this.state = { hasError: false, eventId: '' };
   }
   
   static getDerivedStateFromError() {
@@ -44,10 +62,16 @@ export default class ErrorBoundary extends React.Component<ErrorBoundaryProps, E
     return { hasError: true };
   }
   
-  componentDidCatch(error) {
+  componentDidCatch(error, errorInfo) {
     if (!error.message.includes("Test Error")) {
       console.log("Caught error", error);
     }
+
+    Sentry.withScope((scope) => {
+      scope.setExtras(errorInfo);
+      const eventId = Sentry.captureException(error);
+      this.setState({ eventId });
+    });
     // You can also log the error to an error reporting service
     // @TODO: Add sentry logging
   }
@@ -59,7 +83,7 @@ export default class ErrorBoundary extends React.Component<ErrorBoundaryProps, E
         <PageContent>
           <Container>
             <MainContent>
-              {this.props.errorComponent || <DefaultError />}
+              {this.props.errorComponent || <DefaultError eventId={this.state.eventId}/>}
             </MainContent>
           </Container>
         </PageContent>
