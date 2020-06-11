@@ -6,6 +6,7 @@
   "dependencies": {
     "@babel/preset-typescript": "^7.10.1",
     "@hapi/joi": "^17.1.1",
+    "@sentry/node": "5.17.0",
     "@types/mime-types": "^2.1.0",
     "@types/mock-fs": "^4.10.0",
     "abt-lib": "./../lib",
@@ -14,6 +15,8 @@
     "got": "^11.2.0",
     "mime-types": "^2.1.27",
     "mock-fs": "^4.12.0",
+    "serverless-sentry": "^2.0.2",
+    "serverless-sentry-lib": "^2.0.1",
     "uuid": "^8.0.0"
   },
   "devDependencies": {

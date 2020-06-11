@@ -1,6 +1,6 @@
 import * as AWSMock from 'aws-sdk-mock';
 import { AWS } from '../../api/storage';
-import { handler } from '../generate/handler';
+import { baseHandler as handler } from '../generate/handler';
 import { START_STEP } from 'abt-lib/dist/models/Steps';
 import { getAuthorisedEvent, mockPrincipalId } from './utils';
 import config from '../../config';

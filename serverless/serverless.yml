@@ -31,6 +31,7 @@ plugins:
   - serverless-webpack
   - serverless-offline
   - serverless-jest-plugin
+  - serverless-sentry
 functions:
   generate:
     handler: handlers/generate/handler.handler
@@ -67,6 +68,9 @@ custom:
     includeModules: true   # Node modules configuration for packaging
     packager: 'yarn'   # Packager that will be used to package your external modules
     excludeFiles: '**/*.test.ts' # Provide a glob for files to ignore
+  sentry:
+    dsn: https://93e4dddc1090408da8b861c3a6e57cd8@o406048.ingest.sentry.io/5272813
+    filterLocal: false
 resources:
   Resources:
     S3:

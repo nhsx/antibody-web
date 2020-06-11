@@ -1,6 +1,6 @@
 import * as AWSMock from 'aws-sdk-mock';
 import { AWS } from '../../api/storage';
-import { handler } from '../interpret/handler';
+import { baseHandler as handler } from '../interpret/handler';
 import { getAuthorisedEvent, mockPrincipalId } from './utils';
 import nock from 'nock';
 import config from '../../config';
