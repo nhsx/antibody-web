@@ -29,6 +29,7 @@
     "react-portal": "^4.2.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
+    "serve": "^11.3.2",
     "uuid": "^8.0.0"
   },
   "scripts": {
@@ -66,11 +67,11 @@
     "@types/react-measure": "^2.0.6",
     "@types/react-router-dom": "^5.1.5",
     "@types/uuid": "^7.0.3",
-    "ts-jest": "^26.1.0",
     "jest": "^26.0.0",
     "jest-puppeteer": "^4.4.0",
     "node-sass": "^4.14.1",
     "puppeteer": "^3.3.0",
+    "ts-jest": "^26.1.0",
     "typescript": "~3.7.2"
   },
   "jest": {
