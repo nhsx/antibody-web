@@ -12,9 +12,24 @@ export interface TestApi {
 }
 
 
+export class HTTPError extends Error {
+
+  public message: string;
+  public statusCode: number;
+
+  constructor({ message, statusCode }) {
+    super();
+    this.message = message;
+    this.statusCode = statusCode;
+  }
+}
+
 function handleErrors(response: Response): Response {
   if (!response.ok) {
-    throw Error(response.statusText);
+    throw new HTTPError({
+      message: response.statusText,
+      statusCode: response.status
+    });
   }
   return response;
 }

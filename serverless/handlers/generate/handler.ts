@@ -3,10 +3,12 @@ import { getUrls, getTestRecord, putTestRecord } from '../../api/storage';
 import { validateGenerateEnvironment } from '../../api/validate';
 import config from '../../config';
 import TestRecord from 'abt-lib/models/TestRecord';
+import withSentry from 'serverless-sentry-lib';
 
-export const handler = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
+export const baseHandler = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
 
   const guid = event.requestContext.authorizer?.principalId;
+
 
   if (!guid) {
     return {
@@ -70,4 +72,6 @@ export const handler = async (event: APIGatewayEvent): Promise<APIGatewayProxyRe
       }),
     headers: config.defaultHeaders
   };
-};  
+};
+
+export const handler = withSentry(baseHandler);

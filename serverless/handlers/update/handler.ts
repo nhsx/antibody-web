@@ -4,8 +4,9 @@ import { validateUpdateRequest, validateUpdateEnvironment } from '../../api/vali
 import { UpdateTestRequest }  from "abt-lib/requests/UpdateTest";
 import config from '../../config';
 import TestRecord from 'abt-lib/models/TestRecord';
+import withSentry from 'serverless-sentry-lib';
 
-export const handler = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
+export const baseHandler = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
 
   const guid = event.requestContext.authorizer?.principalId;
 
@@ -77,4 +78,8 @@ export const handler = async (event: APIGatewayEvent): Promise<APIGatewayProxyRe
     body: JSON.stringify({ testRecord }),
     headers: config.defaultHeaders
   };
-};  
+};
+
+export const handler = withSentry(baseHandler);
+
+

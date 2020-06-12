@@ -53,13 +53,15 @@ const TestContainer = (props: TestContainerProps) => {
         setIsFetchingTest(false);
       } catch (error) {
         // If our token has expired or is invalid, send the user to the login
-        if (error.statusCode === 403 || error.statusCode === 401) {
-          history.push("/");
-        }
+
+        console.log(error.statusCode);
         setIsFetchingTest(false);
         setAppError({
           code: "GEN1"
         });
+        if (error.statusCode  >= 400) {
+          history.push("/");
+        }
       }
     };
 
@@ -76,6 +78,10 @@ const TestContainer = (props: TestContainerProps) => {
       });
     }
   }, [step, updateTest, setAppError, testRecord]);
+
+  useEffect(() => {
+    setAppError(null);
+  }, [setAppError, step]);
 
 
   if (isFetchingTest) {

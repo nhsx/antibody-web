@@ -7,8 +7,9 @@ import { Readable } from 'stream';
 import TestRecord from 'abt-lib/dist/models/TestRecord';
 import { PredictionData } from 'abt-lib/dist/models/Prediction';
 import getResult from 'abt-lib/dist/usecases/processResult';
+import withSentry from 'serverless-sentry-lib';
 
-export const handler = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
+export const baseHandler = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
 
   const UPLOAD_BUCKET: string = process.env.UPLOAD_BUCKET as string;
   const ML_API_BASE: string = process.env.ML_API_BASE as string;
@@ -88,4 +89,6 @@ export const handler = async (event: APIGatewayEvent): Promise<APIGatewayProxyRe
       headers: config.defaultHeaders
     };
   }
-};  
+};
+
+export const handler = withSentry(baseHandler);
