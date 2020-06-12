@@ -78,10 +78,11 @@ jobs:
       run:
         working-directory: client
     steps:
-      - name: Download math result for job 1
+      - name: Download build folder
         uses: actions/download-artifact@v1
         with:
           name: build
+          path: client
       - name: serve build folder
         run: |
           yarn run serve -l 3000 ./build
