@@ -79,6 +79,10 @@ const TestContainer = (props: TestContainerProps) => {
     }
   }, [step, updateTest, setAppError, testRecord]);
 
+  useEffect(() => {
+    setAppError(null);
+  }, [setAppError, step]);
+
 
   if (isFetchingTest) {
     return <div>Fetching Your Test...</div>;

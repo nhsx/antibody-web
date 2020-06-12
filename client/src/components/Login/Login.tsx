@@ -24,12 +24,15 @@ export default (props: LoginProps) => {
       <Col width="two-thirds">
         <Form onSubmit={onFormSubmit}>
           <Input
+            data-testid="login-input"
             id="sign-in-id"
             name="sign-in-id"
             label="Sign In ID"
             onChange={(e) => setSignInId(e.currentTarget.value)}
           />
-          <Button type="submit">Submit</Button>
+          <Button
+            data-testid="login-submit"
+            type="submit">Submit</Button>
         </Form>
       </Col>
     </Row>
