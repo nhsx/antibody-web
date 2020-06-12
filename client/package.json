@@ -67,7 +67,7 @@
     "@types/react-measure": "^2.0.6",
     "@types/react-router-dom": "^5.1.5",
     "@types/uuid": "^7.0.3",
-    "jest": "^26.0.0",
+    "jest": "^24.0.0",
     "jest-puppeteer": "^4.4.0",
     "node-sass": "^4.14.1",
     "puppeteer": "^3.3.0",
