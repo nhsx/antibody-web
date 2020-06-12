@@ -101,7 +101,7 @@ jobs:
         run: |
           npx serverless deploy --stage prod
   deploy-frontend:
-    needs: [deploy-backend]
+    needs: [deploy-prod-backend]
     runs-on: ubuntu-latest
     defaults:
       run:
