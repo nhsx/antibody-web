@@ -78,7 +78,7 @@ jobs:
       run:
         working-directory: client
     steps:
-      - name: Download build folder
+      - name: download build folder
         uses: actions/download-artifact@v1
         with:
           name: build
