@@ -48,8 +48,8 @@ jobs:
       - name: Store build folder for e2e tests
         uses: actions/upload-artifact@v1
         with:
-          name: build
-          path: client/build
+          name: client
+          path: client
   deploy-ci-backend:
     needs: [build-frontend]
     runs-on: ubuntu-latest
@@ -81,8 +81,7 @@ jobs:
       - name: download build folder
         uses: actions/download-artifact@v1
         with:
-          name: build
-          path: client
+          name: client
       - name: serve build folder
         run: |
           yarn run serve -l 3000 ./build
