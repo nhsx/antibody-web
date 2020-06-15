@@ -47,11 +47,6 @@ jobs:
         with:
           name: build
           path: client/build
-      - name: Store test folder
-        uses: actions/upload-artifact@v1
-        with:
-          name: tests
-          path: client/e2e
   deploy-ci-backend:
     needs: [build-frontend, run-tests]
     runs-on: ubuntu-latest
@@ -88,7 +83,7 @@ jobs:
           path: client/build
       - name: install test dependencies
         run: |
-          cd tests && yarn install
+          cd e2e && yarn install
       - name: serve build folder
         run: |
           npx serve -l 3000 ./build &
@@ -98,7 +93,7 @@ jobs:
         env:
           PUBLIC_URL: http://localhost:3000
         run: |
-          cd tests && node_modules/.bin/jest --config=jest.config.js
+          cd e2e && node_modules/.bin/jest --config=jest.config.js
   deploy-prod-backend:
     needs: [e2e-test]
     runs-on: ubuntu-latest
