@@ -97,6 +97,8 @@ jobs:
         run: |
           npx serve -l 3000 ./build &
       - name: run e2e tests
+        env:
+          PUBLIC_URL: http://localhost:3000
         run: |
           cd tests && node_modules/.bin/jest --config=jest.config.js
   deploy-prod-backend:
