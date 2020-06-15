@@ -45,11 +45,16 @@ jobs:
       - name: Build
         run: |
           yarn build
-      - name: Store build folder for e2e tests
+      - name: Store build folder
         uses: actions/upload-artifact@v1
         with:
           name: build
           path: client/build
+      - name: Store test folder
+        uses: actions/upload-artifact@v1
+        with:
+          name: tests
+          path: client/e2e
   deploy-ci-backend:
     needs: [build-frontend]
     runs-on: ubuntu-latest
@@ -83,12 +88,17 @@ jobs:
         with:
           name: build
           path: client
+      - name: download tests folder
+        uses: actions/download-artifact@v1
+        with:
+          name: build
+          path: tests
       - name: serve build folder
         run: |
           npx serve -l 3000 ./build &
       - name: run e2e tests
         run: |
-          yarn run e2e
+          cd tests && npx jest --config=jest.config.js
   deploy-prod-backend:
     needs: [e2e-test]
     runs-on: ubuntu-latest
