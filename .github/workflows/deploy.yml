@@ -85,7 +85,7 @@ jobs:
           path: client
       - name: serve build folder
         run: |
-          npx serve -l 3000 ./build
+          npx serve -l 3000 ./build &
       - name: run e2e tests
         run: |
           yarn run e2e
