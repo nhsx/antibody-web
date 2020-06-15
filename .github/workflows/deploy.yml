@@ -53,7 +53,7 @@ jobs:
           name: tests
           path: client/e2e
   deploy-ci-backend:
-    needs: [build-frontend]
+    needs: [build-frontend, run-tests]
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -81,8 +81,6 @@ jobs:
         working-directory: client
     steps:
       - uses: actions/checkout@master
-      - name: Debugging with tmate
-        uses: mxschmitt/action-tmate@v2
       - name: download build folder
         uses: actions/download-artifact@v1
         with:
@@ -104,6 +102,8 @@ jobs:
           PUBLIC_URL: http://localhost:3000
         run: |
           cd tests && node_modules/.bin/jest --config=jest.config.js
+      - name: Debugging with tmate
+        uses: mxschmitt/action-tmate@v2
   deploy-prod-backend:
     needs: [e2e-test]
     runs-on: ubuntu-latest
