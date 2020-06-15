@@ -80,6 +80,9 @@ jobs:
       run:
         working-directory: client
     steps:
+      - uses: actions/checkout@master
+      - name: Debugging with tmate
+        uses: mxschmitt/action-tmate@v2
       - name: download build folder
         uses: actions/download-artifact@v1
         with:
