@@ -1,9 +1,7 @@
 name: Production Build & Deploy
-
 on:
   push:
     branches: [master]
-
 jobs:
   run-tests:
     runs-on: ubuntu-latest
@@ -28,7 +26,6 @@ jobs:
         run: |
           yarn test
   build-frontend:
-    needs: [run-tests]
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -44,7 +41,7 @@ jobs:
           yarn install
       - name: Build
         run: |
-          yarn build
+          yarn run build
       - name: Store build folder
         uses: actions/upload-artifact@v1
         with:
@@ -93,12 +90,15 @@ jobs:
         with:
           name: tests
           path: client/tests
+      - name: install test dependencies
+        run: |
+          cd tests && yarn install
       - name: serve build folder
         run: |
           npx serve -l 3000 ./build &
       - name: run e2e tests
         run: |
-          cd tests && npx jest --config=jest.config.js
+          cd tests && node_modules/.bin/jest --config=jest.config.js
   deploy-prod-backend:
     needs: [e2e-test]
     runs-on: ubuntu-latest
@@ -137,7 +137,7 @@ jobs:
           yarn install
       - name: Build
         run: |
-          yarn build
+          yarn run build
         env:
           REACT_APP_STAGE: prod
           REACT_APP_API_BASE: https://iy3gq5bmlg.execute-api.eu-west-2.amazonaws.com
