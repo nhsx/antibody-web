@@ -35,7 +35,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --watch-all=false",
     "eject": "react-scripts eject",
     "lint": "eslint --ext .js,.ts,.tsx ./",
     "e2e": "cd e2e && jest --config=jest.config.js"
