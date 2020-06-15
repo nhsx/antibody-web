@@ -88,11 +88,11 @@ jobs:
         with:
           name: build
           path: client
-      - name: download tests folder
+      - name: download test folder
         uses: actions/download-artifact@v1
         with:
           name: tests
-          path: tests
+          path: client/tests
       - name: serve build folder
         run: |
           npx serve -l 3000 ./build &
