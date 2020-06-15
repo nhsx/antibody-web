@@ -85,12 +85,7 @@ jobs:
         uses: actions/download-artifact@v1
         with:
           name: build
-          path: client
-      - name: download test folder
-        uses: actions/download-artifact@v1
-        with:
-          name: tests
-          path: client/tests
+          path: client/build
       - name: install test dependencies
         run: |
           cd tests && yarn install
