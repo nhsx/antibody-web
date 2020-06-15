@@ -91,7 +91,7 @@ jobs:
       - name: download tests folder
         uses: actions/download-artifact@v1
         with:
-          name: build
+          name: tests
           path: tests
       - name: serve build folder
         run: |
