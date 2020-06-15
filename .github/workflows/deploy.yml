@@ -1,7 +1,7 @@
 name: Production Build & Deploy
 on:
   push:
-    branches: [master]
+    branches: [ci-test]
 jobs:
   run-tests:
     runs-on: ubuntu-latest
@@ -98,12 +98,12 @@ jobs:
         run: |
           npx serve -l 3000 ./build &
       - name: run e2e tests
+      - name: Debugging with tmate
+        uses: mxschmitt/action-tmate@v2
         env:
           PUBLIC_URL: http://localhost:3000
         run: |
           cd tests && node_modules/.bin/jest --config=jest.config.js
-      - name: Debugging with tmate
-        uses: mxschmitt/action-tmate@v2
   deploy-prod-backend:
     needs: [e2e-test]
     runs-on: ubuntu-latest
