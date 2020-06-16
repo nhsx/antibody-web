@@ -14,7 +14,7 @@ const MasterConfig: AppConfig = {
   cameraOverlayEnabled: true,
   staticPhotoMLRecognitionEnabled: false,
   landingPage: 'NEWTESTRUN',
-  imageUpload: Boolean(process.env.REACT_APP_FLAG_IMAGE_UPLOAD ?? false)
+  imageUpload: Boolean(process.env.REACT_APP_FLAG_IMAGE_UPLOAD ?? true)
 };
 
 export const getAppConfig = (): AppConfig => {
