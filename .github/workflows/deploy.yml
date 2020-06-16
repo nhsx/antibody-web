@@ -1,7 +1,7 @@
 name: Production Build & Deploy
 on:
   push:
-    branches: [master]
+    branches: [ci-test]
 jobs:
   run-tests:
     runs-on: ubuntu-latest
@@ -47,13 +47,7 @@ jobs:
         with:
           name: build
           path: client/build
-      - name: Store test folder
-        uses: actions/upload-artifact@v1
-        with:
-          name: tests
-          path: client/e2e
   deploy-ci-backend:
-    needs: [build-frontend, run-tests]
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -74,7 +68,7 @@ jobs:
         run: |
           npx serverless deploy --stage ci
   e2e-test:
-    needs: [deploy-ci-backend]
+    needs: [deploy-ci-backend, build-frontend]
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -85,25 +79,22 @@ jobs:
         uses: actions/download-artifact@v1
         with:
           name: build
-          path: client
-      - name: download test folder
-        uses: actions/download-artifact@v1
-        with:
-          name: tests
-          path: client/tests
+          path: client/build
       - name: install test dependencies
         run: |
-          cd tests && yarn install
+          cd e2e && yarn install
       - name: serve build folder
         run: |
           npx serve -l 3000 ./build &
+      - name: Sleep for 5 seconds
+        uses: jakejarvis/wait-action@master
+        with:
+          time: '5s'
       - name: run e2e tests
         env:
           PUBLIC_URL: http://localhost:3000
         run: |
-          cd tests && node_modules/.bin/jest --config=jest.config.js
-      - name: Debugging with tmate
-        uses: mxschmitt/action-tmate@v2
+          cd e2e && node_modules/.bin/jest
   deploy-prod-backend:
     needs: [e2e-test]
     runs-on: ubuntu-latest
