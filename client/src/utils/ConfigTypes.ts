@@ -16,4 +16,6 @@ export interface AppConfig {
 
   // path for the default landing page
   landingPage: string;
+
+  imageUpload: boolean;
 }
