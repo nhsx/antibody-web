@@ -1,4 +1,6 @@
 import withSentry from "serverless-sentry-lib";
+import logger from "../../utils/logger";
+import _ from 'lodash';
 
 /*
 * Copyright 2015-2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
@@ -11,8 +13,11 @@ import withSentry from "serverless-sentry-lib";
 */
 export const baseHandler = async function(event) {
 
+  logger.info(`Authorization attempt from token: ${_.take(event.authorizationToken, 3)}***${_.takeRight(event.authorizationToken, 3)}`);
+
   //@TODO: Implement proper token decryption
   if (!event.authorizationToken?.startsWith('TEMP_ALLOW')) {
+    logger.error(`Unauthorized attempt`);
     throw new Error("Unauthorized");
   }
   const user = decodeToken(event.authorizationToken);
@@ -52,6 +57,8 @@ export const baseHandler = async function(event) {
   authResponse.context = {
   };
 
+
+  logger.info(`Authorization complete: auth response:`, authResponse);
   return authResponse;
 };
 

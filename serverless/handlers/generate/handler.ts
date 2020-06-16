@@ -4,13 +4,16 @@ import { validateGenerateEnvironment } from '../../api/validate';
 import config from '../../config';
 import TestRecord from 'abt-lib/models/TestRecord';
 import withSentry from 'serverless-sentry-lib';
+import logger from '../../utils/logger';
 
 export const baseHandler = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
 
   const guid = event.requestContext.authorizer?.principalId;
 
+  logger.info(`Obtaining test session for user: ${guid}`);
 
   if (!guid) {
+    logger.error("No user id available in request context");
     return {
       statusCode: 400,
       body: JSON.stringify({
@@ -27,6 +30,7 @@ export const baseHandler = async (event: APIGatewayEvent): Promise<APIGatewayPro
   const { error: envError } = validateGenerateEnvironment(process.env);
 
   if (envError) {
+    logger.error("Environment not configured correctly", envError);
     return {
       statusCode: 400,
       body: JSON.stringify({
@@ -39,13 +43,20 @@ export const baseHandler = async (event: APIGatewayEvent): Promise<APIGatewayPro
   let record: TestRecord | null;
 
   // Check if this user already has a test in progress
+  logger.info("Retrieving user");
   record = await getTestRecord(DYNAMO_TABLE, guid);
 
+  
   // Generate new s3 urls on login
   const { uploadUrl, downloadUrl } = await getUrls(UPLOAD_BUCKET, guid);
+  logger.info("S3 URLs generated");
+  logger.debug(uploadUrl, downloadUrl);
+  
 
   // Save the new urls if this is an existing user
   if (record) {
+    logger.info("User record retrieved. Updating user record with fresh presigned URLs...");
+  
     record = {
       ...record as TestRecord,
       uploadUrl,
@@ -53,6 +64,7 @@ export const baseHandler = async (event: APIGatewayEvent): Promise<APIGatewayPro
     };
   // Or create the record entirely
   } else {
+    logger.info("No record found - creating record");
     record = {
       guid,
       uploadUrl,
@@ -61,9 +73,14 @@ export const baseHandler = async (event: APIGatewayEvent): Promise<APIGatewayPro
     } as TestRecord;
   }
   
+  logger.info("Saving record");
+  logger.debug(record);
   await putTestRecord(DYNAMO_TABLE, record);
-  
+  logger.info("Record saved");
   //Response
+
+  logger.info("Successfully generated test session");
+
   return {
     statusCode: 200,
     body: JSON.stringify(
