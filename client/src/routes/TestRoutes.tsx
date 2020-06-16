@@ -25,9 +25,10 @@ import { getAppConfig } from 'utils/AppConfig';
 import _ from 'lodash';
 export interface TestRouteProps extends RouteProps {
   component: any;
-  caption?: React.ReactNode; 
+  caption?: React.ReactNode;
   step?: string | string[] | undefined;
   next?: string;
+  canPreview?: boolean;
 }
 
 
@@ -38,7 +39,7 @@ const TestRoute = (props: TestRouteProps) => {
     <Portal node={document.getElementById("portal-header")}><FormattedMessage id={`screens.${other.step}.title`} /></Portal>
     {caption && <Caption>{caption}</Caption>}
     <Component {...other} />
-  
+
   </>
   );
 };
@@ -50,56 +51,64 @@ let testRoutes = [
   {
     component: WashAndDryHands,
     path: "washAndDryHands",
-    next: "setUpTest"
+    next: "setUpTest",
+    canPreview: true
   },
   {
     component: SetUpTest,
-    path:"setUpTest",
-    next: "selectAFinger"
+    path: "setUpTest",
+    next: "selectAFinger",
+    canPreview: true
   },
   {
     component: SelectAFinger,
-    path:"selectAFinger",
-    next: "prickFinger"
+    path: "selectAFinger",
+    next: "prickFinger",
+    canPreview: true
   },
   {
     component: PrickFinger,
-    path:"prickFinger",
-    next: "collectBloodSample"
+    path: "prickFinger",
+    next: "collectBloodSample",
+    canPreview: true
   },
   {
     component: CollectBloodSample,
-    path:"collectBloodSample",
-    next: "coverCut"
+    path: "collectBloodSample",
+    next: "coverCut",
+    canPreview: true
   },
   {
     component: CoverCut,
-    path:"coverCut",
-    next: "addBloodSample"
+    path: "coverCut",
+    next: "addBloodSample",
+    canPreview: true
   },
   {
     component: AddBloodSample,
-    path:"addBloodSample",
-    next: "testBloodSample"
+    path: "addBloodSample",
+    next: "testBloodSample",
+    canPreview: true
   },
   {
     component: TestBloodSample,
-    path:"testBloodSample",
-    next: "wait"
+    path: "testBloodSample",
+    next: "wait",
+    canPreview: true
   },
   {
     component: Wait,
-    path:"wait",
+    path: "wait",
     next: config.imageUpload ? "scanKit" : "whatDoYouSee"
   },
   {
     component: ScanKit,
-    path:"scanKit",
+    path: "scanKit",
     next: "whatDoYouSee"
   },
   {
     component: WhatDoYouSee,
-    path:"whatDoYouSee",
+    path: "whatDoYouSee",
     next: "results"
   }
 ];
@@ -116,7 +125,7 @@ const supportRoutes = [
   // Routes without a step counter
   {
     component: CheckYourKit,
-    path:"checkYourKit",
+    path: "checkYourKit",
     next: "washAndDryHands",
   },
   {
@@ -139,9 +148,13 @@ const supportRoutes = [
   },
   {
     component: Results,
-    path:"results"
+    path: "results"
   }
 ];
+
+const previewRoutes = () => (
+  testRoutes.filter(({ canPreview }) => canPreview)
+);
 
 export const TestRoutes = () => (
   <Switch>
@@ -152,8 +165,8 @@ export const TestRoutes = () => (
         next={`/test/${next}`}
         caption={<FormattedMessage
           id="app.stepCount"
-          values={{ 
-            current: index + 1, 
+          values={{
+            current: index + 1,
             total: testRoutes.length
           }} />}
         key={path}
@@ -170,12 +183,35 @@ export const TestRoutes = () => (
 );
 
 export default () => (
-  <Route
-    path="/test/:step?"
-    render={({ match }) => (
-      <TestContainer step={match.params.step}>
-        <TestRoutes />
-      </TestContainer>
-    )}>
-  </Route>
+  <>
+    <Route
+      path="/test/:step?"
+      render={({ match }) => (
+        <TestContainer step={match.params.step}>
+          <TestRoutes />
+        </TestContainer>
+      )}>
+    </Route>
+    <Route
+      path="/preview/:step?"
+      render={({ match }) => (
+        <Switch>
+          {previewRoutes().map(({ path, next, ...route }, index) => (
+            <TestRoute
+              path={`/preview/${path}`}
+              step={path}
+              next={index < previewRoutes.length - 1 ? `/preview/${next}` : undefined}
+              caption={<FormattedMessage
+                id="app.stepCount"
+                values={{
+                  current: index + 1,
+                  total: testRoutes.length
+                }} />}
+              key={path}
+              {...route} />
+          ))}
+        </Switch>
+      )}>
+    </Route>
+  </>
 );
