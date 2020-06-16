@@ -48,7 +48,6 @@ jobs:
           name: build
           path: client/build
   deploy-ci-backend:
-    needs: [build-frontend, run-tests]
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -69,7 +68,7 @@ jobs:
         run: |
           npx serverless deploy --stage ci
   e2e-test:
-    needs: [deploy-ci-backend]
+    needs: [deploy-ci-backend, build-frontend]
     runs-on: ubuntu-latest
     defaults:
       run:
