@@ -182,6 +182,27 @@ export const TestRoutes = () => (
   </Switch>
 );
 
+export const PreviewRoutes = () => (
+  <Switch>
+    {previewRoutes().map(({ path, next, ...route }, index) => {
+      return (
+        <TestRoute
+          path={`/preview/${path}`}
+          step={path}
+          next={index < previewRoutes().length - 1 ? `/preview/${next}` : `/test`}
+          caption={<FormattedMessage
+            id="app.stepCount"
+            values={{
+              current: index + 1,
+              total: previewRoutes().length
+            }} />}
+          key={path}
+          {...route} />
+      );
+    })}
+  </Switch>
+);
+
 export default () => (
   <>
     <Route
@@ -194,23 +215,8 @@ export default () => (
     </Route>
     <Route
       path="/preview/:step?"
-      render={({ match }) => (
-        <Switch>
-          {previewRoutes().map(({ path, next, ...route }, index) => (
-            <TestRoute
-              path={`/preview/${path}`}
-              step={path}
-              next={index < previewRoutes.length - 1 ? `/preview/${next}` : undefined}
-              caption={<FormattedMessage
-                id="app.stepCount"
-                values={{
-                  current: index + 1,
-                  total: testRoutes.length
-                }} />}
-              key={path}
-              {...route} />
-          ))}
-        </Switch>
+      render={() => (
+        <PreviewRoutes />
       )}>
     </Route>
   </>
