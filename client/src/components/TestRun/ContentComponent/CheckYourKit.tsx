@@ -1,11 +1,12 @@
 import React from 'react';
 import { Row, Col, BodyText, Images, Label, InsetText } from 'nhsuk-react-components';
-import { ContinueButton } from 'components/ui/Buttons';
+import { ContinueButton, SecondaryButton } from 'components/ui/Buttons';
 import { StepProps } from './Step';
 import { Link } from 'react-router-dom';
 
 export default (props: StepProps) => {
-  
+  const previewNextStep = `/preview/${props.next}`;
+
   return <Row>
     <Col width="full">
       <Label size="m">Check Your Kit</Label>
@@ -45,10 +46,22 @@ export default (props: StepProps) => {
           to="/test/whatIsWrong"
         > order a replacement kit</Link>
       </InsetText>
-      <ContinueButton
-        text="Begin Test"
-        href={props.next}
-      />
+      <Row>
+        <Col width="full">
+          <ContinueButton
+            text="Begin Test"
+            href={props.next}
+          />
+        </Col>
+      </Row>
+      <Row>
+        <Col width="full">
+          <SecondaryButton
+            text="Preview instructions"
+            href={previewNextStep}
+          />
+        </Col>
+      </Row>
     </Col>
   </Row>;
 };
