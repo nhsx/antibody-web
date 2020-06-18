@@ -15,6 +15,7 @@ export const ContinueButton: FunctionComponent<ContinueButtonProps> = (
 ) => {
   return (
     <Link
+      data-testid="primary-button"
       className="nhsuk-button"
       to={props.href ? props.href : ""}>
       {props.text ? props.text : 'Continue'}
