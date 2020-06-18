@@ -39,7 +39,6 @@ const TestRoute = (props: TestRouteProps) => {
     <Portal node={document.getElementById("portal-header")}><FormattedMessage id={`screens.${other.step}.title`} /></Portal>
     {caption && <Caption>{caption}</Caption>}
     <Component {...other} />
-
   </>
   );
 };

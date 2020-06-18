@@ -33,7 +33,6 @@ export default (props: StepProps) => {
 
 
   const handleMinuteLeft = () => {
-    console.log('minute left');
     setShowInfo(false);
   };
 
