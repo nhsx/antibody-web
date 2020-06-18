@@ -22,6 +22,7 @@ import AddBloodSample from "components/TestRun/ContentComponent/AddBloodSample";
 import TestBloodSample from "components/TestRun/ContentComponent/TestBloodSample";
 import WhatDoYouSee from "components/TestRun/ContentComponent/WhatDoYouSee";
 import { getAppConfig } from 'utils/AppConfig';
+import { AppConfig } from "utils/ConfigTypes";
 export interface TestRouteProps extends RouteProps {
   component: any;
   caption?: React.ReactNode;
@@ -43,10 +44,7 @@ const TestRoute = (props: TestRouteProps) => {
   );
 };
 
-const config = getAppConfig();
-
-let testRoutes = [
-
+const testRoutes = ({ config }: { config: AppConfig }) => ([
   {
     component: WashAndDryHands,
     path: "washAndDryHands",
@@ -110,7 +108,7 @@ let testRoutes = [
     path: "whatDoYouSee",
     next: "results"
   }
-];
+]);
 
 const supportRoutes = [
   // Routes without a step counter
@@ -144,12 +142,12 @@ const supportRoutes = [
 ];
 
 const previewRoutes = () => (
-  testRoutes.filter(({ canPreview }) => canPreview)
+  testRoutes({ config: getAppConfig() }).filter(({ canPreview }) => canPreview)
 );
 
 export const TestRoutes = () => (
   <Switch>
-    {testRoutes.map(({ path, next, ...route }, index) => (
+    {testRoutes({ config: getAppConfig() }).map(({ path, next, ...route }, index) => (
       <TestRoute
         path={`/test/${path}`}
         step={path}
@@ -158,7 +156,7 @@ export const TestRoutes = () => (
           id="app.stepCount"
           values={{
             current: index + 1,
-            total: testRoutes.length
+            total: testRoutes({ config: getAppConfig() }).length
           }} />}
         key={path}
         {...route} />
