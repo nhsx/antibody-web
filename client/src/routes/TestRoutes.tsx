@@ -22,7 +22,6 @@ import AddBloodSample from "components/TestRun/ContentComponent/AddBloodSample";
 import TestBloodSample from "components/TestRun/ContentComponent/TestBloodSample";
 import WhatDoYouSee from "components/TestRun/ContentComponent/WhatDoYouSee";
 import { getAppConfig } from 'utils/AppConfig';
-import _ from 'lodash';
 export interface TestRouteProps extends RouteProps {
   component: any;
   caption?: React.ReactNode;
@@ -112,14 +111,6 @@ let testRoutes = [
     next: "results"
   }
 ];
-
-// Our simple flow skips the scan kit step for now.
-let simpleRoutes = _.cloneDeep(testRoutes);
-_.remove(simpleRoutes, r => r.path === "scanKit");
-const waitRoute = _.find(simpleRoutes, r => r.path === 'wait');
-if (waitRoute) {
-  waitRoute.next = "whatDoYouSee";
-}
 
 const supportRoutes = [
   // Routes without a step counter
