@@ -9,8 +9,11 @@ import { AppConfig } from "../utils/ConfigTypes";
  * Use this file to enable/disable features.
  */
 
-const overrides: Partial<AppConfig> = {
+const overrides = (): Partial<AppConfig> => ({
   landingPage: "NEWTESTRUN",
-};
+  imageUpload: Boolean(
+    !(process.env.REACT_APP_FLAG_IMAGE_UPLOAD === "false") ?? true
+  ),
+});
 
 export default overrides;
