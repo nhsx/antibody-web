@@ -25,6 +25,9 @@
         "prepareFinger": {
             "title": "Take the test"
         },
+        "testBloodSample": {
+            "title": "Take the test"
+        },
         "results": {
             "title": "Your results"
         },
