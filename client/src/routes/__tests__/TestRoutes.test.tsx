@@ -2,8 +2,7 @@ import React from 'react';
 import { MemoryRouter } from "react-router-dom";
 import { screen } from "@testing-library/react";
 import TestRoutes from "routes/TestRoutes";
-import { renderWithReactIntl } from "utils/testUtils";
-import AppContext from 'components/App/context';
+import { renderWithStubAppContext } from "utils/testUtils";
 
 jest.mock("utils/AppConfig", () => ({
   getAppConfig: () => ({ imageUpload: false })
@@ -11,24 +10,10 @@ jest.mock("utils/AppConfig", () => ({
 
 describe("TestRoutes", () => {
   const renderTestStep = ({ mode, step }: { mode: string, step: string }) => {
-    const appContext = {
-      state: { locale: "en-gb" },
-      setLocale: () => { },
-      setAppError: () => { },
-      dispatch: () => { },
-      container: {
-        getTestApi: () => ({
-          generateTest: () => ({ testRecord: { timerStartedAt: 10 } })
-        })
-      }
-    };
-
-    renderWithReactIntl(
-      <AppContext.Provider value={appContext} >
-        <MemoryRouter initialEntries={[`/${mode}/${step}`]}>
-          <TestRoutes />
-        </MemoryRouter>
-      </AppContext.Provider >
+    renderWithStubAppContext(
+      <MemoryRouter initialEntries={[`/${mode}/${step}`]}>
+        <TestRoutes />
+      </MemoryRouter>
     );
   };
 
