@@ -1,11 +1,12 @@
 import { APIGatewayProxyResult, APIGatewayEvent } from 'aws-lambda';
-import { putTestRecord } from '../../api/storage';
+import { putTestRecord, getTestRecord } from '../../api/storage';
 import { validateUpdateRequest, validateUpdateEnvironment } from '../../api/validate';
 import { UpdateTestRequest }  from "abt-lib/requests/UpdateTest";
 import config from '../../config';
 import TestRecord from 'abt-lib/models/TestRecord';
 import withSentry from 'serverless-sentry-lib';
 import logger from '../../utils/logger';
+import { scheduleNotification } from '../../api/notifier';
 
 export const baseHandler = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
 
@@ -37,10 +38,7 @@ export const baseHandler = async (event: APIGatewayEvent): Promise<APIGatewayPro
     };
   }
   
-  
-  // Validation
   const { error: envError } = validateUpdateEnvironment(process.env);
-
   
   if (envError) {
     logger.error("Environment not configured correctly", envError);
@@ -78,11 +76,21 @@ export const baseHandler = async (event: APIGatewayEvent): Promise<APIGatewayPro
     logger.error("WARNING: Attempted to save record to another user's guid");
     throw new Error("Attempted to save with user_id that does not belong to this user");
   }
+
+  const oldRecord = await getTestRecord(DYNAMO_TABLE, guid);
+
+  // Only schedule our notification if we are receiving the user's subscription for the first time
+  if (!oldRecord?.notificationSubscription && testRecord.notificationSubscription) {
+    scheduleNotification({
+      subscription: testRecord.notificationSubscription
+    }, {
+      wait: 10
+    });
+  }
   
   await putTestRecord(DYNAMO_TABLE, testRecord);
   
   //Response
-  
   logger.debug(testRecord);
   logger.info("Updating record complete");
 
@@ -93,6 +101,5 @@ export const baseHandler = async (event: APIGatewayEvent): Promise<APIGatewayPro
   };
 };
 
+
 export const handler = withSentry(baseHandler);
-
-

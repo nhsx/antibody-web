@@ -8,6 +8,8 @@ import logger from '../../utils/logger';
 
 export const baseHandler = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
 
+
+  console.log(event.requestContext);
   const guid = event.requestContext.authorizer?.principalId;
 
   logger.info(`Obtaining test session for user: ${guid}`);
@@ -44,51 +46,74 @@ export const baseHandler = async (event: APIGatewayEvent): Promise<APIGatewayPro
 
   // Check if this user already has a test in progress
   logger.info("Retrieving user");
-  record = await getTestRecord(DYNAMO_TABLE, guid);
+  try {
+    record = await getTestRecord(DYNAMO_TABLE, guid);
+  } catch (error) {
+    logger.error("Could not retrieve record", error);
+    return {
+      statusCode: 500,
+      body: JSON.stringify({
+        error: "Could not retrieve record"
+      }),
+      headers: config.defaultHeaders
+    };
+  }
+
 
   
   // Generate new s3 urls on login
-  const { uploadUrl, downloadUrl } = await getUrls(UPLOAD_BUCKET, guid);
-  logger.info("S3 URLs generated");
-  logger.debug(uploadUrl, downloadUrl);
+  try {
+    const { uploadUrl, downloadUrl } = await getUrls(UPLOAD_BUCKET, guid);
+    logger.info("S3 URLs generated");
+    logger.debug(uploadUrl, downloadUrl);
   
 
-  // Save the new urls if this is an existing user
-  if (record) {
-    logger.info("User record retrieved. Updating user record with fresh presigned URLs...");
+    // Save the new urls if this is an existing user
+    if (record) {
+      logger.info("User record retrieved. Updating user record with fresh presigned URLs...");
   
-    record = {
-      ...record as TestRecord,
-      uploadUrl,
-      downloadUrl
+      record = {
+        ...record as TestRecord,
+        uploadUrl,
+        downloadUrl
+      };
+      // Or create the record entirely
+    } else {
+      logger.info("No record found - creating record");
+      record = {
+        guid,
+        uploadUrl,
+        downloadUrl,
+        step: "checkYourKit"
+      } as TestRecord;
+    }
+  
+    logger.info("Saving record");
+    logger.debug(record);
+
+    await putTestRecord(DYNAMO_TABLE, record);
+
+    logger.info("Successfully generated test record");
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify(
+        {
+          testRecord: record
+        }),
+      headers: config.defaultHeaders
     };
-  // Or create the record entirely
-  } else {
-    logger.info("No record found - creating record");
-    record = {
-      guid,
-      uploadUrl,
-      downloadUrl,
-      step: "checkYourKit"
-    } as TestRecord;
+  } catch (error) {
+    logger.error("Could not update record", error);
+    return {
+      statusCode: 500,
+      body: JSON.stringify({
+        error: "Failed to update record"
+      }),
+      headers: config.defaultHeaders
+    };
   }
   
-  logger.info("Saving record");
-  logger.debug(record);
-  await putTestRecord(DYNAMO_TABLE, record);
-  logger.info("Record saved");
-  //Response
-
-  logger.info("Successfully generated test session");
-
-  return {
-    statusCode: 200,
-    body: JSON.stringify(
-      {
-        testRecord: record
-      }),
-    headers: config.defaultHeaders
-  };
 };
 
 export const handler = withSentry(baseHandler);

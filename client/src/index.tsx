@@ -5,7 +5,9 @@ import App from 'components/App/App';
 import * as serviceWorker from './serviceWorker';
 import * as Sentry from '@sentry/browser';
 
-Sentry.init({ dsn: 'https://2429c9470d954253b9190e461d2cc300@o406048.ingest.sentry.io/5272690' });
+if (process.env.REACT_APP_STAGE === "prod") {
+  Sentry.init({ dsn: 'https://2429c9470d954253b9190e461d2cc300@o406048.ingest.sentry.io/5272690' });
+}
 
 ReactDOM.render(
   <React.StrictMode>
@@ -14,7 +16,6 @@ ReactDOM.render(
   document.getElementById('root')
 );
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+// Register our service worker so we can handle push notifications
+
+serviceWorker.register();

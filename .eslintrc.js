@@ -22,6 +22,7 @@ module.exports = {
   },
   rules: {
     'no-useless-escape': 0,
+    'no-restricted-globals': 0,
     "react/prop-types": [2, { ignore: ['children'] }],
     'object-curly-spacing': ["error", "always"],
     'react/jsx-first-prop-new-line': [2, 'multiline'],
