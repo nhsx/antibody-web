@@ -46,13 +46,16 @@ const testApi: TestApi = {
     return response.json();
   },
 
-  uploadImage: async (url, file, onUploadProgress) => {
+  uploadImage: async (url, data, onUploadProgress) => {
     let type;
+    let outputData;
     // If this is a file upload
-    if ((file as File).type) {
-      type = (file as File).type;
+    if ((data as File).type) {
+      outputData = data;
+      type = (data as File).type;
     } else {
-    // Otherwise they've used the camera
+      outputData = Buffer.from((data as string).replace(/^data:image\/\w+;base64,/, ""),'base64');
+      // Otherwise they've used the camera
       type = 'image/png';
     }
 
@@ -74,7 +77,7 @@ const testApi: TestApi = {
 
       xhr.open("PUT", url);
       xhr.setRequestHeader("Content-Type", type);
-      xhr.send(file);
+      xhr.send(outputData);
     });
   },
 
