@@ -10,11 +10,13 @@ jest.mock("utils/AppConfig", () => ({
 
 describe("TestRoutes", () => {
   const renderTestStep = ({ mode, step }: { mode: string, step: string }) => {
-    renderWithStubAppContext(
+    let [, context] = renderWithStubAppContext(
       <MemoryRouter initialEntries={[`/${mode}/${step}`]}>
         <TestRoutes />
       </MemoryRouter>
     );
+
+    return context;
   };
 
 
@@ -29,6 +31,13 @@ describe("TestRoutes", () => {
       renderTestStep({ mode: "test", step: "checkYourKit" });
       const content = await screen.findByText(/Begin/);
       expect(content).not.toBeUndefined();
+    });
+
+    it("Updates the test on the api", async () => {
+      const context = renderTestStep({ mode: "test", step: "checkYourKit" });
+      await screen.findByText(/Check Your Kit/);
+      let updateTest = context.container.getTestApi().updateTest;
+      expect(updateTest).toHaveBeenCalledWith({ testRecord: { step: "checkYourKit", timerStartedAt: 10 } });
     });
   });
 
