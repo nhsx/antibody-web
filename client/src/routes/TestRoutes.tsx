@@ -6,9 +6,9 @@ import End from "components/TestRun/ContentComponent/End";
 import StartPage from "components/TestRun/ContentComponent/StartPage";
 import GetReady from "components/TestRun/ContentComponent/GetReady";
 import CheckYourKit from "components/TestRun/ContentComponent/CheckYourKit";
-import WashAndDryHands from "components/TestRun/ContentComponent/WashAndDryHands";
-import SetUpTest from "components/TestRun/ContentComponent/SetUpTest";
-import SelectAFinger from "components/TestRun/ContentComponent/SelectAFinger";
+// import WashAndDryHands from "components/TestRun/ContentComponent/WashAndDryHands";
+// import SetUpTest from "components/TestRun/ContentComponent/SetUpTest";
+// import SelectAFinger from "components/TestRun/ContentComponent/SelectAFinger";
 import PrickFinger from "components/TestRun/ContentComponent/PrickFinger";
 import Wait from "components/TestRun/ContentComponent/Wait";
 import ScanKit from "components/TestRun/ContentComponent/ScanKit";
@@ -48,24 +48,24 @@ const TestRoute = (props: TestRouteProps) => {
 };
 
 const testRoutes = ({ config }: { config: AppConfig }) => ([
-  {
-    component: WashAndDryHands,
-    path: "washAndDryHands",
-    next: "setUpTest",
-    canPreview: true
-  },
-  {
-    component: SetUpTest,
-    path: "setUpTest",
-    next: "selectAFinger",
-    canPreview: true
-  },
-  {
-    component: SelectAFinger,
-    path: "selectAFinger",
-    next: "prickFinger",
-    canPreview: true
-  },
+  // {
+  //   component: WashAndDryHands,
+  //   path: "washAndDryHands",
+  //   next: "setUpTest",
+  //   canPreview: true
+  // },
+  // {
+  //   component: SetUpTest,
+  //   path: "setUpTest",
+  //   next: "selectAFinger",
+  //   canPreview: true
+  // },
+  // {
+  //   component: SelectAFinger,
+  //   path: "selectAFinger",
+  //   next: "prickFinger",
+  //   canPreview: true
+  // },
   {
     component: PrickFinger,
     path: "prickFinger",

@@ -1,31 +1,29 @@
 import React from "react";
-import Asset from "../../ui/Asset";
-import { Row, Col, Label } from "nhsuk-react-components";
+import { Row, Col, Label, Images } from "nhsuk-react-components";
 import { ContinueButton } from "components/ui/Buttons";
 import { StepProps } from "./Step";
 
 export default (props: StepProps) => {
   return (
-    <React.Fragment>
-      <Label size="m">Prick finger</Label>
-      <Row>
-        <Col width="full">
-          <Asset
-            src="prick.png"
-            alt="Image of pricking finger with lancet"
-          />
-          <ul className="nhsuk-list nhsuk-list--bullet">
-            <li>Stand up (if you can)</li>
-            <li>Lay hand on flat surface, palm up</li>
-            <li>Position lancet on finger (as shown)</li>
-            <li>Press lancet firmly for 2 to 3 seconds then remove</li>
-            <li>A tiny blood drop will form (if it doesn't, gently and slowly squeeze sides of finger)</li>
-          </ul>
-          <ContinueButton
-            href={props.next}
-          />
-        </Col>
-      </Row>
-    </React.Fragment>
+    <Row>
+      <Col width="full">
+        <Label size="l">Prick finger</Label>
+        <Images
+          srcSet="/assets/images/prick.png 325w"
+          alt="Image of a lancet pricking a finger"
+          caption="Image of a lancet pricking a finger"
+        />
+        <ul className="nhsuk-list nhsuk-list--bullet">
+          <li>Remove cap from lancet</li>
+          <li>Do not squeeze the sides of the lancet</li>
+          <li>Select your 3rd or 4th finger (middle or ring) on the hand you don’t write with</li>
+          <li>Place the lancet just off the centre of the fingertip and press firmly for 2 to 3 seconds until it clicks</li>
+          <li>If a blood drop does not form after a few seconds, gently squeeze the finger</li>
+        </ul>
+        <ContinueButton
+          href={props.next}
+        />
+      </Col>
+    </Row>
   );
 };
