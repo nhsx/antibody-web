@@ -1,6 +1,10 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 import TestContainer from "components/TestContainer/TestContainer";
+import TestKitID from "components/TestRun/ContentComponent/TestKitID";
+import End from "components/TestRun/ContentComponent/End";
+import StartPage from "components/TestRun/ContentComponent/StartPage";
+import GetReady from "components/TestRun/ContentComponent/GetReady";
 import CheckYourKit from "components/TestRun/ContentComponent/CheckYourKit";
 import WashAndDryHands from "components/TestRun/ContentComponent/WashAndDryHands";
 import SetUpTest from "components/TestRun/ContentComponent/SetUpTest";
@@ -71,7 +75,7 @@ const testRoutes = ({ config }: { config: AppConfig }) => ([
   {
     component: CollectBloodSample,
     path: "collectBloodSample",
-    next: "coverCut",
+    next: "addBloodSample",
     canPreview: true
   },
   {
@@ -95,7 +99,7 @@ const testRoutes = ({ config }: { config: AppConfig }) => ([
   {
     component: Wait,
     path: "wait",
-    next: config.imageUpload ? "scanKit" : "whatDoYouSee"
+    next: config.imageUpload ? "scanKit" : "end"
   },
   {
     component: ScanKit,
@@ -112,10 +116,26 @@ const testRoutes = ({ config }: { config: AppConfig }) => ([
 const supportRoutes = [
   // Routes without a step counter
   {
+    component: StartPage,
+    path: "start",
+    next: "testKitID"
+  },
+  {
+    component: TestKitID,
+    path: "testKitId",
+    next: "checkYourKit"
+  },
+  {
     component: CheckYourKit,
     path: "checkYourKit",
-    next: "washAndDryHands",
+    next: "getReady",
   },
+  {
+    component: GetReady,
+    path: "getReady",
+    next: "prickFinger",
+  },
+
   {
     component: WhatIsWrong,
     path: "whatIsWrong"
@@ -137,6 +157,10 @@ const supportRoutes = [
   {
     component: Results,
     path: "results"
+  },
+  {
+    component: End,
+    path: "end"
   }
 ];
 
