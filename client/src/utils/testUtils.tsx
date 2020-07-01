@@ -22,6 +22,9 @@ export const renderWithStubAppContext = component => {
     dispatch: () => { },
     container: {
       getLogin: () => (): any => { },
+      getUserApi: () => ({
+        authenticate: (): any => ({ success: true, token: 'testToken' })
+      }),
       getTestApi: () => ({
         generateTest: (): any => ({ testRecord: { timerStartedAt: 10 } }),
         uploadImage: (): any => { },

@@ -1,26 +1,23 @@
 import withSentry from "serverless-sentry-lib";
 import logger from "../../utils/logger";
 import _ from 'lodash';
+import jwt from 'jsonwebtoken';
+import { getJWTSecret } from "../../api/authentication";
 
-/*
-* Copyright 2015-2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
-*
-* Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance with the License. A copy of the License is located at
-*
-*     http://aws.amazon.com/apache2.0/
-*
-* or in the "license" file accompanying this file. This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
-*/
 export const baseHandler = async function(event) {
 
   logger.info(`Authorization attempt from token: ${_.take(event.authorizationToken, 3)}***${_.takeRight(event.authorizationToken, 3)}`);
 
-  //@TODO: Implement proper token decryption
-  if (!event.authorizationToken?.startsWith('TEMP_ALLOW')) {
-    logger.error(`Unauthorized attempt`);
+  let user;
+
+
+  try {
+    user = await decodeToken(event.authorizationToken);
+  } catch (error) {
+    console.log(error);
     throw new Error("Unauthorized");
   }
-  const user = decodeToken(event.authorizationToken);
+  
 
   // if the token is valid, a policy must be generated which will allow or deny access to the client
 
@@ -43,7 +40,7 @@ export const baseHandler = async function(event) {
   // and will apply to subsequent calls to any method/resource in the RestApi
   // made with the same token
 
-  var policy = new AuthPolicy(user.user_id, awsAccountId, apiOptions);
+  var policy = new AuthPolicy(user.orderId, awsAccountId, apiOptions);
   
   // All authentication is presumably through the same endpoint, so we can allow access to all lambdas
   policy.allowAllMethods();
@@ -64,12 +61,9 @@ export const baseHandler = async function(event) {
 
 export const handler = withSentry(baseHandler);
 
-function decodeToken(token) {
-  //@TODO: Assuming they do use a JWT approach we will need WS2's secret key here.
-  // For now just pull the id out of their auth token
-  return {
-    user_id: token.split("TEMP_ALLOW_")[1]
-  };
+async function decodeToken(token) {
+  const jwtSecret = await getJWTSecret();
+  return jwt.verify(token, jwtSecret);
 }
 
 /**

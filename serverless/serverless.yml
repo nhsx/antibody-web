@@ -33,6 +33,13 @@ plugins:
   - serverless-jest-plugin
   - serverless-sentry
 functions:
+  authenticate:
+      handler: handlers/authenticate/handler.handler
+      events:
+        - http:
+            method: POST
+            path: authenticate
+            cors: true
   generate:
     handler: handlers/generate/handler.handler
     events:

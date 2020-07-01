@@ -7,6 +7,7 @@ import { useHistory } from "react-router-dom";
 import Login from "../Login/Login";
 import { AppContext, withApp } from "components/App/context";
 import { useCookies } from "react-cookie";
+import { AuthenticateRequest } from "abt-lib/requests/Authenticate";
 
 export const Home = ({ app }: { app: AppContext }) => {
 
@@ -17,13 +18,13 @@ export const Home = ({ app }: { app: AppContext }) => {
   const history = useHistory();
   const login = app.container.getLogin();
   
-  const handleLogin = useCallback(async (signInId: string) => {
-    const response = await login(signInId);
+  const handleLogin = useCallback(async (request: AuthenticateRequest) => {
+    const response = await login(request);
 
-    if (response.successful) {
+    if (response.success) {
       dispatch({
         type: "LOGIN_SUCCESS",
-        token: response.token
+        token: response.token as string
       });
 
       // For now, just generate a uuid on login if one isn't set

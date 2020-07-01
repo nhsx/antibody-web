@@ -2,6 +2,7 @@ import config from './config';
 import { GenerateTestResponse } from 'abt-lib/requests/GenerateTest';
 import { UpdateTestRequest, UpdateTestResponse } from 'abt-lib/requests/UpdateTest';
 import cookies from 'js-cookie';
+import { handleErrors } from './errors';
 const { apiBase } = config;
 
 export interface TestApi {
@@ -9,29 +10,6 @@ export interface TestApi {
   uploadImage(url: string, file: File | string, onUploadProgress: Function);
   updateTest(parameters: any) : Promise<UpdateTestResponse>;
   interpretResult(): Promise<UpdateTestResponse>;
-}
-
-
-export class HTTPError extends Error {
-
-  public message: string;
-  public statusCode: number;
-
-  constructor({ message, statusCode }) {
-    super();
-    this.message = message;
-    this.statusCode = statusCode;
-  }
-}
-
-function handleErrors(response: Response): Response {
-  if (!response.ok) {
-    throw new HTTPError({
-      message: response.statusText,
-      statusCode: response.status
-    });
-  }
-  return response;
 }
 
 const testApi: TestApi = {
