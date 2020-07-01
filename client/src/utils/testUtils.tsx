@@ -14,11 +14,11 @@ export const renderWithReactIntl = component => {
   </IntlProvider>);
 };
 
-export const renderWithStubAppContext = (component): [RenderResult, AppContextType] => {
+export const renderWithStubAppContext = (component, api = {}): [RenderResult, AppContextType] => {
   const testApi = {
-    generateTest: (): any => ({ testRecord: { timerStartedAt: 10 } }),
-    uploadImage: (): any => { },
-    interpretResult: (): any => { },
+    generateTest: jest.fn((): any => ({ testRecord: { timerStartedAt: 10 } })),
+    uploadImage: jest.fn((): any => { }),
+    interpretResult: jest.fn((): any => { }),
     updateTest: jest.fn()
   };
 

@@ -32,13 +32,6 @@ describe("TestRoutes", () => {
       const content = await screen.findByText(/Begin/);
       expect(content).not.toBeUndefined();
     });
-
-    it("Updates the test on the api", async () => {
-      const context = renderTestStep({ mode: "test", step: "checkYourKit" });
-      await screen.findByText(/Check Your Kit/);
-      let updateTest = context.container.getTestApi().updateTest;
-      expect(updateTest).toHaveBeenCalledWith({ testRecord: { step: "checkYourKit", timerStartedAt: 10 } });
-    });
   });
 
   describe("Test steps", () => {
