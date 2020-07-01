@@ -10,11 +10,13 @@ jest.mock("utils/AppConfig", () => ({
 
 describe("TestRoutes", () => {
   const renderTestStep = ({ mode, step }: { mode: string, step: string }) => {
-    renderWithStubAppContext(
+    let [, context] = renderWithStubAppContext(
       <MemoryRouter initialEntries={[`/${mode}/${step}`]}>
         <TestRoutes />
       </MemoryRouter>
     );
+
+    return context;
   };
 
 
