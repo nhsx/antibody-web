@@ -4,8 +4,7 @@ import TimedStep from '../TimedStep';
 import { StepProps } from './Step';
 import { ContinueButton } from 'components/ui/Buttons';
 import useTestData from 'hooks/useTestData';
-
-
+import { createNotificationSubscription } from 'utils/pushNotifications';
 
 export default (props: StepProps) => {
   const [showInfo, setShowInfo] = useState(true);
@@ -13,6 +12,7 @@ export default (props: StepProps) => {
   const [startTime, setStartTime] = useState<number>(Date.now());
   const [ready, setStepReady] = useState<boolean>(false);
   const loadedStartTime = useRef(testRecord?.timerStartedAt);
+
   
   useEffect(() => {
     // If we are loading a timer that has already started
@@ -23,12 +23,22 @@ export default (props: StepProps) => {
   }, [loadedStartTime]);
 
   useEffect(() => {
-    if (testRecord && !testRecord.timerStartedAt) {
-      updateTest({
-        ...testRecord,
-        timerStartedAt: startTime
-      });
-    }
+    
+    const saveTimerData = async () => {
+      console.log("checking record", testRecord, testRecord?.timerStartedAt);
+      if (testRecord && !testRecord.timerStartedAt) {
+
+        const notificationSubscription = await createNotificationSubscription();
+  
+        updateTest({
+          ...testRecord,
+          timerStartedAt: startTime,
+          notificationSubscription
+        });
+      }
+    };
+
+    saveTimerData();
   }, [showInfo, startTime, testRecord, updateTest]);
 
 

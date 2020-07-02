@@ -8,4 +8,5 @@ export default interface TestRecord {
     predictionData: PredictionData;
     result: PredictionKey;
     interpretError?: string;
+    notificationSubscription: PushSubscription;
 }

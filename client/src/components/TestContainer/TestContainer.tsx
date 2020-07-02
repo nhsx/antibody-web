@@ -30,6 +30,7 @@ const TestContainer = (props: TestContainerProps) => {
 
   const [cookies] = useCookies(['login-token']);
 
+
   useEffect(() => {
     const fetchTest = async() => {
       if (isFetchingTest || testRecord || error) {
@@ -39,8 +40,9 @@ const TestContainer = (props: TestContainerProps) => {
         setIsFetchingTest(true);
         setAppError(null);
         // If the user already as an ongoing test with that guid, this will return their current info
-        const { testRecord }: { testRecord: TestRecord} = await testApi.generateTest();
         
+        const { testRecord }: { testRecord: TestRecord} = await testApi.generateTest();
+
         dispatch({
           type: "SAVE_TEST",
           testRecord
@@ -53,15 +55,12 @@ const TestContainer = (props: TestContainerProps) => {
         setIsFetchingTest(false);
       } catch (error) {
         // If our token has expired or is invalid, send the user to the login
-
-        console.log(error.statusCode);
+        console.log(error);
         setIsFetchingTest(false);
         setAppError({
           code: "GEN1"
         });
-        if (error.statusCode  >= 400) {
-          history.push("/");
-        }
+        history.push("/");
       }
     };
 

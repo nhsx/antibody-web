@@ -27,11 +27,20 @@ provider:
           - - 'arn:aws:s3:::'
             - Ref: S3
             - '/*'
+    - Effect: Allow
+      Action:
+        - states:StartExecution
+      Resource: "*"
+    - Effect: Allow
+      Action:
+        - secretsmanager:GetSecretValue
+      Resource: "*"
 plugins:
   - serverless-webpack
   - serverless-offline
   - serverless-jest-plugin
   - serverless-sentry
+  - serverless-step-functions
 functions:
   generate:
     handler: handlers/generate/handler.handler
@@ -49,6 +58,8 @@ functions:
           path: update
           cors: true
           authorizer: authorizer
+    environment:
+      STATE_MACHINE_ARN: ${self:resources.Outputs.StateMachine.Value} # This function initialises our wait state machine
   interpret:
     handler: handlers/interpret/handler.handler
     events:
@@ -57,9 +68,33 @@ functions:
           path: interpret
           cors: true
           authorizer: authorizer
+  notify:
+    handler: handlers/notify/handler.handler # Note - this handler is not exposed via http - it is only accessible by the state machine
+    events:
+      - http:
+          method: POST
+          path: notify
+          cors: true
   authorizer:
     type: TOKEN
     handler: handlers/authorizer/handler.handler
+stepFunctions:
+  stateMachines:
+    delayedNotification:
+      name: 'delayedNotification'
+      definition:
+        Comment: "Wait and notify user when their timer is complete"
+        StartAt: Wait
+        States:
+          Wait:
+            Type: "Wait"
+            SecondsPath: "$.wait"
+            Next: Notify
+          Notify:
+            Type: "Task"
+            Resource:
+              Fn::GetAtt: [notify, Arn] # We dynamically fetch in the notify function's arn here
+            End: true
 custom:
   serverless-offline:
     httpPort: 4000
@@ -72,6 +107,11 @@ custom:
     dsn: https://93e4dddc1090408da8b861c3a6e57cd8@o406048.ingest.sentry.io/5272813
     filterLocal: false
 resources:
+  Outputs:
+    StateMachine:
+      Description: The ARN of the provisioning state machine
+      Value:
+        Ref: DelayedNotification # Capital letter at start for some reason #https://medium.com/@iamNoah_/invoke-aws-step-function-from-aws-lambda-using-the-serverless-framework-21b7fde38a42
   Resources:
     S3:
       Type: AWS::S3::Bucket
@@ -103,6 +143,7 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 2
           WriteCapacityUnits: 2
+          
     GatewayResponseDefault4XX:
       Type: 'AWS::ApiGateway::GatewayResponse'
       Properties:

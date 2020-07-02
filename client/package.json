@@ -35,6 +35,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "serve": "node_modules/.bin/serve ./build",
     "test": "react-scripts test --watch-all=false",
     "eject": "react-scripts eject",
     "lint": "eslint --ext .js,.ts,.tsx ./",

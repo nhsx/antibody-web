@@ -24,11 +24,13 @@ export class HTTPError extends Error {
   }
 }
 
+
+// We throw on HTTP failures
 function handleErrors(response: Response): Response {
   if (!response.ok) {
     throw new HTTPError({
       message: response.statusText,
-      statusCode: response.status
+      statusCode: response.status || 500
     });
   }
   return response;
