@@ -7,7 +7,7 @@ export default (props: StepProps) => {
   return (
     <Row>
       <Col width="full">
-        <Label size="l">Prick finger</Label>
+        <Label size="l"><span data-testid="page-title">Prick finger</span></Label>
         <Images
           srcSet="/assets/images/prick.png 325w"
           alt="Image of a lancet pricking a finger"

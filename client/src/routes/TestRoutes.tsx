@@ -16,7 +16,6 @@ import Results from "components/TestRun/ContentComponent/Results";
 import { RouteProps } from 'react-router-dom';
 import { FormattedMessage } from "react-intl";
 import Caption from "components/ui/Caption";
-import { Portal } from 'react-portal';
 import WhatIsWrong from "components/TestRun/ContentComponent/WhatIsWrong";
 import ReportKit from "components/TestRun/ContentComponent/ReportKit";
 import ReorderKit from "components/TestRun/ContentComponent/ReorderKit";
@@ -40,7 +39,6 @@ export interface TestRouteProps extends RouteProps {
 const TestRoute = (props: TestRouteProps) => {
   const { component: Component, caption, ...other } = props;
   return (<>
-    <Portal node={document.getElementById("portal-header")}><FormattedMessage id={`screens.${other.step}.title`} /></Portal>
     {caption && <Caption>{caption}</Caption>}
     <Component {...other} />
   </>

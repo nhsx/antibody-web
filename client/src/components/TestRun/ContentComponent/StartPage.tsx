@@ -20,7 +20,7 @@ export default (props: StepProps) => {
   return (
     <Row>
       <Col width="two-thirds">
-        <Label size="l">Your coronavirus antibody home test</Label>
+        <Label size="l"><span data-testid="page-title">Your coronavirus antibody home test</span></Label>
         <BodyText>Thank you for taking part in the national research study into coronavirus (COVID-19). Taking the test helps NHS and medical scientists learn more about the virus.</BodyText>
         <InsetText>Your test kit should arrive 23 June 2020. If it is more than 7 days late, you can order a new one.</InsetText>
         <BodyText>Use this service to guide you through these steps:</BodyText>
