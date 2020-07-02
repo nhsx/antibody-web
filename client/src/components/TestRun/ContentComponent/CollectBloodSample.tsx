@@ -6,7 +6,7 @@ import { StepProps } from "./Step";
 export default (props: StepProps) => {
   return (
     <Row>
-      <Col width="full">
+      <Col width="two-thirds">
         <Label size="l">Draw blood</Label>
         <Images
           srcSet="/assets/images/collect.png 325w"
