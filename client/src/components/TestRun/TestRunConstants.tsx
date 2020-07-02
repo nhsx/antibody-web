@@ -38,4 +38,4 @@ export interface StepDetails extends StepDetailsIncomplete {
   name: string;
 }
 
-export const START_STEP = "checkYourKit";
+export const START_STEP = "startPage";

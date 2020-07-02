@@ -18,11 +18,7 @@ export default (props: PageContentProps) => (
       <Header.Container>
         <Header.Logo href="/" />
         <Header.ServiceName href="/">
-          <span
-            data-testid="service-name"
-            id="portal-header"
-          >
-          </span>
+          Coronavirus home testing
         </Header.ServiceName>
       </Header.Container>
     </Header>

@@ -84,7 +84,7 @@ export const baseHandler = async (event: APIGatewayEvent): Promise<APIGatewayPro
         guid,
         uploadUrl,
         downloadUrl,
-        step: "checkYourKit"
+        step: "start"
       } as TestRecord;
     }
   
@@ -113,7 +113,6 @@ export const baseHandler = async (event: APIGatewayEvent): Promise<APIGatewayPro
       headers: config.defaultHeaders
     };
   }
-  
 };
 
 export const handler = withSentry(baseHandler);

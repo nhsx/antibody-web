@@ -1,1 +1,1 @@
-export const START_STEP = "checkYourKit";
+export const START_STEP = "start";

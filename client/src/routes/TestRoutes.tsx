@@ -1,10 +1,14 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 import TestContainer from "components/TestContainer/TestContainer";
+import TestKitID from "components/TestRun/ContentComponent/TestKitID";
+import End from "components/TestRun/ContentComponent/End";
+import StartPage from "components/TestRun/ContentComponent/StartPage";
+import GetReady from "components/TestRun/ContentComponent/GetReady";
 import CheckYourKit from "components/TestRun/ContentComponent/CheckYourKit";
-import WashAndDryHands from "components/TestRun/ContentComponent/WashAndDryHands";
-import SetUpTest from "components/TestRun/ContentComponent/SetUpTest";
-import SelectAFinger from "components/TestRun/ContentComponent/SelectAFinger";
+// import WashAndDryHands from "components/TestRun/ContentComponent/WashAndDryHands";
+// import SetUpTest from "components/TestRun/ContentComponent/SetUpTest";
+// import SelectAFinger from "components/TestRun/ContentComponent/SelectAFinger";
 import PrickFinger from "components/TestRun/ContentComponent/PrickFinger";
 import Wait from "components/TestRun/ContentComponent/Wait";
 import ScanKit from "components/TestRun/ContentComponent/ScanKit";
@@ -12,7 +16,6 @@ import Results from "components/TestRun/ContentComponent/Results";
 import { RouteProps } from 'react-router-dom';
 import { FormattedMessage } from "react-intl";
 import Caption from "components/ui/Caption";
-import { Portal } from 'react-portal';
 import WhatIsWrong from "components/TestRun/ContentComponent/WhatIsWrong";
 import ReportKit from "components/TestRun/ContentComponent/ReportKit";
 import ReorderKit from "components/TestRun/ContentComponent/ReorderKit";
@@ -36,7 +39,6 @@ export interface TestRouteProps extends RouteProps {
 const TestRoute = (props: TestRouteProps) => {
   const { component: Component, caption, ...other } = props;
   return (<>
-    <Portal node={document.getElementById("portal-header")}><FormattedMessage id={`screens.${other.step}.title`} /></Portal>
     {caption && <Caption>{caption}</Caption>}
     <Component {...other} />
   </>
@@ -44,24 +46,24 @@ const TestRoute = (props: TestRouteProps) => {
 };
 
 const testRoutes = ({ config }: { config: AppConfig }) => ([
-  {
-    component: WashAndDryHands,
-    path: "washAndDryHands",
-    next: "setUpTest",
-    canPreview: true
-  },
-  {
-    component: SetUpTest,
-    path: "setUpTest",
-    next: "selectAFinger",
-    canPreview: true
-  },
-  {
-    component: SelectAFinger,
-    path: "selectAFinger",
-    next: "prickFinger",
-    canPreview: true
-  },
+  // {
+  //   component: WashAndDryHands,
+  //   path: "washAndDryHands",
+  //   next: "setUpTest",
+  //   canPreview: true
+  // },
+  // {
+  //   component: SetUpTest,
+  //   path: "setUpTest",
+  //   next: "selectAFinger",
+  //   canPreview: true
+  // },
+  // {
+  //   component: SelectAFinger,
+  //   path: "selectAFinger",
+  //   next: "prickFinger",
+  //   canPreview: true
+  // },
   {
     component: PrickFinger,
     path: "prickFinger",
@@ -71,7 +73,7 @@ const testRoutes = ({ config }: { config: AppConfig }) => ([
   {
     component: CollectBloodSample,
     path: "collectBloodSample",
-    next: "coverCut",
+    next: "addBloodSample",
     canPreview: true
   },
   {
@@ -95,7 +97,7 @@ const testRoutes = ({ config }: { config: AppConfig }) => ([
   {
     component: Wait,
     path: "wait",
-    next: config.imageUpload ? "scanKit" : "whatDoYouSee"
+    next: config.imageUpload ? "scanKit" : "end"
   },
   {
     component: ScanKit,
@@ -112,10 +114,26 @@ const testRoutes = ({ config }: { config: AppConfig }) => ([
 const supportRoutes = [
   // Routes without a step counter
   {
+    component: StartPage,
+    path: "start",
+    next: "testKitID"
+  },
+  {
+    component: TestKitID,
+    path: "testKitId",
+    next: "checkYourKit"
+  },
+  {
     component: CheckYourKit,
     path: "checkYourKit",
-    next: "washAndDryHands",
+    next: "getReady",
   },
+  {
+    component: GetReady,
+    path: "getReady",
+    next: "prickFinger",
+  },
+
   {
     component: WhatIsWrong,
     path: "whatIsWrong"
@@ -137,6 +155,10 @@ const supportRoutes = [
   {
     component: Results,
     path: "results"
+  },
+  {
+    component: End,
+    path: "end"
   }
 ];
 

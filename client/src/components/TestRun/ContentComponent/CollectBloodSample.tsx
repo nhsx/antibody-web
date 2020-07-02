@@ -1,31 +1,29 @@
 import React from "react";
-import Asset from "../../ui/Asset";
-import { Row, Col, Label, BodyText } from "nhsuk-react-components";
+import { Row, Col, Label, Images } from "nhsuk-react-components";
 import { ContinueButton } from "components/ui/Buttons";
 import { StepProps } from "./Step";
 
 export default (props: StepProps) => {
   return (
-    <React.Fragment>
-      <Label size="m">Collect blood sample</Label>
-      <Row>
-        <Col width="full">
-          <Asset
-            src="collect.png"
-            alt="Image of collecting blood sample with pipette"
-          />
-          <BodyText>When collecting blood, do not squeeze the collection tube or push it into the cut on your finger.</BodyText>
-          <ul className="nhsuk-list nhsuk-list--bullet">
-            <li>Hold the blood collection tube horizontally</li>
-            <li>Gently touch the blood drop with the tip of the tube (it will fill by itself)</li>
-            <li>When filled to the black line, lift tube off finger</li>
-            <li>If tube not filling, lift it off the finger and touch the blood drop again</li>
-          </ul>
-          <ContinueButton
-            href={props.next}
-          />
-        </Col>
-      </Row>
-    </React.Fragment>
+    <Row>
+      <Col width="two-thirds">
+        <Label size="l">Draw blood</Label>
+        <Images
+          srcSet="/assets/images/collect.png 325w"
+          alt="Image of a blood sample being drawn"
+          caption="Image of a blood sample being drawn"
+        />
+        <ul className="nhsuk-list nhsuk-list--bullet">
+          <li>Do not squeeze the blood collection tube or push it into the cut on your finger.</li>
+          <li>Holding the tube horizontally, gently touch the blood drop with the tip of the tube.</li>
+          <li>The blood will automatically flow up the tube.</li>
+          <li>Fill only to the black line.</li>
+          <li>If the tube does not fill to the black line, lift it off the finger and touch the blood drop again.</li>
+        </ul>
+        <ContinueButton
+          href={props.next}
+        />
+      </Col>
+    </Row>
   );
 };

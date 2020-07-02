@@ -1,30 +1,27 @@
 import React from "react";
-import Asset from "../../ui/Asset";
-import { Row, Col, Label } from "nhsuk-react-components";
+import { Row, Col, Label, Images } from "nhsuk-react-components";
 import { ContinueButton } from "components/ui/Buttons";
 import { StepProps } from "./Step";
 
 export default (props: StepProps) => {
   return (
-    <React.Fragment>
-      <Label size="m">Test blood sample</Label>
-      <Row>
-        <Col width="full">
-          <Asset
-            src="test.png"
-            alt="Image of the applying blood from pipette to test kit"
-          />
-          <ul className="nhsuk-list nhsuk-list--bullet">
-            <li>Twist and remove cap off the small bottle</li>
-            <li>Hold bottle just above hole on the test device</li>
-            <li>When filled to the black line, lift tube off finger</li>
-            <li>If tube not filling, lift it off the finger and touch the blood drop again</li>
-          </ul>
-          <ContinueButton
-            href={props.next}
-          />
-        </Col>
-      </Row>
-    </React.Fragment>
+    <Row>
+      <Col width="two-thirds">
+        <Label size="l">Add test solution to test device</Label>
+        <Images
+          srcSet="/assets/images/collect.png 325w"
+          alt="Image of a blood sample being added to the test device"
+          caption="Image of a blood sample being added to the test device"
+        />
+        <ul className="nhsuk-list nhsuk-list--bullet">
+          <li>Twist and remove cap off test solution bottle</li>
+          <li>Add the test solution to the sample hole one drop at a time, until the bottle is empty</li>
+        </ul>
+        <ContinueButton
+          href={props.next}
+          text="Start timer"
+        />
+      </Col>
+    </Row>
   );
 };

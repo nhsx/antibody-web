@@ -22,50 +22,44 @@ describe("TestRoutes", () => {
 
   describe("Support steps", () => {
     it("Renders the content component", async () => {
-      renderTestStep({ mode: "test", step: "checkYourKit" });
-      const content = await screen.findByText(/Check Your Kit/);
-      expect(content).not.toBeUndefined();
-    });
-
-    it("There is a begin test link ", async () => {
-      renderTestStep({ mode: "test", step: "checkYourKit" });
-      const content = await screen.findByText(/Begin/);
+      renderTestStep({ mode: "test", step: "start" });
+      const content = await screen.findByTestId("page-title");
       expect(content).not.toBeUndefined();
     });
   });
 
   describe("Test steps", () => {
     it("Renders the content component", async () => {
-      renderTestStep({ mode: "test", step: "washAndDryHands" });
-      const content = await screen.findByText(/Wash and dry hands/);
+      renderTestStep({ mode: "test", step: "prickFinger" });
+      const content = await screen.findByTestId("page-title");
       expect(content).not.toBeUndefined();
     });
 
     it("Renders the correct number of steps", async () => {
-      renderTestStep({ mode: "test", step: "washAndDryHands" });
-      const content = await screen.findByText(/Step 1 of 11/);
+      renderTestStep({ mode: "test", step: "prickFinger" });
+      const content = await screen.findByText(/Step 1 of 8/);
       expect(content).not.toBeUndefined();
     });
 
     describe("With no image upload enabled", () => {
-      it("Skips from the wait step to the what do you see step", async () => {
+      it("Skips from the wait step to the end", async () => {
         renderTestStep({ mode: "test", step: "wait" });
         const content = await screen.findByTestId("primary-button");
-        expect(content.getAttribute('href')).toBe("/test/whatDoYouSee");
+        expect(content.getAttribute('href')).toBe("/test/end");
       });
     });
   });
 
   describe("Previewing steps", () => {
     it("Allows you to preview content", async () => {
-      renderTestStep({ mode: "preview", step: "washAndDryHands" });
-      const content = await screen.findByText(/Wash and dry hands/);
+      renderTestStep({ mode: "preview", step: "prickFinger" });
+      const content = await screen.findByTestId("page-title");
       expect(content).not.toBeUndefined();
     });
 
     it("Renders the correct number of steps", async () => {
-      renderTestStep({ mode: "preview", step: "washAndDryHands" });
-      const content = await screen.findByText(/Step 1 of 8/);
+      renderTestStep({ mode: "preview", step: "prickFinger" });
+      const content = await screen.findByText(/Step 1 of 5/);
       expect(content).not.toBeUndefined();
     });
 
