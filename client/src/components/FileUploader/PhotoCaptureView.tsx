@@ -3,8 +3,7 @@
 // Use of this source code is governed by an LGPL-3.0 license that
 // can be found in the LICENSE file distributed with this file.
 
-import Asset from "components/ui/Asset";
-import { BodyText, Button, Label } from "nhsuk-react-components";
+import { BodyText, Button, Label, Images, InsetText } from "nhsuk-react-components";
 import React from "react";
 
 export interface PhotoCaptureProps {
@@ -14,23 +13,25 @@ export interface PhotoCaptureProps {
 export default (props: PhotoCaptureProps) => {
   return (
     <>
-      <Asset
-        height={200}
-        width={310}
-        alt="A phone taking the test strip photo."
-        src="RDT_capture.gif"
+      <Label size="l"><span data-testid="page-title">Take a photo of your test device</span></Label>
+      <Images
+        srcSet="/assets/images/RDT_capture.gif 310w"
+        alt="Illustration of a photo being taken of a test kit"
+        caption="Illustration of a photo being taken of a test kit"
       />
-      <Label size="l">Take photo of test cassette</Label>
-      <BodyText>
-        Next, you'll be asked to take a photo of your test cassette.
-      </BodyText>
+      <InsetText>You have TODO minutes left to take your photograph</InsetText>
+      <BodyText>Use your phone’s camera to take a photo of your test device</BodyText>
+      <BodyText>Hold your phone flat and directly above the test device</BodyText>
+      <BodyText>Line up the test device with the example image</BodyText>
+      <BodyText>Make sure the photo:</BodyText>
       <ul className="nhsuk-list nhsuk-list--bullet">
-        <li>Ensure your location has good lighting</li>
-        <li>Hold your device flat and directly above the test cassette.</li>
-        <li>Line up the test cassette with the sample image.</li>
+        <li>is in focus (clear)</li>
+        <li>only contains the test device</li>
+        <li>does not have any shadows falling across the test device</li>
+        <li>does not have any bright light falling across the test device</li>
       </ul>
       <Button onClick={props.handleShowCamera}>
-        Start camera
+        Take a photo of your test kit
       </Button>
     </>
   );

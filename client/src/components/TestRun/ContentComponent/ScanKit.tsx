@@ -7,15 +7,13 @@ import { useHistory } from 'react-router-dom';
 export default (props: StepProps) => {
   const history = useHistory();
 
-  
-
   const handleGoToResults = useCallback(() => {
     history.push(props.next as string);
   }, [history, props.next]);
   
   return (
     <Row>
-      <Col width="full">
+      <Col width="two-thirds">
         <TestResultPhotoUploader
           onInterpret={handleGoToResults} />
       </Col>
