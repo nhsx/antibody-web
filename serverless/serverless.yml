@@ -81,7 +81,7 @@ functions:
 stepFunctions:
   stateMachines:
     delayedNotification:
-      name: 'delayedNotification'
+      name: ${opt:stage, 'dev'}-delayed-notification
       definition:
         Comment: "Wait and notify user when their timer is complete"
         StartAt: Wait
