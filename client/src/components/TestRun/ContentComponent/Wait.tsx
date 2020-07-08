@@ -7,7 +7,6 @@ import useTestData from 'hooks/useTestData';
 import { createNotificationSubscription } from 'utils/pushNotifications';
 
 export default (props: StepProps) => {
-  const [showInfo, setShowInfo] = useState(true);
   const [testRecord, updateTest] = useTestData();
   const [startTime, setStartTime] = useState<number>(Date.now());
   const [ready, setStepReady] = useState<boolean>(false);
@@ -18,7 +17,6 @@ export default (props: StepProps) => {
     // If we are loading a timer that has already started
     if (loadedStartTime.current) {
       setStartTime(loadedStartTime.current);
-      setShowInfo(false);
     }
   }, [loadedStartTime]);
 
@@ -43,12 +41,8 @@ export default (props: StepProps) => {
     };
 
     saveTimerData();
-  }, [showInfo, startTime, testRecord, updateTest]);
+  }, [startTime, testRecord, updateTest]);
 
-
-  const handleMinuteLeft = () => {
-    setShowInfo(false);
-  };
 
   return (
     <Row>
@@ -59,7 +53,6 @@ export default (props: StepProps) => {
         <TimedStep
           duration={startTime + 600000 - Date.now()}
           setStepReady={setStepReady}
-          notifications={[{ time: 60000, onNotify: handleMinuteLeft }]}
         />
         <WarningCallout label="Test result accuracy">
           <BodyText>Do not leave your test for more than 15 minutes. If you do this, your test result will be invalid and you will not be able to re-order and retake the test.</BodyText>

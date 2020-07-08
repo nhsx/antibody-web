@@ -3,17 +3,16 @@
 // Use of this source code is governed by an LGPL-3.0 license that
 // can be found in the LICENSE file distributed with this file.
 import React, { useCallback, useEffect, useState } from 'react';
-import Timer, { Notification } from 'components/ui/Timer';
+import Timer from 'components/ui/Timer';
 
 export interface InterfaceTimedStepProps {
   duration: number;
   //testRunUID: string;
   setStepReady: (ready: boolean) => void;
-  notifications?: Notification[]
 }
 
 export default (props: InterfaceTimedStepProps) => {
-  const { duration, setStepReady, notifications } = props;
+  const { duration, setStepReady } = props;
 
   // Time is complete, enable the "next" button.
   const timerCompleteCallback = useCallback(() => {
@@ -51,7 +50,6 @@ export default (props: InterfaceTimedStepProps) => {
         duration={duration}
         startTime={startTimeInternal!}
         onTimerComplete={timerCompleteCallback}
-        notifications={notifications}
       />
     </div>
   );
