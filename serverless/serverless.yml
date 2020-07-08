@@ -111,7 +111,7 @@ resources:
     StateMachine:
       Description: The ARN of the provisioning state machine
       Value:
-        Ref: DelayedNotification-${opt:stage, 'dev'} # Capital letter at start for some reason #https://medium.com/@iamNoah_/invoke-aws-step-function-from-aws-lambda-using-the-serverless-framework-21b7fde38a42
+        Ref: DelayedNotification # Capital letter at start for some reason #https://medium.com/@iamNoah_/invoke-aws-step-function-from-aws-lambda-using-the-serverless-framework-21b7fde38a42
   Resources:
     S3:
       Type: AWS::S3::Bucket
