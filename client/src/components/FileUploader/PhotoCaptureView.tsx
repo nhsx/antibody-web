@@ -15,7 +15,7 @@ export default (props: PhotoCaptureProps) => {
     <>
       <Label size="l"><span data-testid="page-title">Take a photo of your test device</span></Label>
       <Images
-        srcSet="/assets/images/RDT_capture.gif 310w"
+        srcSet="/assets/images/take-a-photo.png"
         alt="Illustration of a photo being taken of a test kit"
         caption="Illustration of a photo being taken of a test kit"
       />
