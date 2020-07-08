@@ -45,7 +45,7 @@ describe("TestRoutes", () => {
       it("Skips from the wait step to the end", async () => {
         renderTestStep({ mode: "test", step: "wait" });
         const content = await screen.findByTestId("primary-button");
-        expect(content.getAttribute('href')).toBe("/test/end");
+        expect(content.getAttribute('href')).toBe("/test/testComplete");
       });
     });
   });

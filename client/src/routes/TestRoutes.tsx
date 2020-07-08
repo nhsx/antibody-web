@@ -2,7 +2,7 @@ import React from "react";
 import { Route, Switch } from "react-router-dom";
 import TestContainer from "components/TestContainer/TestContainer";
 import TestKitID from "components/TestRun/ContentComponent/TestKitID";
-import End from "components/TestRun/ContentComponent/End";
+import TestComplete from "components/TestRun/ContentComponent/TestComplete";
 import StartPage from "components/TestRun/ContentComponent/StartPage";
 import GetReady from "components/TestRun/ContentComponent/GetReady";
 import CheckYourKit from "components/TestRun/ContentComponent/CheckYourKit";
@@ -97,7 +97,7 @@ const testRoutes = ({ config }: { config: AppConfig }) => ([
   {
     component: Wait,
     path: "wait",
-    next: config.imageUpload ? "scanKit" : "end"
+    next: config.imageUpload ? "scanKit" : "testComplete"
   },
   {
     component: ScanKit,
@@ -157,8 +157,8 @@ const supportRoutes = [
     path: "results"
   },
   {
-    component: End,
-    path: "end"
+    component: TestComplete,
+    path: "testComplete"
   }
 ];
 
