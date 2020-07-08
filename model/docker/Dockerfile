@@ -12,6 +12,10 @@ RUN apt-get update && \
     openjdk-11-jdk \
     curl \
     vim \
+    libsm6 \
+    libxext6 \
+    libxrender-dev \
+    libglib2.0.0 \
     && rm -rf /var/lib/apt/lists/* \
     && cd /tmp \
     && curl -O https://bootstrap.pypa.io/get-pip.py \
@@ -23,6 +27,8 @@ RUN update-alternatives --install /usr/local/bin/pip pip /usr/local/bin/pip3 1
 RUN pip install --no-cache-dir psutil
 RUN pip install --no-cache-dir torch
 RUN pip install --no-cache-dir torchvision
+RUN pip install --no-cache-dir torchserve
+RUN pip install --no-cache-dir opencv-python   
 
 RUN pip install --no-cache-dir torchserve torch-model-archiver
 
