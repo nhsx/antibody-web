@@ -1,4 +1,4 @@
-import { PredictionData, PredictionKey } from "./Prediction";
+import { PredictionData, PredictionResult } from "./Prediction";
 
 export default interface TestRecord {
   guid: string;
@@ -7,7 +7,7 @@ export default interface TestRecord {
   step: string;
   timerStartedAt: number;
   predictionData: PredictionData,
-  result: PredictionKey,
+  result: PredictionResult,
   interpretError?: string,
   notificationSubscription: PushSubscription
 }

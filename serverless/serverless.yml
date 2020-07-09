@@ -7,7 +7,7 @@ provider:
   environment:
       UPLOAD_BUCKET: ${opt:stage, 'dev'}-covid19-antibody-uk
       DYNAMO_TABLE: ${opt:stage, 'dev'}-covid19-antibody-uk
-      ML_API_BASE: http://antibody-model-lb-1474317296.eu-west-2.elb.amazonaws.com
+      ML_API_BASE: http://localhost:8080
   iamRoleStatements:
     - Effect: Allow
       Action:

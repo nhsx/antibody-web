@@ -1,13 +1,22 @@
-export declare const PredictionKeys: Readonly<{
-    guard: (value: string) => value is "Positive" | "Negative";
-    check: (value: string) => "Positive" | "Negative";
-    values: ("Positive" | "Negative")[];
-} & {
-    type: "Positive" | "Negative";
-}>;
-export declare type PredictionKey = typeof PredictionKeys.type;
-export declare type PredictionItem = {
-    [K in PredictionKey]?: number;
+export declare type PredictionResult = 'positive' | 'negative' | 'invalid' | 'failed_checks' | 'rdt_not_found' | 'diagnostic_not_found';
+export declare type BlurStatus = 'blurred' | 'ok';
+export declare type ExposureStatus = 'overexposed' | 'underexposed' | 'over_and_underexposed' | 'ok';
+export declare type Quality = {
+    blur: BlurStatus;
+    exposure: ExposureStatus;
 };
-export interface PredictionData extends Array<PredictionItem> {
+export declare type BoundingBox = [[number, number], [number, number]];
+export interface Extracts {
+    rdt: string;
+    diagnostic: BoundingBox;
+}
+export interface Confidence {
+    positive: number;
+    negative: number;
+}
+export interface PredictionData {
+    result: PredictionResult;
+    confidence: Confidence;
+    quality: Quality;
+    extracts: Extracts;
 }
