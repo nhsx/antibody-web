@@ -6,10 +6,10 @@ import { StepProps } from "./Step";
 export default (props: StepProps) => {
   return (
     <Row>
-      <Col width="full">
-        <Label size="l"><span data-testid="page-title">Prick finger</span></Label>
+      <Col width="two-thirds">
+        <Label size="l"><span data-testid="page-title">Step 1: Prick finger</span></Label>
         <Images
-          srcSet="/assets/images/prick.png 325w"
+          srcSet="/assets/images/prick.png"
           alt="Image of a lancet pricking a finger"
           caption="Image of a lancet pricking a finger"
         />

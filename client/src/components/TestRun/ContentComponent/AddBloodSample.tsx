@@ -7,9 +7,9 @@ export default (props: StepProps) => {
   return (
     <Row>
       <Col width="two-thirds">
-        <Label size="l">Add blood sample to test device</Label>
+        <Label size="l">Step 3: Add blood sample to test device</Label>
         <Images
-          srcSet="/assets/images/collect.png 325w"
+          srcSet="/assets/images/add-blood.png"
           alt="Image of a blood sample being added to the test device"
           caption="Image of a blood sample being added to the test device"
         />

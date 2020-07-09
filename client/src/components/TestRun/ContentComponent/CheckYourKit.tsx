@@ -10,7 +10,7 @@ export default (props: StepProps) => {
         <Label size="l">Check your test kit</Label>
         <BodyText>Your test kit should contain the following items. It is important to familiarise yourself with them before you begin.</BodyText>
         <Images
-          srcSet="/assets/images/check-your-test-kit/disposal-bag.png 325w"
+          srcSet="/assets/images/kit-laid-out.png"
           alt="Illustration showing the contents of your test kit"
           caption="Illustration showing the contents of your test kit"
         />

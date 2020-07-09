@@ -14,7 +14,6 @@ import Wait from "components/TestRun/ContentComponent/Wait";
 import ScanKit from "components/TestRun/ContentComponent/ScanKit";
 import Results from "components/TestRun/ContentComponent/Results";
 import { RouteProps } from 'react-router-dom';
-import { FormattedMessage } from "react-intl";
 import Caption from "components/ui/Caption";
 import WhatIsWrong from "components/TestRun/ContentComponent/WhatIsWrong";
 import ReportKit from "components/TestRun/ContentComponent/ReportKit";
@@ -173,12 +172,6 @@ export const TestRoutes = () => (
         path={`/test/${path}`}
         step={path}
         next={`/test/${next}`}
-        caption={<FormattedMessage
-          id="app.stepCount"
-          values={{
-            current: index + 1,
-            total: testRoutes({ config: getAppConfig() }).length
-          }} />}
         key={path}
         {...route} />
     ))}
@@ -200,12 +193,6 @@ export const PreviewRoutes = () => (
           path={`/preview/${path}`}
           step={path}
           next={index < previewRoutes().length - 1 ? `/preview/${next}` : `/test`}
-          caption={<FormattedMessage
-            id="app.stepCount"
-            values={{
-              current: index + 1,
-              total: previewRoutes().length
-            }} />}
           key={path}
           {...route} />
       );

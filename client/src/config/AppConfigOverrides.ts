@@ -14,6 +14,7 @@ const overrides = (): Partial<AppConfig> => ({
   imageUpload: Boolean(
     !(process.env.REACT_APP_FLAG_IMAGE_UPLOAD === "false") ?? true
   ),
+  cameraOverlayEnabled: false
 });
 
 export default overrides;
