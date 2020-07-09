@@ -2,7 +2,6 @@ import React from "react";
 import { Route, Switch } from "react-router-dom";
 import TestContainer from "components/TestContainer/TestContainer";
 import { RouteProps } from 'react-router-dom';
-import Caption from "components/ui/Caption";
 import { getAppConfig } from 'utils/AppConfig';
 import { AppConfig } from "utils/ConfigTypes";
 
@@ -20,7 +19,6 @@ import Wait from "components/TestRun/ContentComponent/Wait";
 
 export interface TestRouteProps extends RouteProps {
   component: any;
-  caption?: React.ReactNode;
   step?: string | string[] | undefined;
   next?: string;
   canPreview?: boolean;
@@ -28,9 +26,8 @@ export interface TestRouteProps extends RouteProps {
 
 /* Set our page title using portals, so we don't have to pass huge amounts of callbacks down the tree */
 const TestRoute = (props: TestRouteProps) => {
-  const { component: Component, caption, ...other } = props;
+  const { component: Component, ...other } = props;
   return (<>
-    {caption && <Caption>{caption}</Caption>}
     <Component {...other} />
   </>
   );
