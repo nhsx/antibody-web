@@ -179,7 +179,7 @@ export default (props: PhotoPreviewProps) => {
       msgs.push("was underexposed (too dark)");
     }
     if (predictionData?.quality.exposure === 'over_and_underexposed') {
-      msgs.push("has inconsistent lighting");
+      msgs.push("was inconsistently lit");
     }
 
     return msgs;

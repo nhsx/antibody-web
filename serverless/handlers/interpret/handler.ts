@@ -93,8 +93,8 @@ export const baseHandler = async (event: APIGatewayEvent): Promise<APIGatewayPro
       prediction.result = 'failed_checks'; 
       prediction.success = false;          
     }
-    if (guid.includes('underover')) {
-      prediction.quality.exposure = 'under_and_overexposed';
+    if (guid.includes('overunder')) {
+      prediction.quality.exposure = 'over_and_underexposed';
       prediction.result = 'failed_checks';    
       prediction.success = false;      
     }
