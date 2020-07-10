@@ -6,7 +6,7 @@ export default interface TestRecord {
     step: string;
     timerStartedAt: number;
     predictionData: PredictionData;
+    testCompleted: boolean;
     result: PredictionResult;
-    interpretError?: string;
-    notificationSubscription: PushSubscription;
+    notificationSubscription?: PushSubscription;
 }

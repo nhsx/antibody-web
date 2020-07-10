@@ -19,4 +19,5 @@ export interface PredictionData {
     confidence: Confidence;
     quality: Quality;
     extracts: Extracts;
+    success: boolean;
 }

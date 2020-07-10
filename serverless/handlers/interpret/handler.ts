@@ -1,5 +1,5 @@
 import { APIGatewayProxyResult, APIGatewayEvent } from 'aws-lambda';
-import { getFileStream, getTestRecord, putTestRecord } from '../../api/storage';
+import { getTestRecord, putTestRecord } from '../../api/storage';
 import { validateInterpretEnvironment } from '../../api/validate';
 import config from '../../config';
 import TestRecord from 'abt-lib/dist/models/TestRecord';
@@ -8,7 +8,7 @@ import logger from '../../utils/logger';
 
 export const baseHandler = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
 
-  const UPLOAD_BUCKET: string = process.env.UPLOAD_BUCKET as string;
+  // const UPLOAD_BUCKET: string = process.env.UPLOAD_BUCKET as string;
   const ML_API_BASE: string = process.env.ML_API_BASE as string;
   const DYNAMO_TABLE: string = process.env.DYNAMO_TABLE as string;
 
@@ -46,7 +46,7 @@ export const baseHandler = async (event: APIGatewayEvent): Promise<APIGatewayPro
 
   logger.info("Retrieving user's image from S3");
   try {
-    fileStream = getFileStream(UPLOAD_BUCKET, guid);
+    // fileStream = getFileStream(UPLOAD_BUCKET, guid);
   } catch (error) {
     logger.error("Could not get image from S3", error);
     return {
@@ -66,6 +66,7 @@ export const baseHandler = async (event: APIGatewayEvent): Promise<APIGatewayPro
     // });
 
     const prediction = {
+      success: true,
       result: 'positive',
       confidence: { positive: 0.983, negative: 0.017 },
       quality: {
@@ -80,22 +81,25 @@ export const baseHandler = async (event: APIGatewayEvent): Promise<APIGatewayPro
     if (guid.includes('blur')) {
       prediction.quality.blur = 'blurred';
       prediction.result = 'failed_checks';          
+      prediction.success = false;
     }
     if (guid.includes('over')) {
       prediction.quality.exposure = 'overexposed';
-      prediction.result = 'failed_checks';          
+      prediction.result = 'failed_checks'; 
+      prediction.success = false;         
     }
     if (guid.includes('under')) {
       prediction.quality.exposure = 'underexposed';
-      prediction.result = 'failed_checks';          
+      prediction.result = 'failed_checks'; 
+      prediction.success = false;          
     }
     if (guid.includes('underover')) {
       prediction.quality.exposure = 'under_and_overexposed';
-      prediction.result = 'failed_checks';          
+      prediction.result = 'failed_checks';    
+      prediction.success = false;      
     }
 
     logger.info("Received prediction - updating user's info.");
-
 
     // Get our users record to update with the prediction
     const oldRecord = await getTestRecord(DYNAMO_TABLE, guid) as TestRecord;
@@ -103,6 +107,7 @@ export const baseHandler = async (event: APIGatewayEvent): Promise<APIGatewayPro
     const newRecord: TestRecord = {
       ...oldRecord,
       predictionData: prediction,
+      testCompleted: prediction.success,
       result: prediction.result
     };
 
