@@ -2,7 +2,7 @@ import { APIGatewayProxyResult, APIGatewayEvent } from 'aws-lambda';
 import { getFileStream, getTestRecord, putTestRecord } from '../../api/storage';
 import { validateInterpretEnvironment } from '../../api/validate';
 import config from '../../config';
-import TestRecord from 'abt-lib/dist/models/TestRecord';
+import TestRecord from 'abt-lib/models/TestRecord';
 import withSentry from 'serverless-sentry-lib';
 import logger from '../../utils/logger';
 import { PredictionData } from 'abt-lib/models/Prediction';
@@ -80,22 +80,23 @@ export const baseHandler = async (event: APIGatewayEvent): Promise<APIGatewayPro
     };
     
     if (guid.includes('blur')) {
-      mockPrediction.quality.blur = 'blurred';
+      mockPrediction.quality && (mockPrediction.quality.blur = 'blurred');
       mockPrediction.result = 'failed_checks';
       mockPrediction.success = false;
     }
     if (guid.includes('over')) {
-      mockPrediction.quality.exposure = 'overexposed';
+      mockPrediction.quality && (mockPrediction.quality.exposure = 'overexposed');
       mockPrediction.result = 'failed_checks';
       mockPrediction.success = false;         
     }
     if (guid.includes('under')) {
-      mockPrediction.quality.exposure = 'underexposed';
+      mockPrediction.quality && (mockPrediction.quality.exposure = 'underexposed');
+
       mockPrediction.result = 'failed_checks';
       mockPrediction.success = false;          
     }
     if (guid.includes('overunder')) {
-      mockPrediction.quality.exposure = 'over_and_underexposed';
+      mockPrediction.quality && (mockPrediction.quality.exposure = 'over_and_underexposed');
       mockPrediction.result = 'failed_checks';
       mockPrediction.success = false;      
     }
