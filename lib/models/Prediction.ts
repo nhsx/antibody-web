@@ -16,7 +16,7 @@ export type BoundingBox = [
 
 export interface Extracts {
   rdt: string | null // base64 image,
-  diagnostic?: BoundingBox | null
+  diagnostic: BoundingBox | null
 };
 
 export interface Confidence {

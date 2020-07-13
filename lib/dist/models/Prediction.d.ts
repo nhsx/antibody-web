@@ -8,7 +8,7 @@ export declare type Quality = {
 export declare type BoundingBox = [[number, number], [number, number]];
 export interface Extracts {
     rdt: string | null;
-    diagnostic?: BoundingBox | null;
+    diagnostic: BoundingBox | null;
 }
 export interface Confidence {
     positive: number;
