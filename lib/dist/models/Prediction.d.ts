@@ -7,8 +7,8 @@ export declare type Quality = {
 };
 export declare type BoundingBox = [[number, number], [number, number]];
 export interface Extracts {
-    rdt: string;
-    diagnostic: BoundingBox;
+    rdt?: string;
+    diagnostic?: BoundingBox;
 }
 export interface Confidence {
     positive: number;
@@ -16,8 +16,8 @@ export interface Confidence {
 }
 export interface PredictionData {
     result: PredictionResult;
-    confidence: Confidence;
-    quality: Quality;
+    confidence?: Confidence;
+    quality?: Quality;
     extracts: Extracts;
     success: boolean;
 }

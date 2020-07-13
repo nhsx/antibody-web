@@ -15,8 +15,8 @@ export type BoundingBox = [
 ];
 
 export interface Extracts {
-  rdt: string // base64 image,
-  diagnostic: BoundingBox
+  rdt?: string // base64 image,
+  diagnostic?: BoundingBox
 };
 
 export interface Confidence {
@@ -26,8 +26,8 @@ export interface Confidence {
 
 export interface PredictionData {
   result: PredictionResult,
-  confidence: Confidence,
-  quality: Quality,
-  extracts: Extracts,
+  confidence?: Confidence,
+  quality?: Quality,
+  extracts : Extracts,
   success: boolean
 }
