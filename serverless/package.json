@@ -22,6 +22,7 @@
     "serverless-sentry-lib": "^2.0.1",
     "serverless-step-functions": "^2.21.1",
     "serverless-step-functions-offline": "^2.1.4",
+    "nock": "^12.0.3",
     "uuid": "^8.0.0",
     "web-push": "^3.4.4",
     "winston": "^3.2.1"
@@ -42,7 +43,6 @@
     "cache-loader": "^4.1.0",
     "fork-ts-checker-webpack-plugin": "^4.1.6",
     "jest": "^26.0.1",
-    "nock": "^12.0.3",
     "serverless-jest-plugin": "^0.3.0",
     "serverless-offline": "^6.1.5",
     "serverless-plugin-typescript": "^1.1.9",
