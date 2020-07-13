@@ -5,7 +5,7 @@
     "types": "dist/*.d.ts",
     "scripts": {
         "build": "node_modules/.bin/rimraf dist && tsc",
-        "test": "node_modules/.bin/jest"
+        "test": "node_modules/.bin/jest --passWithNoTests"
     },
     "devDependencies": {
         "@types/jest": "^25.2.3",

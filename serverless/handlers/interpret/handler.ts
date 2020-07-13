@@ -1,14 +1,18 @@
 import { APIGatewayProxyResult, APIGatewayEvent } from 'aws-lambda';
-import { getTestRecord, putTestRecord } from '../../api/storage';
+import { getFileStream, getTestRecord, putTestRecord } from '../../api/storage';
 import { validateInterpretEnvironment } from '../../api/validate';
 import config from '../../config';
 import TestRecord from 'abt-lib/dist/models/TestRecord';
 import withSentry from 'serverless-sentry-lib';
 import logger from '../../utils/logger';
+import { PredictionData } from 'abt-lib/models/Prediction';
+import nock from 'nock';
+import got from 'got/dist/source';
+import { Readable } from 'stream';
 
 export const baseHandler = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
 
-  // const UPLOAD_BUCKET: string = process.env.UPLOAD_BUCKET as string;
+  const UPLOAD_BUCKET: string = process.env.UPLOAD_BUCKET as string;
   const ML_API_BASE: string = process.env.ML_API_BASE as string;
   const DYNAMO_TABLE: string = process.env.DYNAMO_TABLE as string;
 
@@ -42,11 +46,11 @@ export const baseHandler = async (event: APIGatewayEvent): Promise<APIGatewayPro
   }  
 
   
-  // let fileStream: Readable;
+  let fileStream: Readable;
 
   logger.info("Retrieving user's image from S3");
   try {
-    // fileStream = getFileStream(UPLOAD_BUCKET, guid);
+    fileStream = getFileStream(UPLOAD_BUCKET, guid);
   } catch (error) {
     logger.error("Could not get image from S3", error);
     return {
@@ -60,12 +64,8 @@ export const baseHandler = async (event: APIGatewayEvent): Promise<APIGatewayPro
 
   try {
     logger.info("Sending image to prediction endpoint" + predictionEndpoint);
-    // const { body: prediction } : { body: PredictionData } = await got.post(predictionEndpoint, {
-    //   body: fileStream,
-    //   responseType: 'json'
-    // });
 
-    const prediction = {
+    const mockPrediction : PredictionData = {
       success: true,
       result: 'positive',
       confidence: { positive: 0.983, negative: 0.017 },
@@ -79,26 +79,33 @@ export const baseHandler = async (event: APIGatewayEvent): Promise<APIGatewayPro
       }
     };
     if (guid.includes('blur')) {
-      prediction.quality.blur = 'blurred';
-      prediction.result = 'failed_checks';          
-      prediction.success = false;
+      mockPrediction.quality.blur = 'blurred';
+      mockPrediction.result = 'failed_checks';
+      mockPrediction.success = false;
     }
     if (guid.includes('over')) {
-      prediction.quality.exposure = 'overexposed';
-      prediction.result = 'failed_checks'; 
-      prediction.success = false;         
+      mockPrediction.quality.exposure = 'overexposed';
+      mockPrediction.result = 'failed_checks';
+      mockPrediction.success = false;         
     }
     if (guid.includes('under')) {
-      prediction.quality.exposure = 'underexposed';
-      prediction.result = 'failed_checks'; 
-      prediction.success = false;          
+      mockPrediction.quality.exposure = 'underexposed';
+      mockPrediction.result = 'failed_checks';
+      mockPrediction.success = false;          
     }
     if (guid.includes('overunder')) {
-      prediction.quality.exposure = 'over_and_underexposed';
-      prediction.result = 'failed_checks';    
-      prediction.success = false;      
+      mockPrediction.quality.exposure = 'over_and_underexposed';
+      mockPrediction.result = 'failed_checks';
+      mockPrediction.success = false;      
     }
 
+    // Temporarily mock the ml api instead of firing real requests
+    nock(ML_API_BASE as string).post(`/${config.modelPath}`).reply(200, mockPrediction);
+
+    const { body: prediction } : { body: PredictionData } = await got.post(predictionEndpoint, {
+      body: fileStream,
+      responseType: 'json'
+    });
     logger.info("Received prediction - updating user's info.");
 
     // Get our users record to update with the prediction
