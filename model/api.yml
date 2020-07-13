@@ -1,0 +1,146 @@
+openapi: "3.0.3"
+info:
+  description: "API for interfacing with Audere ML model"
+  version: "1.0"
+  title: "Audere ML Model API"
+paths:
+  /predictions/{modelName}:
+    post:
+      summary: "Interpret an image of a test cassette and predict a result"
+      description: "Takes the user's image and extract the cassette, checks it is not blurred or over/underexposed, and then extracts and classifies the diagnostic region of the cassette"
+      parameters:
+      - in: "path"
+        name: "modelName"
+        description: "The ML model we are using to make our prediction"
+        required: true
+        schema:
+            type: string
+      requestBody:
+        content:
+          image/png:
+            schema:
+              type: string
+              format: binary
+          image/jpeg:
+            schema:
+              type: string
+              format: binary
+      responses:
+        "200":
+          description: "A object containing results of the image quality checks and predicted result, if possible. (Returned regardless of whether diagnostic region could be read)"
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - success
+                  - result
+                  - confidence
+                  - quality
+                  - extracts
+                properties:
+                  success:
+                    description: "Whether or not the ML model extracted and made a prediction from the diagnostic area - will be true for a result of positive, negative or invalid, and false for all others"
+                    type: boolean
+                  result:
+                    description: "A string representing the outcome of the image interpretation. Failure states should be returned in order according to this list."
+                    type: string
+                    enum: [no_rdt_found, no_diagnostic_found, failed_checks, negative, positive, invalid]
+                  confidence:
+                    description: "A map of numeric values between 0 and 1 for how sure the ML model is about its predictions"
+                    type: object
+                    required:
+                      - positive
+                      - negative
+                    properties:
+                      positive:
+                        type: number
+                      negative:
+                        type: number
+                  quality:
+                    description: "Map of our quality checks. Each quality key has a string which is either 'Ok' or a failure reason"
+                    type: object
+                    required:
+                      - blur
+                      - exposure
+                    properties:
+                      blur:
+                        description: "Whether our blur detection algorithm thinks the cassette subsection is blurred or not"
+                        type: string
+                        enum: [ok, blurred]
+                      exposure:
+                        description: "Whether our exposure check algorithm thinks the cassette is overexposed, underexposed or both"
+                        type: string
+                        enum: [ok, overexposed, underexposed, over_and_underexposed]
+                  extracts:
+                    description: "The relevant regions of interest in the RDT image"
+                    required:
+                      - rdt
+                      - diagnostic
+                    properties:
+                      rdt:
+                        description: "Base64 encoded image of the test cassette extract"
+                        type: string
+                        format: byte
+                      diagnostic:
+                        description: "Bounding box for the diagnostic square within the rdt image. Two x-y coordinate pairs that represent the top left and bottom right of the box e.g. [[20, 20], [40, 40]]"
+                        type: array
+                        items: 
+                          minLength: 2
+                          maxLength: 2
+                          type: array
+                          items:
+                            minLength: 2
+                            maxLength: 2
+                            type: number
+              examples:
+                Successful Prediction:
+                  value:
+                    success: true
+                    result: positive
+                    confidence:
+                      positive: 0.9
+                      negative: 0.1
+                    quality:
+                      blur: ok
+                      exposure: ok
+                    extracts:
+                      rdt: "Somebase64encodedstring=="
+                      diagnostic: [[180.43, 121.29], [342.42, 301.39]]
+                Failed Prediction (Quality Checks):
+                  value:
+                    success: false
+                    result: failed_checks
+                    confidence:
+                      positive: 0.9
+                      negative: 0.1
+                    quality:
+                      blur: blurred
+                      exposure: ok
+                    extracts:
+                      rdt: "Somebase64encodedstring=="
+                      diagnostic: [[180.43, 121.29], [342.42, 301.39]]
+                Failed Prediction (No Cassette):
+                  value:
+                    success: false
+                    result: no_rdt_found
+                    confidence: null
+                    quality: null
+                    extracts:
+                      rdt: null
+                      diagnostic: null
+                Failed Prediction (No Diagnostic):
+                  value:
+                    success: false
+                    result: no_diagnostic_found
+                    confidence: null
+                    quality:
+                      blur: ok
+                      exposure: ok
+                    extracts:
+                      rdt: "Somebase64encodedstring=="
+                      diagnostic: null
+        "500":
+          description: "Internal error in model"
+        "405":
+          description: "Invalid input - missing or unparseable image"

@@ -66,6 +66,11 @@ yarn test
 
 This will run front and back-end tests sequentially. Run the same command from the client or serverless folder to run tests independently.
 
+
+### Testing the image checks
+At the moment we are using a mocked api endpoint for the Machine Learning interpretation of the results. To test the UI handling of these responses there are some special login ids you can use. An id containing 'blur' will return the blurred image response. and id's containing 'over', 'under' and 'overunder' will return the relevant exposure responses. 'nocasette' and 'nodiagnostic' will return the responses for the ML model failing to detect the correct regions in the image.
+
+
 ### Building a production version
 
 Builds the app for production to the `build` folder.
