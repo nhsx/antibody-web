@@ -8,17 +8,12 @@ import CameraView from "./CameraView";
 import PhotoCaptureView from "./PhotoCaptureView";
 import PhotoPreview from "./PhotoPreview";
 
-import { useModelPreLoader } from "./RDTModelLoader";
-
 interface TestResultPhotoUploaderProps {
   onInterpret: () => void;
 }
 
 const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
   const { onInterpret } = props;
-
-  // Preload model.
-  useModelPreLoader();
 
   // Show/hide the camera
   const [cameraOn, setCameraOn] = useState(false);
