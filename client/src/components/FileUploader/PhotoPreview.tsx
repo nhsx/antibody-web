@@ -40,8 +40,7 @@ export interface PhotoPreviewProps {
   imageAsURI: string;
   imageAsFile: File | null;
   usedCamera: boolean;
-  onInterpret: () => void;
-  onInterpretFailure: () => void;
+  onInterpret: () => void
 }
 
 export default (props: PhotoPreviewProps) => {
@@ -51,8 +50,7 @@ export default (props: PhotoPreviewProps) => {
     imageAsURI,
     usedCamera,
     imageAsFile,
-    onInterpret,
-    onInterpretFailure
+    onInterpret
   } = props;
 
   const {
@@ -135,7 +133,7 @@ export default (props: PhotoPreviewProps) => {
     return () => {
       isCancelled = true;
     };
-  }, [testApi, imageAsFile, imageAsURI, setAppError, testRecord, handleRetry, onInterpretFailure]);
+  }, [testApi, imageAsFile, imageAsURI, setAppError, testRecord, handleRetry]);
 
   // Once the file is uploaded, it's ready to be interpreted.
   const linkPhotoToTestrun = useCallback(async () => {
@@ -211,7 +209,7 @@ export default (props: PhotoPreviewProps) => {
   const time = "15:00";
 
   return (
-    <Row>
+    <Row data-testid="photo-preview">
       <Col width="full">
         <Label size="l"><span data-testid="page-title">{predictionData?.success === false ? "Re-take your photograph" : "Check your photograph"}</span></Label>
         {predictionData?.success === false && (
