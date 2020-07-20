@@ -141,6 +141,7 @@ export default (props: PhotoPreviewProps) => {
 
     try {
       const response = await testApi.interpretResult();
+      console.log('received response', response);
       testDispatch({
         type: "SAVE_TEST",
         testRecord: response.testRecord
@@ -151,7 +152,7 @@ export default (props: PhotoPreviewProps) => {
         onInterpret();
       } else {
         // Set our prediction data in the component so we can parse the failure reasons and display them to the user
-        setPredictionData(response.testRecord.predictionData);
+        setPredictionData(response.testRecord.predictionData || null);
       }
 
       setUploadingState(UPLOADING_STATES.OFF);
@@ -208,12 +209,15 @@ export default (props: PhotoPreviewProps) => {
 
   const time = "15:00";
 
+  console.log(predictionData);
+
   return (
     <Row data-testid="photo-preview">
       <Col width="full">
         <Label size="l"><span data-testid="page-title">{predictionData?.success === false ? "Re-take your photograph" : "Check your photograph"}</span></Label>
         {predictionData?.success === false && (
           <ErrorSummary
+            data-testid="image-error"
             aria-labelledby="error-summary-title"
             role="alert"
             tabIndex={-1}>
@@ -224,7 +228,7 @@ export default (props: PhotoPreviewProps) => {
               <p>
               You need to take another photo of your test kit because it did not pass our quality checks. Your photo:
               </p>
-              <ul>
+              <ul data-testid="image-error-messages">
                 {getErrorMessages().map(msg => (
                   <li>{msg}</li>
                 ))}
@@ -240,6 +244,7 @@ export default (props: PhotoPreviewProps) => {
           {(isUploadBlocking(uploadingState) ||
           (uploadingState === UPLOADING_STATES.DONE && uploadUserRequest)) && (
             <PhotoUploadProgressOverlay
+              data-testid="upload-progress"
               progress={progress}
               interpreting={uploadingState === UPLOADING_STATES.INTERPRETING}/>
           )}
@@ -259,7 +264,7 @@ export default (props: PhotoPreviewProps) => {
       </Col>
       <Col width="full">
         <InsetText>
-          <BodyText> 
+          <BodyText data-testid="picture-timer"> 
             You have <b>{time}</b> minutes left to submit your photograph.
           </BodyText>
         </InsetText> 
@@ -275,6 +280,7 @@ export default (props: PhotoPreviewProps) => {
         </ul>
         {predictionData?.success !== false && (
           <Button
+            data-testid="submit-photo"
             className="nhsuk-u-margin-right-3"
             disabled={isUploadBlocking(uploadingState)}
             onClick={handleAcceptPhoto}

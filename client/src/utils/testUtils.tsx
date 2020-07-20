@@ -16,7 +16,7 @@ export const renderWithReactIntl = component => {
 };
 
 
-const defaultRecord: TestRecord = {
+export const defaultRecord: TestRecord = {
   guid: 'test',
   uploadUrl: 'testup',
   downloadUrl: 'testdown',
@@ -25,9 +25,8 @@ const defaultRecord: TestRecord = {
   testCompleted: false
 };
 
-
 /* Renduces boilerplate in tests by passing partial properties to the stub context to overwrite the defaults */
-export const renderWithStubTestContext = (component: JSX.Element, recordProperties: Partial<TestRecord>): [RenderResult, AppContextType, TestContextType] => {
+export const renderWithStubTestContext = (component: JSX.Element, api = {}, recordProperties: Partial<TestRecord>): [RenderResult, AppContextType, TestContextType] => {
 
   const testContext : TestContextType = {
     state: {
@@ -39,7 +38,8 @@ export const renderWithStubTestContext = (component: JSX.Element, recordProperti
   const [result, appContext] = renderWithStubAppContext(
     <TestContext.Provider value={testContext}>
       {component}
-    </TestContext.Provider>
+    </TestContext.Provider>,
+    api
   );
 
   return [result, appContext, testContext];
@@ -49,9 +49,12 @@ export const renderWithStubAppContext = (component, api = {}): [RenderResult, Ap
   const testApi = {
     generateTest: jest.fn((): any => ({ testRecord: { timerStartedAt: 10 } })),
     uploadImage: jest.fn((): any => { }),
-    interpretResult: jest.fn((): any => { }),
-    updateTest: jest.fn()
+    interpretResult: jest.fn((): any => Promise.resolve()),
+    updateTest: jest.fn(),
+    ...api
   };
+
+
 
   const appContext = {
     state: { locale: "en-gb" },
