@@ -1,15 +1,16 @@
 import React from "react";
-import {  renderWithStubTestContext, defaultRecord } from "utils/testUtils";
+import { renderWithStubTestContext, defaultRecord } from "utils/testUtils";
 import PhotoPreview, { PhotoPreviewProps } from "../PhotoPreview";
-import { fireEvent, screen, waitForElementToBeRemoved } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
 import TestRecord from "abt-lib/models/TestRecord";
 import _ from 'lodash';
+import { act } from "react-dom/test-utils";
 
 describe("<PhotoPreview>", () => {
 
   const testBlob = new Blob();
 
-  const mockProps : PhotoPreviewProps = {
+  const mockProps: PhotoPreviewProps = {
     handleShowCamera: jest.fn(),
     handleImageAsFile: jest.fn(),
     onInterpret: jest.fn(),
@@ -43,37 +44,61 @@ describe("<PhotoPreview>", () => {
   };
 
   const renderPhotoPreview = async ({ props = {}, api = mockApi, testRecord = {} }: { props?: Partial<PhotoPreviewProps>, api?: object, testRecord?: Partial<TestRecord> }) => {
-    const [, context] = await renderWithStubTestContext(
-      <PhotoPreview
-        {...mockProps}
-        {...props}
-      />,
-      api,
-      testRecord
-    );
-    
+    let context;
+
+    await act(async () => {
+      [, context] = await renderWithStubTestContext(
+        <PhotoPreview
+          {...mockProps}
+          {...props}
+        />,
+        api,
+        testRecord
+      );
+    });
+
     return context;
   };
 
+  const submitPhoto = async () => {
+    const submit = await screen.getByTestId("submit-photo");
+    await act(async () => {
+      await fireEvent.click(submit);
+    });
+  };
+
+  const submitPhotoWithErrors = async () => {
+    const submit = await screen.getByTestId("submit-photo");
+    await act(async () => {
+      await fireEvent.click(submit);
+    });
+    await screen.getByTestId("image-error-messages");
+  };
 
   it("Renders the preview component", async () => {
-    await renderPhotoPreview({});
-    const content = await screen.findAllByTestId("photo-preview"); 
+    await act(async () => {
+      await renderPhotoPreview({});
+    });
+
+    const content = await screen.findAllByTestId("photo-preview");
     expect(content.length).toBe(1);
   });
 
   it("displays the image taken back to the user", async () => {
-    await renderPhotoPreview({});
-    const content = await screen.findAllByTestId("user-image"); 
+    await act(async () => {
+      await renderPhotoPreview({});
+    });
+
+    const content = await screen.findAllByTestId("user-image");
     expect(content.length).toBe(1);
     expect(content[0].getAttribute('src')).toEqual('imageuri');
   });
 
   it("displays the time remaining to the user", async () => {
     await renderPhotoPreview({});
-    const content = await screen.findAllByTestId("picture-timer"); 
+    const content = await screen.findAllByTestId("picture-timer");
     expect(content.length).toBe(1);
-    expect (await screen.getByText("15:00"));
+    expect(await screen.getByText("15:00"));
     //@ TODO: Enable this once we have hooked in the second timer
     //expect (await waitForElement(() => screen.getByText("14:59"), { timeout: 2000 }));
   });
@@ -92,10 +117,20 @@ describe("<PhotoPreview>", () => {
       uploadImage: jest.fn(() => Promise.reject())
     };
     await renderPhotoPreview({ api });
-    const submit = await screen.getByTestId("submit-photo");
-    await fireEvent.click(submit);
+    await submitPhoto();
     expect(api.uploadImage).toHaveBeenCalled();
     expect(api.interpretResult).toHaveBeenCalledTimes(0);
+  });
+
+  it("attempts to interpret the image if uploaded successfully", async () => {
+    const api = {
+      interpretResult: jest.fn(),
+      uploadImage: jest.fn(() => Promise.resolve())
+    };
+    await renderPhotoPreview({ api });
+    expect(api.uploadImage).toHaveBeenCalled();
+    await submitPhoto();
+    expect(api.interpretResult).toHaveBeenCalled();
   });
 
   it("attempts to interpret the image if uploaded successfully", async () => {
@@ -108,34 +143,18 @@ describe("<PhotoPreview>", () => {
     expect(api.uploadImage).toHaveBeenCalled();
     await fireEvent.click(submit);
     expect(api.interpretResult).toHaveBeenCalled();
-  }); 
-
-  it("attempts to interpret the image if uploaded successfully", async () => {
-    const api = {
-      interpretResult: jest.fn(),
-      uploadImage: jest.fn(() => Promise.resolve())
-    };
-    await renderPhotoPreview({ api });
-    const submit = await screen.getByTestId("submit-photo");
-    expect(api.uploadImage).toHaveBeenCalled();
-    await fireEvent.click(submit);
-    expect(api.interpretResult).toHaveBeenCalled();
-  }); 
-
+  });
 
   it("calls the onInterpret prop if the image passes validation checks and receives a result", async () => {
     const api = {
-      interpretResult: jest.fn(() => Promise.resolve(defaultInterpretResponse ))
+      interpretResult: jest.fn(() => Promise.resolve(defaultInterpretResponse))
     };
     const props: Partial<PhotoPreviewProps> = {
       onInterpret: jest.fn()
     };
 
-    await renderPhotoPreview({ props,  api });
-    const submit = await screen.getByTestId("submit-photo");
-    await fireEvent.click(submit);
-    expect(await screen.getByTestId("upload-progress"));
-    await waitForElementToBeRemoved(() => screen.getByTestId("upload-progress"));
+    await renderPhotoPreview({ props, api });
+    await submitPhotoWithErrors();
     expect(props.onInterpret).toHaveBeenCalled();
   });
 
@@ -149,10 +168,7 @@ describe("<PhotoPreview>", () => {
       interpretResult: jest.fn(() => Promise.resolve(response))
     };
     await renderPhotoPreview({ api });
-    const submit = await screen.getByTestId("submit-photo");
-    await fireEvent.click(submit);
-    await waitForElementToBeRemoved(() => screen.getByTestId("upload-progress"));
-    await screen.getByTestId("image-error-messages");
+    await submitPhotoWithErrors();
     await screen.getByText(/not in focus/);
   });
 
@@ -165,10 +181,7 @@ describe("<PhotoPreview>", () => {
       interpretResult: jest.fn(() => Promise.resolve(response))
     };
     await renderPhotoPreview({ api });
-    const submit = await screen.getByTestId("submit-photo");
-    await fireEvent.click(submit);
-    await waitForElementToBeRemoved(() => screen.getByTestId("upload-progress"));
-    await screen.getByTestId("image-error-messages");
+    await submitPhotoWithErrors();
     await screen.getByText(/too dark/);
   });
 
@@ -182,10 +195,7 @@ describe("<PhotoPreview>", () => {
       interpretResult: jest.fn(() => Promise.resolve(response))
     };
     await renderPhotoPreview({ api });
-    const submit = await screen.getByTestId("submit-photo");
-    await fireEvent.click(submit);
-    await waitForElementToBeRemoved(() => screen.getByTestId("upload-progress"));
-    await screen.getByTestId("image-error-messages");
+    await submitPhotoWithErrors();
     await screen.getByText(/too bright/);
   });
 
@@ -198,10 +208,7 @@ describe("<PhotoPreview>", () => {
       interpretResult: jest.fn(() => Promise.resolve(response))
     };
     await renderPhotoPreview({ api });
-    const submit = await screen.getByTestId("submit-photo");
-    await fireEvent.click(submit);
-    await waitForElementToBeRemoved(() => screen.getByTestId("upload-progress"));
-    await screen.getByTestId("image-error-messages");
+    await submitPhotoWithErrors();
     await screen.getByText(/inconsistently lit/);
   });
 
@@ -215,10 +222,7 @@ describe("<PhotoPreview>", () => {
       interpretResult: jest.fn(() => Promise.resolve(response))
     };
     await renderPhotoPreview({ api });
-    const submit = await screen.getByTestId("submit-photo");
-    await fireEvent.click(submit);
-    await waitForElementToBeRemoved(() => screen.getByTestId("upload-progress"));
-    await screen.getByTestId("image-error-messages");
+    await submitPhotoWithErrors();
     await screen.getByText(/not show the test/);
   });
 
@@ -231,11 +235,9 @@ describe("<PhotoPreview>", () => {
     const api = {
       interpretResult: jest.fn(() => Promise.resolve(response))
     };
+
     await renderPhotoPreview({ api });
-    const submit = await screen.getByTestId("submit-photo");
-    await fireEvent.click(submit);
-    await waitForElementToBeRemoved(() => screen.getByTestId("upload-progress"));
-    await screen.getByTestId("image-error-messages");
+    await submitPhotoWithErrors();
     await screen.getByText(/test area obscured/);
   });
 });
