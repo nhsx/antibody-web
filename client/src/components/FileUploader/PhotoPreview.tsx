@@ -115,7 +115,6 @@ export default (props: PhotoPreviewProps) => {
           
         }
       } catch (error) {
-        console.log("uploading error!");
         if (isCancelled) {
           return;
         }
@@ -141,7 +140,6 @@ export default (props: PhotoPreviewProps) => {
 
     try {
       const response = await testApi.interpretResult();
-      console.log('received response', response);
       testDispatch({
         type: "SAVE_TEST",
         testRecord: response.testRecord
@@ -215,7 +213,6 @@ export default (props: PhotoPreviewProps) => {
 
   const time = "15:00";
 
-  console.log(predictionData);
 
   return (
     <Row data-testid="photo-preview">

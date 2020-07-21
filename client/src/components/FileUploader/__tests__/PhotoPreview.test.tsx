@@ -98,6 +98,17 @@ describe("<PhotoPreview>", () => {
     expect(api.interpretResult).toHaveBeenCalledTimes(0);
   });
 
+  it("attempts to interpret the image if uploaded successfully", async () => {
+    const api = {
+      interpretResult: jest.fn(),
+      uploadImage: jest.fn(() => Promise.resolve())
+    };
+    await renderPhotoPreview({ api });
+    const submit = await screen.getByTestId("submit-photo");
+    expect(api.uploadImage).toHaveBeenCalled();
+    await fireEvent.click(submit);
+    expect(api.interpretResult).toHaveBeenCalled();
+  }); 
 
   it("attempts to interpret the image if uploaded successfully", async () => {
     const api = {
@@ -109,10 +120,10 @@ describe("<PhotoPreview>", () => {
     expect(api.uploadImage).toHaveBeenCalled();
     await fireEvent.click(submit);
     expect(api.interpretResult).toHaveBeenCalled();
-  });
+  }); 
 
 
-  it("notifies the user if they submit a blurred photo", async () => {
+  it("calls the onInterpret prop if the image passes validation checks and receives a result", async () => {
     const api = {
       interpretResult: jest.fn(() => Promise.resolve(defaultInterpretResponse ))
     };
@@ -128,9 +139,9 @@ describe("<PhotoPreview>", () => {
     expect(props.onInterpret).toHaveBeenCalled();
   });
 
-  it("notifies the user if they submit an underexposed photo", async () => {
+
+  it("notifies the user if they submit a blurred photo", async () => {
     const response = _.cloneDeep(defaultInterpretResponse);
-    response.testRecord.result = "failed_checks";
     response.testRecord.testCompleted = false;
     response.testRecord.predictionData.success = false;
     response.testRecord.predictionData.quality.blur = "blurred";
@@ -145,10 +156,25 @@ describe("<PhotoPreview>", () => {
     await screen.getByText(/not in focus/);
   });
 
+  it("notifies the user if they submit an underexposed photo", async () => {
+    const response = _.cloneDeep(defaultInterpretResponse);
+    response.testRecord.testCompleted = false;
+    response.testRecord.predictionData.success = false;
+    response.testRecord.predictionData.quality.exposure = "underexposed";
+    const api = {
+      interpretResult: jest.fn(() => Promise.resolve(response))
+    };
+    await renderPhotoPreview({ api });
+    const submit = await screen.getByTestId("submit-photo");
+    await fireEvent.click(submit);
+    await waitForElementToBeRemoved(() => screen.getByTestId("upload-progress"));
+    await screen.getByTestId("image-error-messages");
+    await screen.getByText(/too dark/);
+  });
+
 
   it("notifies the user if they submit an overexposed photo", async () => {
     const response = _.cloneDeep(defaultInterpretResponse);
-    response.testRecord.result = "failed_checks";
     response.testRecord.testCompleted = false;
     response.testRecord.predictionData.success = false;
     response.testRecord.predictionData.quality.exposure = "overexposed";
@@ -165,7 +191,6 @@ describe("<PhotoPreview>", () => {
 
   it("notifies the user if they submit an over and underexposed photo", async () => {
     const response = _.cloneDeep(defaultInterpretResponse);
-    response.testRecord.result = "failed_checks";
     response.testRecord.testCompleted = false;
     response.testRecord.predictionData.success = false;
     response.testRecord.predictionData.quality.exposure = "over_and_underexposed";
@@ -183,10 +208,9 @@ describe("<PhotoPreview>", () => {
 
   it("notifies the user if no rdt device can be found", async () => {
     const response = _.cloneDeep(defaultInterpretResponse);
-    response.testRecord.result = "no_rdt_found";
     response.testRecord.testCompleted = false;
+    response.testRecord.predictionData.result = "rdt_not_found";
     response.testRecord.predictionData.success = false;
-    response.testRecord.quality = {};
     const api = {
       interpretResult: jest.fn(() => Promise.resolve(response))
     };
@@ -195,31 +219,23 @@ describe("<PhotoPreview>", () => {
     await fireEvent.click(submit);
     await waitForElementToBeRemoved(() => screen.getByTestId("upload-progress"));
     await screen.getByTestId("image-error-messages");
-    await screen.getByText(/no test device/);
+    await screen.getByText(/not show the test/);
   });
 
+  it("notifies the user if no diagnostic square can be found", async () => {
+    const response = _.cloneDeep(defaultInterpretResponse);
+    response.testRecord.testCompleted = false;
+    response.testRecord.predictionData.result = "diagnostic_not_found";
+    response.testRecord.predictionData.success = false;
 
-  
-  // it("notifies the user if they submit an overexposed photo", async () => {
-  //   await renderPhotoPreview({});
-  //   const content = await screen.findAllByTestId("user-image"); 
-  //   console.log(content);
-  //   expect(content.length).toBe(1);
-  // });
-
-
-  // it("notifies the user if they submit an over + underexposed photo", async () => {
-  //   await renderPhotoPreview({});
-  //   const content = await screen.findAllByTestId("user-image"); 
-  //   console.log(content);
-  //   expect(content.length).toBe(1);
-  // });
-
-
-  // it("notifies the user if they submit a photo with no cassette visible photo", async () => {
-  //   await renderPhotoPreview({});
-  //   const content = await screen.findAllByTestId("user-image"); 
-  //   console.log(content);
-  //   expect(content.length).toBe(1);
-  // });
+    const api = {
+      interpretResult: jest.fn(() => Promise.resolve(response))
+    };
+    await renderPhotoPreview({ api });
+    const submit = await screen.getByTestId("submit-photo");
+    await fireEvent.click(submit);
+    await waitForElementToBeRemoved(() => screen.getByTestId("upload-progress"));
+    await screen.getByTestId("image-error-messages");
+    await screen.getByText(/test area obscured/);
+  });
 });
