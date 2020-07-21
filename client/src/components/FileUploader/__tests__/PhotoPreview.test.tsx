@@ -1,7 +1,7 @@
 import React from "react";
 import {  renderWithStubTestContext, defaultRecord } from "utils/testUtils";
 import PhotoPreview, { PhotoPreviewProps } from "../PhotoPreview";
-import { fireEvent, screen, waitForElement, waitForElementToBeRemoved } from "@testing-library/react";
+import { fireEvent, screen, waitForElementToBeRemoved } from "@testing-library/react";
 import TestRecord from "abt-lib/models/TestRecord";
 import _ from 'lodash';
 
@@ -128,32 +128,78 @@ describe("<PhotoPreview>", () => {
     expect(props.onInterpret).toHaveBeenCalled();
   });
 
-  it("notifies the user if they submit a blurred photo", async () => {
-    const blurredResponse = _.clone(defaultInterpretResponse);
-    blurredResponse.testRecord.result = "failed_checks";
-    blurredResponse.testRecord.testCompleted = false;
-    blurredResponse.testRecord.predictionData.success = false;
-    blurredResponse.testRecord.predictionData.quality.blur = "blurred";
+  it("notifies the user if they submit an underexposed photo", async () => {
+    const response = _.cloneDeep(defaultInterpretResponse);
+    response.testRecord.result = "failed_checks";
+    response.testRecord.testCompleted = false;
+    response.testRecord.predictionData.success = false;
+    response.testRecord.predictionData.quality.blur = "blurred";
     const api = {
-      interpretResult: jest.fn(() => Promise.resolve(blurredResponse))
+      interpretResult: jest.fn(() => Promise.resolve(response))
     };
     await renderPhotoPreview({ api });
     const submit = await screen.getByTestId("submit-photo");
     await fireEvent.click(submit);
     await waitForElementToBeRemoved(() => screen.getByTestId("upload-progress"));
-    await waitForElement(() => {
-      return screen.getByTestId("image-error");
-    });
+    await screen.getByTestId("image-error-messages");
+    await screen.getByText(/not in focus/);
   });
 
-  // it("notifies the user if they submit an underexposed photo", async () => {
-  //   await renderPhotoPreview({});
-  //   const content = await screen.findAllByTestId("user-image"); 
-  //   console.log(content);
-  //   expect(content.length).toBe(1);
-  // });
+
+  it("notifies the user if they submit an overexposed photo", async () => {
+    const response = _.cloneDeep(defaultInterpretResponse);
+    response.testRecord.result = "failed_checks";
+    response.testRecord.testCompleted = false;
+    response.testRecord.predictionData.success = false;
+    response.testRecord.predictionData.quality.exposure = "overexposed";
+    const api = {
+      interpretResult: jest.fn(() => Promise.resolve(response))
+    };
+    await renderPhotoPreview({ api });
+    const submit = await screen.getByTestId("submit-photo");
+    await fireEvent.click(submit);
+    await waitForElementToBeRemoved(() => screen.getByTestId("upload-progress"));
+    await screen.getByTestId("image-error-messages");
+    await screen.getByText(/too bright/);
+  });
+
+  it("notifies the user if they submit an over and underexposed photo", async () => {
+    const response = _.cloneDeep(defaultInterpretResponse);
+    response.testRecord.result = "failed_checks";
+    response.testRecord.testCompleted = false;
+    response.testRecord.predictionData.success = false;
+    response.testRecord.predictionData.quality.exposure = "over_and_underexposed";
+    const api = {
+      interpretResult: jest.fn(() => Promise.resolve(response))
+    };
+    await renderPhotoPreview({ api });
+    const submit = await screen.getByTestId("submit-photo");
+    await fireEvent.click(submit);
+    await waitForElementToBeRemoved(() => screen.getByTestId("upload-progress"));
+    await screen.getByTestId("image-error-messages");
+    await screen.getByText(/inconsistently lit/);
+  });
 
 
+  it("notifies the user if no rdt device can be found", async () => {
+    const response = _.cloneDeep(defaultInterpretResponse);
+    response.testRecord.result = "no_rdt_found";
+    response.testRecord.testCompleted = false;
+    response.testRecord.predictionData.success = false;
+    response.testRecord.quality = {};
+    const api = {
+      interpretResult: jest.fn(() => Promise.resolve(response))
+    };
+    await renderPhotoPreview({ api });
+    const submit = await screen.getByTestId("submit-photo");
+    await fireEvent.click(submit);
+    await waitForElementToBeRemoved(() => screen.getByTestId("upload-progress"));
+    await screen.getByTestId("image-error-messages");
+    await screen.getByText(/no test device/);
+  });
+
+
+  
   // it("notifies the user if they submit an overexposed photo", async () => {
   //   await renderPhotoPreview({});
   //   const content = await screen.findAllByTestId("user-image"); 

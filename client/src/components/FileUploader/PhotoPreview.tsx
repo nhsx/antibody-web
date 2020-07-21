@@ -168,17 +168,23 @@ export default (props: PhotoPreviewProps) => {
 
   const getErrorMessages = useCallback(() : string[] => {
     const msgs: string[] = [];
-    if (predictionData?.quality.blur === 'blurred') {
+    if (predictionData?.quality?.blur === 'blurred') {
       msgs.push("was not in focus (clear enough)");
     }
-    if (predictionData?.quality.exposure === 'overexposed') {
+    if (predictionData?.quality?.exposure === 'overexposed') {
       msgs.push("was overexposed (too bright)");
     }
-    if (predictionData?.quality.exposure === 'underexposed') {
+    if (predictionData?.quality?.exposure === 'underexposed') {
       msgs.push("was underexposed (too dark)");
     }
-    if (predictionData?.quality.exposure === 'over_and_underexposed') {
+    if (predictionData?.quality?.exposure === 'over_and_underexposed') {
       msgs.push("was inconsistently lit");
+    }
+    if (predictionData?.result === 'rdt_not_found') {
+      msgs.push("does not show the test device clearly");
+    }
+    if (predictionData?.result === 'diagnostic_not_found') {
+      msgs.push("may have the test area obscured, or your device may not be the right way up");
     }
 
     return msgs;

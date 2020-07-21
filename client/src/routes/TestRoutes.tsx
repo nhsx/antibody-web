@@ -1,68 +1,59 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 import TestContainer from "components/TestContainer/TestContainer";
-import TestKitID from "components/TestRun/ContentComponent/TestKitID";
-import TestComplete from "components/TestRun/ContentComponent/TestComplete";
-import StartPage from "components/TestRun/ContentComponent/StartPage";
-import GetReady from "components/TestRun/ContentComponent/GetReady";
-import CheckYourKit from "components/TestRun/ContentComponent/CheckYourKit";
-// import WashAndDryHands from "components/TestRun/ContentComponent/WashAndDryHands";
-// import SetUpTest from "components/TestRun/ContentComponent/SetUpTest";
-// import SelectAFinger from "components/TestRun/ContentComponent/SelectAFinger";
-import PrickFinger from "components/TestRun/ContentComponent/PrickFinger";
-import Wait from "components/TestRun/ContentComponent/Wait";
-import ScanKit from "components/TestRun/ContentComponent/ScanKit";
-import Results from "components/TestRun/ContentComponent/Results";
 import { RouteProps } from 'react-router-dom';
-import Caption from "components/ui/Caption";
-import WhatIsWrong from "components/TestRun/ContentComponent/WhatIsWrong";
-import ReportKit from "components/TestRun/ContentComponent/ReportKit";
-import ReorderKit from "components/TestRun/ContentComponent/ReorderKit";
-import CollectBloodSample from "components/TestRun/ContentComponent/CollectBloodSample";
-import CoverCut from "components/TestRun/ContentComponent/CoverCut";
-import AddBloodSample from "components/TestRun/ContentComponent/AddBloodSample";
-import TestBloodSample from "components/TestRun/ContentComponent/TestBloodSample";
-import WhatDoYouSee from "components/TestRun/ContentComponent/WhatDoYouSee";
 import { getAppConfig } from 'utils/AppConfig';
 import { AppConfig } from "utils/ConfigTypes";
+
+import AddBloodSample from "components/TestRun/ContentComponent/AddBloodSample";
+import CheckYourKit from "components/TestRun/ContentComponent/CheckYourKit";
+import CollectBloodSample from "components/TestRun/ContentComponent/CollectBloodSample";
+import GetReady from "components/TestRun/ContentComponent/GetReady";
+import PrickFinger from "components/TestRun/ContentComponent/PrickFinger";
+import ScanKit from "components/TestRun/ContentComponent/ScanKit";
+import StartPage from "components/TestRun/ContentComponent/StartPage";
+import TestBloodSample from "components/TestRun/ContentComponent/TestBloodSample";
+import TestComplete from "components/TestRun/ContentComponent/TestComplete";
+import TestKitID from "components/TestRun/ContentComponent/TestKitID";
+import Wait from "components/TestRun/ContentComponent/Wait";
+
 export interface TestRouteProps extends RouteProps {
   component: any;
-  caption?: React.ReactNode;
   step?: string | string[] | undefined;
   next?: string;
   canPreview?: boolean;
 }
 
-
 /* Set our page title using portals, so we don't have to pass huge amounts of callbacks down the tree */
 const TestRoute = (props: TestRouteProps) => {
-  const { component: Component, caption, ...other } = props;
+  const { component: Component, ...other } = props;
   return (<>
-    {caption && <Caption>{caption}</Caption>}
     <Component {...other} />
   </>
   );
 };
 
 const testRoutes = ({ config }: { config: AppConfig }) => ([
-  // {
-  //   component: WashAndDryHands,
-  //   path: "washAndDryHands",
-  //   next: "setUpTest",
-  //   canPreview: true
-  // },
-  // {
-  //   component: SetUpTest,
-  //   path: "setUpTest",
-  //   next: "selectAFinger",
-  //   canPreview: true
-  // },
-  // {
-  //   component: SelectAFinger,
-  //   path: "selectAFinger",
-  //   next: "prickFinger",
-  //   canPreview: true
-  // },
+  {
+    component: StartPage,
+    path: "start",
+    next: "testKitID"
+  },
+  {
+    component: TestKitID,
+    path: "testKitId",
+    next: "checkYourKit"
+  },
+  {
+    component: CheckYourKit,
+    path: "checkYourKit",
+    next: "getReady",
+  },
+  {
+    component: GetReady,
+    path: "getReady",
+    next: "prickFinger",
+  },
   {
     component: PrickFinger,
     path: "prickFinger",
@@ -72,12 +63,6 @@ const testRoutes = ({ config }: { config: AppConfig }) => ([
   {
     component: CollectBloodSample,
     path: "collectBloodSample",
-    next: "addBloodSample",
-    canPreview: true
-  },
-  {
-    component: CoverCut,
-    path: "coverCut",
     next: "addBloodSample",
     canPreview: true
   },
@@ -101,65 +86,13 @@ const testRoutes = ({ config }: { config: AppConfig }) => ([
   {
     component: ScanKit,
     path: "scanKit",
-    next: "whatDoYouSee"
-  },
-  {
-    component: WhatDoYouSee,
-    path: "whatDoYouSee",
-    next: "results"
-  }
-]);
-
-const supportRoutes = [
-  // Routes without a step counter
-  {
-    component: StartPage,
-    path: "start",
-    next: "testKitID"
-  },
-  {
-    component: TestKitID,
-    path: "testKitId",
-    next: "checkYourKit"
-  },
-  {
-    component: CheckYourKit,
-    path: "checkYourKit",
-    next: "getReady",
-  },
-  {
-    component: GetReady,
-    path: "getReady",
-    next: "prickFinger",
-  },
-
-  {
-    component: WhatIsWrong,
-    path: "whatIsWrong"
-  },
-  {
-    component: ReportKit,
-    type: "Missing",
-    path: "missing"
-  },
-  {
-    component: ReportKit,
-    type: "Broken",
-    path: "damaged"
-  },
-  {
-    component: ReorderKit,
-    path: "reorder"
-  },
-  {
-    component: Results,
-    path: "results"
+    next: "testComplete"
   },
   {
     component: TestComplete,
     path: "testComplete"
   }
-];
+]);
 
 const previewRoutes = () => (
   testRoutes({ config: getAppConfig() }).filter(({ canPreview }) => canPreview)
@@ -172,13 +105,6 @@ export const TestRoutes = () => (
         path={`/test/${path}`}
         step={path}
         next={`/test/${next}`}
-        key={path}
-        {...route} />
-    ))}
-    {supportRoutes.map(({ path, ...route }, index) => (
-      <TestRoute
-        path={`/test/${path}`}
-        step={path}
         key={path}
         {...route} />
     ))}

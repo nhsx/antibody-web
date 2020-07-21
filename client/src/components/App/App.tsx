@@ -1,7 +1,8 @@
+import '../../style/sassStyle';
+
 import React, { useReducer, useCallback } from "react";
-import { Helmet, HelmetProvider } from "react-helmet-async";
+import { HelmetProvider } from "react-helmet-async";
 import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
-import PageNotFound from "components/PageNotFound/PageNotFound";
 import { IntlProvider } from "react-intl";
 import AppContext from "./context";
 import { appReducer, initialState } from "./reducer";
@@ -13,7 +14,7 @@ import LoginProvider from "../LoginProvider/LoginProvider";
 import Layout from "components/ui/Layout";
 import Home from "components/Home/Home";
 import TestRoutes from "routes/TestRoutes";
-import AppError from "errors/AppError";
+import AppError from "errors/AppError"; 
 
 const App = () => {
   const [appState, dispatch] = useReducer(
@@ -21,7 +22,7 @@ const App = () => {
     initialState
   );
 
-  const setAppError = useCallback((error: AppError | null)  => {
+  const setAppError = useCallback((error: AppError | null) => {
     dispatch({
       type: "SET_ERROR",
       error
@@ -57,12 +58,6 @@ const App = () => {
                   <LoginProvider>
                     <TestRoutes />
                   </LoginProvider>
-                  <Route key="pagenotfound">
-                    <>
-                      <Helmet title={`Open RDT: Page not found`} />
-                      <PageNotFound />
-                    </>
-                  </Route>
                 </Switch>
               </Layout>
             </Router>
