@@ -39,6 +39,7 @@ export interface PhotoPreviewProps {
   handleImageAsFile: (image: File) => void;
   imageAsURI: string;
   imageAsFile: File | null;
+  
   usedCamera: boolean;
   onInterpret: () => void
 }
@@ -84,11 +85,13 @@ export default (props: PhotoPreviewProps) => {
 
   // Initiate the upload on render.
   useEffect(() => {
+
     if (!imageAsFile && !imageAsURI) {
       return;
     }
     let isCancelled = false;
     const uploadAsync = async function () {
+
       try {
         if (testRecord && (imageAsFile || imageAsURI)) {
 
@@ -232,8 +235,8 @@ export default (props: PhotoPreviewProps) => {
               You need to take another photo of your test kit because it did not pass our quality checks. Your photo:
               </p>
               <ul data-testid="image-error-messages">
-                {getErrorMessages().map(msg => (
-                  <li>{msg}</li>
+                {getErrorMessages().map((msg, i) => (
+                  <li key={i}>{msg}</li>
                 ))}
               </ul>
             </ErrorSummary.Body>

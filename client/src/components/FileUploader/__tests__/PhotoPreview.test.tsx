@@ -76,19 +76,13 @@ describe("<PhotoPreview>", () => {
   };
 
   it("Renders the preview component", async () => {
-    await act(async () => {
-      await renderPhotoPreview({});
-    });
-
+    await renderPhotoPreview({});
     const content = await screen.findAllByTestId("photo-preview");
     expect(content.length).toBe(1);
   });
 
   it("displays the image taken back to the user", async () => {
-    await act(async () => {
-      await renderPhotoPreview({});
-    });
-
+    await renderPhotoPreview({});
     const content = await screen.findAllByTestId("user-image");
     expect(content.length).toBe(1);
     expect(content[0].getAttribute('src')).toEqual('imageuri');
@@ -139,9 +133,8 @@ describe("<PhotoPreview>", () => {
       uploadImage: jest.fn(() => Promise.resolve())
     };
     await renderPhotoPreview({ api });
-    const submit = await screen.getByTestId("submit-photo");
     expect(api.uploadImage).toHaveBeenCalled();
-    await fireEvent.click(submit);
+    await submitPhoto();
     expect(api.interpretResult).toHaveBeenCalled();
   });
 
@@ -152,9 +145,8 @@ describe("<PhotoPreview>", () => {
     const props: Partial<PhotoPreviewProps> = {
       onInterpret: jest.fn()
     };
-
     await renderPhotoPreview({ props, api });
-    await submitPhotoWithErrors();
+    await submitPhoto();
     expect(props.onInterpret).toHaveBeenCalled();
   });
 
