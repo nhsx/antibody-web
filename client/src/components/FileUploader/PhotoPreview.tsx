@@ -34,6 +34,11 @@ export function isUploadBlocking(state: UPLOADING_STATES) {
   );
 }
 
+type ErrorMessage = {
+  message: string,
+  key: string
+};
+
 export interface PhotoPreviewProps {
   handleShowCamera: () => void;
   handleImageAsFile: (image: File) => void;
@@ -167,25 +172,26 @@ export default (props: PhotoPreviewProps) => {
     
   }, [testApi, testDispatch, onInterpret, setAppError]);
 
-  const getErrorMessages = useCallback(() : string[] => {
-    const msgs: string[] = [];
+  const getErrorMessages = useCallback(() : ErrorMessage[] => {
+    
+    const msgs: ErrorMessage[] = [];
     if (predictionData?.quality?.blur === 'blurred') {
-      msgs.push("was not in focus (clear enough)");
+      msgs.push({ message: "was not in focus (clear enough)", key: "blurred" });
     }
     if (predictionData?.quality?.exposure === 'overexposed') {
-      msgs.push("was overexposed (too bright)");
+      msgs.push({ message: "was overexposed (too bright)", key: "overexposed" });
     }
     if (predictionData?.quality?.exposure === 'underexposed') {
-      msgs.push("was underexposed (too dark)");
+      msgs.push({ message: "was underexposed (too dark)", key: "underexposed" });
     }
     if (predictionData?.quality?.exposure === 'over_and_underexposed') {
-      msgs.push("was inconsistently lit");
+      msgs.push({ message: "was inconsistently lit", key: "over_and_underexposed" });
     }
     if (predictionData?.result === 'rdt_not_found') {
-      msgs.push("does not show the test device clearly");
+      msgs.push({ message: "does not show the test device clearly", key: "rdt_not_found" });
     }
     if (predictionData?.result === 'diagnostic_not_found') {
-      msgs.push("may have the test area obscured, or your device may not be the right way up");
+      msgs.push({ message: "may have the test area obscured, or your device may not be the right way up", key: "diagnostic_not_found" });
     }
 
     return msgs;
@@ -216,7 +222,6 @@ export default (props: PhotoPreviewProps) => {
 
   const time = "15:00";
 
-
   return (
     <Row data-testid="photo-preview">
       <Col width="full">
@@ -235,8 +240,10 @@ export default (props: PhotoPreviewProps) => {
               You need to take another photo of your test kit because it did not pass our quality checks. Your photo:
               </p>
               <ul data-testid="image-error-messages">
-                {getErrorMessages().map((msg, i) => (
-                  <li key={i}>{msg}</li>
+                {getErrorMessages().map(({ message, key }) => (
+                  <li
+                    data-testid={key}
+                    key={key}>{message}</li>
                 ))}
               </ul>
             </ErrorSummary.Body>

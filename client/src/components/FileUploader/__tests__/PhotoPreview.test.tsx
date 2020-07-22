@@ -147,7 +147,9 @@ describe("<PhotoPreview>", () => {
     };
     await renderPhotoPreview({ props, api });
     await submitPhoto();
+
     expect(props.onInterpret).toHaveBeenCalled();
+
   });
 
 
@@ -161,7 +163,7 @@ describe("<PhotoPreview>", () => {
     };
     await renderPhotoPreview({ api });
     await submitPhotoWithErrors();
-    await screen.getByText(/not in focus/);
+    await screen.getByTestId("blurred");
   });
 
   it("notifies the user if they submit an underexposed photo", async () => {
@@ -174,9 +176,8 @@ describe("<PhotoPreview>", () => {
     };
     await renderPhotoPreview({ api });
     await submitPhotoWithErrors();
-    await screen.getByText(/too dark/);
+    await screen.getByTestId("underexposed");
   });
-
 
   it("notifies the user if they submit an overexposed photo", async () => {
     const response = _.cloneDeep(defaultInterpretResponse);
@@ -188,7 +189,7 @@ describe("<PhotoPreview>", () => {
     };
     await renderPhotoPreview({ api });
     await submitPhotoWithErrors();
-    await screen.getByText(/too bright/);
+    await screen.getByTestId("overexposed");
   });
 
   it("notifies the user if they submit an over and underexposed photo", async () => {
@@ -201,7 +202,7 @@ describe("<PhotoPreview>", () => {
     };
     await renderPhotoPreview({ api });
     await submitPhotoWithErrors();
-    await screen.getByText(/inconsistently lit/);
+    await screen.getByTestId("over_and_underexposed");
   });
 
 
@@ -215,7 +216,7 @@ describe("<PhotoPreview>", () => {
     };
     await renderPhotoPreview({ api });
     await submitPhotoWithErrors();
-    await screen.getByText(/not show the test/);
+    await screen.getByTestId("rdt_not_found");
   });
 
   it("notifies the user if no diagnostic square can be found", async () => {
@@ -230,6 +231,6 @@ describe("<PhotoPreview>", () => {
 
     await renderPhotoPreview({ api });
     await submitPhotoWithErrors();
-    await screen.getByText(/test area obscured/);
+    await screen.getByTestId("diagnostic_not_found");
   });
 });
