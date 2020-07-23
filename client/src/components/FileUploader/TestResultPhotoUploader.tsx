@@ -60,10 +60,6 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
     setCameraHasError(true);
   }, []);
 
-  const handleInterpretFailure = useCallback(() => {
-    setImageAsURI('');
-    setImageAsFile(null);
-  }, []);
 
   if (imageAsURI) {
     return (
@@ -74,7 +70,6 @@ const TestResultPhotoUploader = (props: TestResultPhotoUploaderProps) => {
         imageAsURI={imageAsURI}
         imageAsFile={imageAsFile}
         onInterpret={onInterpret}
-        onInterpretFailure={handleInterpretFailure}
       />
     );
   } else if (cameraHasError) {

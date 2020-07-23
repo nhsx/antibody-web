@@ -34,14 +34,19 @@ export function isUploadBlocking(state: UPLOADING_STATES) {
   );
 }
 
+type ErrorMessage = {
+  message: string,
+  key: string
+};
+
 export interface PhotoPreviewProps {
   handleShowCamera: () => void;
   handleImageAsFile: (image: File) => void;
   imageAsURI: string;
   imageAsFile: File | null;
+  
   usedCamera: boolean;
-  onInterpret: () => void;
-  onInterpretFailure: () => void;
+  onInterpret: () => void
 }
 
 export default (props: PhotoPreviewProps) => {
@@ -51,8 +56,7 @@ export default (props: PhotoPreviewProps) => {
     imageAsURI,
     usedCamera,
     imageAsFile,
-    onInterpret,
-    onInterpretFailure
+    onInterpret
   } = props;
 
   const {
@@ -86,11 +90,13 @@ export default (props: PhotoPreviewProps) => {
 
   // Initiate the upload on render.
   useEffect(() => {
+
     if (!imageAsFile && !imageAsURI) {
       return;
     }
     let isCancelled = false;
     const uploadAsync = async function () {
+
       try {
         if (testRecord && (imageAsFile || imageAsURI)) {
 
@@ -117,7 +123,6 @@ export default (props: PhotoPreviewProps) => {
           
         }
       } catch (error) {
-        console.log("uploading error!");
         if (isCancelled) {
           return;
         }
@@ -135,7 +140,7 @@ export default (props: PhotoPreviewProps) => {
     return () => {
       isCancelled = true;
     };
-  }, [testApi, imageAsFile, imageAsURI, setAppError, testRecord, handleRetry, onInterpretFailure]);
+  }, [testApi, imageAsFile, imageAsURI, setAppError, testRecord, handleRetry]);
 
   // Once the file is uploaded, it's ready to be interpreted.
   const linkPhotoToTestrun = useCallback(async () => {
@@ -153,7 +158,7 @@ export default (props: PhotoPreviewProps) => {
         onInterpret();
       } else {
         // Set our prediction data in the component so we can parse the failure reasons and display them to the user
-        setPredictionData(response.testRecord.predictionData);
+        setPredictionData(response.testRecord.predictionData || null);
       }
 
       setUploadingState(UPLOADING_STATES.OFF);
@@ -167,25 +172,26 @@ export default (props: PhotoPreviewProps) => {
     
   }, [testApi, testDispatch, onInterpret, setAppError]);
 
-  const getErrorMessages = useCallback(() : string[] => {
-    const msgs: string[] = [];
+  const getErrorMessages = useCallback(() : ErrorMessage[] => {
+    
+    const msgs: ErrorMessage[] = [];
     if (predictionData?.quality?.blur === 'blurred') {
-      msgs.push("was not in focus (clear enough)");
+      msgs.push({ message: "was not in focus (clear enough)", key: "blurred" });
     }
     if (predictionData?.quality?.exposure === 'overexposed') {
-      msgs.push("was overexposed (too bright)");
+      msgs.push({ message: "was overexposed (too bright)", key: "overexposed" });
     }
     if (predictionData?.quality?.exposure === 'underexposed') {
-      msgs.push("was underexposed (too dark)");
+      msgs.push({ message: "was underexposed (too dark)", key: "underexposed" });
     }
     if (predictionData?.quality?.exposure === 'over_and_underexposed') {
-      msgs.push("was inconsistently lit");
+      msgs.push({ message: "was inconsistently lit", key: "over_and_underexposed" });
     }
     if (predictionData?.result === 'rdt_not_found') {
-      msgs.push("does not show the test device clearly");
+      msgs.push({ message: "does not show the test device clearly", key: "rdt_not_found" });
     }
     if (predictionData?.result === 'diagnostic_not_found') {
-      msgs.push("may have the test area obscured, or your device may not be the right way up");
+      msgs.push({ message: "may have the test area obscured, or your device may not be the right way up", key: "diagnostic_not_found" });
     }
 
     return msgs;
@@ -217,11 +223,12 @@ export default (props: PhotoPreviewProps) => {
   const time = "15:00";
 
   return (
-    <Row>
+    <Row data-testid="photo-preview">
       <Col width="full">
         <Label size="l"><span data-testid="page-title">{predictionData?.success === false ? "Re-take your photograph" : "Check your photograph"}</span></Label>
         {predictionData?.success === false && (
           <ErrorSummary
+            data-testid="image-error"
             aria-labelledby="error-summary-title"
             role="alert"
             tabIndex={-1}>
@@ -232,9 +239,11 @@ export default (props: PhotoPreviewProps) => {
               <p>
               You need to take another photo of your test kit because it did not pass our quality checks. Your photo:
               </p>
-              <ul>
-                {getErrorMessages().map(msg => (
-                  <li>{msg}</li>
+              <ul data-testid="image-error-messages">
+                {getErrorMessages().map(({ message, key }) => (
+                  <li
+                    data-testid={key}
+                    key={key}>{message}</li>
                 ))}
               </ul>
             </ErrorSummary.Body>
@@ -248,6 +257,7 @@ export default (props: PhotoPreviewProps) => {
           {(isUploadBlocking(uploadingState) ||
           (uploadingState === UPLOADING_STATES.DONE && uploadUserRequest)) && (
             <PhotoUploadProgressOverlay
+              data-testid="upload-progress"
               progress={progress}
               interpreting={uploadingState === UPLOADING_STATES.INTERPRETING}/>
           )}
@@ -267,7 +277,7 @@ export default (props: PhotoPreviewProps) => {
       </Col>
       <Col width="full">
         <InsetText>
-          <BodyText> 
+          <BodyText data-testid="picture-timer"> 
             You have <b>{time}</b> minutes left to submit your photograph.
           </BodyText>
         </InsetText> 
@@ -283,6 +293,7 @@ export default (props: PhotoPreviewProps) => {
         </ul>
         {predictionData?.success !== false && (
           <Button
+            data-testid="submit-photo"
             className="nhsuk-u-margin-right-3"
             disabled={isUploadBlocking(uploadingState)}
             onClick={handleAcceptPhoto}

@@ -20,6 +20,7 @@ export default (props: RDTImagePreviewProps) => {
   return (
     <div>
       <img
+        data-testid="user-image"
         style={styles.image}
         src={dataURI}
         alt="preview" />

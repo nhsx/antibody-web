@@ -5,7 +5,8 @@ import { IntlProvider } from 'react-intl';
 import messages from 'i18n/index';
 import { flatten } from 'flat';
 import AppContext, { AppContext as AppContextType } from 'components/App/context';
-
+import TestContext, { TestContext as TestContextType } from 'components/TestContainer/context';
+import TestRecord from 'abt-lib/models/TestRecord';
 export const renderWithReactIntl = component => {
   return render(<IntlProvider
     locale="en-gb"
@@ -14,13 +15,46 @@ export const renderWithReactIntl = component => {
   </IntlProvider>);
 };
 
+
+export const defaultRecord: TestRecord = {
+  guid: 'test',
+  uploadUrl: 'testup',
+  downloadUrl: 'testdown',
+  timerStartedAt: new Date('2020-07-01T00:00:00').getTime(),
+  step: "checkYourKit",
+  testCompleted: false
+};
+
+/* Renduces boilerplate in tests by passing partial properties to the stub context to overwrite the defaults */
+export const renderWithStubTestContext = (component: JSX.Element, api = {}, recordProperties: Partial<TestRecord>): [RenderResult, AppContextType, TestContextType] => {
+
+  const testContext : TestContextType = {
+    state: {
+      testRecord: { ...defaultRecord, ...recordProperties }
+    },
+    dispatch: () => { }
+  };
+
+  const [result, appContext] = renderWithStubAppContext(
+    <TestContext.Provider value={testContext}>
+      {component}
+    </TestContext.Provider>,
+    api
+  );
+
+  return [result, appContext, testContext];
+};
+
 export const renderWithStubAppContext = (component, api = {}): [RenderResult, AppContextType] => {
   const testApi = {
     generateTest: jest.fn((): any => ({ testRecord: { timerStartedAt: 10 } })),
     uploadImage: jest.fn((): any => { }),
-    interpretResult: jest.fn((): any => { }),
-    updateTest: jest.fn()
+    interpretResult: jest.fn((): any => Promise.resolve()),
+    updateTest: jest.fn(),
+    ...api
   };
+
+
 
   const appContext = {
     state: { locale: "en-gb" },

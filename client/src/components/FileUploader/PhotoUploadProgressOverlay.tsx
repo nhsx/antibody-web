@@ -40,11 +40,12 @@ interface PhotoUploadProgressOverlayProps {
 }
 
 export default (props: PhotoUploadProgressOverlayProps) => {
-  const { progress, interpreting } = props;
+  const { progress, interpreting, ...other } = props;
   const classnames = useStyle();
 
   return (
     <Fade
+      {...other}
       in={true}
       timeout={1000}>
       <div className={classnames.wrapperRoot}>
