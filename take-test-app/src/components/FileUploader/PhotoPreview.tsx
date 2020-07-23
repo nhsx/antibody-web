@@ -107,6 +107,14 @@ export default (props: PhotoPreviewProps) => {
             return;
           }
           setUploadingState(UPLOADING_STATES.DONE);
+
+          await testApi.updateTest({
+            testRecord: {
+              ...testRecord,
+              photoUploadedAt: Date.now()
+            }
+          });
+
         } else {
           if (isCancelled) {
             return;
@@ -123,6 +131,7 @@ export default (props: PhotoPreviewProps) => {
         if (isCancelled) {
           return;
         }
+
         setAppError({
           code: "UPL1",
           onFix: handleRetry,
