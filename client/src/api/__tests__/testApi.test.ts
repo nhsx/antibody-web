@@ -42,6 +42,41 @@ describe("TestApi", () => {
     );
   });
 
+  describe("/generate", () => {
+    it("Passes the cookie to the generate endpoint", async () => {
+      const updateRequest = nock("https://meow.cat/dev")
+        .post("/generate")
+        .matchHeader("Authorization", "stubCookie")
+        .reply(200, {});
+
+      await testApi({ apiBase: "https://meow.cat/dev" }).generateTest();
+
+      expect(updateRequest.isDone()).toBe(true);
+    });
+
+    it("Returns the response from the update endpoint", async () => {
+      nock("https://meow.cat/dev")
+        .post("/generate")
+        .reply(200, { an: "example" });
+
+      const response = await testApi({
+        apiBase: "https://meow.cat/dev",
+      }).generateTest();
+
+      expect(response).toEqual({ an: "example" });
+    });
+
+    testErrors({
+      stubRequest: () =>
+        nock("https://meow.cat/dev")
+          .post("/generate")
+          .reply(404),
+      callApi: () =>
+        testApi({ apiBase: "https://meow.cat/dev" }).generateTest(),
+      expectedErrorCode: 404,
+    });
+  });
+
   describe("/update", () => {
     it("Passes the parameters & cookie to the update endpoint", async () => {
       const updateRequest = nock("https://meow.cat/dev")
