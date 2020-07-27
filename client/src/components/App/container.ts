@@ -1,5 +1,6 @@
 import login from "../../usecases/login";
 import testApi, { TestApi } from "api/testApi";
+import apiConfig from "api/config";
 
 
 export interface AppContainer {
@@ -13,6 +14,6 @@ export class AppContainer implements AppContainer {
   }
 
   getTestApi() {
-    return testApi;
+    return testApi({ apiBase: apiConfig.apiBase });
   }
 }
