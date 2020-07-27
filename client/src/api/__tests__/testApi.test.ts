@@ -55,9 +55,7 @@ describe("TestApi", () => {
     });
 
     it("Returns the response from the update endpoint", async () => {
-      nock(apiBase)
-        .post("/generate")
-        .reply(200, { an: "example" });
+      nock(apiBase).post("/generate").reply(200, { an: "example" });
 
       const response = await testApi({
         apiBase: apiBase,
@@ -67,10 +65,8 @@ describe("TestApi", () => {
     });
 
     testErrors({
-      stubRequest: () =>
-        nock(apiBase).post("/generate").reply(404),
-      callApi: () =>
-        testApi({ apiBase: apiBase }).generateTest(),
+      stubRequest: () => nock(apiBase).post("/generate").reply(404),
+      callApi: () => testApi({ apiBase: apiBase }).generateTest(),
       expectedErrorCode: 404,
     });
   });
@@ -103,14 +99,62 @@ describe("TestApi", () => {
 
     testErrors({
       stubRequest: () =>
-        nock(apiBase)
-          .post("/update", { dog: "woof" })
-          .reply(403),
+        nock(apiBase).post("/update", { dog: "woof" }).reply(403),
       callApi: () =>
         testApi({ apiBase: apiBase }).updateTest({
           dog: "woof",
         }),
       expectedErrorCode: 403,
+    });
+  });
+
+  describe("uploadImage", () => {
+    it("puts the given file on the URL", async () => {
+      const uploadRequest = nock("https://meow.cat")
+        .put("/example", "File")
+        .reply(200);
+
+      await testApi({ apiBase }).uploadImage(
+        "https://meow.cat/example",
+        "File",
+        () => {}
+      );
+
+      expect(uploadRequest.isDone()).toEqual(true);
+    });
+
+    describe("content-types", () => {
+      it("Uploads a file with its specified type", async () => {
+        const fileToUpload = new File(["a"], "file", { type: "image/jpeg" });
+        const uploadRequest = nock("https://meow.cat")
+          .put("/example", "a")
+          .matchHeader("content-type", "image/jpeg")
+          .reply(200);
+
+        await testApi({ apiBase }).uploadImage(
+          "https://meow.cat/example",
+          fileToUpload,
+          () => {}
+        );
+
+        expect(uploadRequest.isDone()).toEqual(true);
+      });
+
+      it("Defaults to image/png when no type is given", async () => {
+        const fileToUpload = new File(["a"], "file");
+        const uploadRequest = nock("https://meow.cat")
+          .put("/example", "a")
+          .matchHeader("content-type", "image/png")
+          .reply(200);
+
+        await testApi({ apiBase }).uploadImage(
+          "https://meow.cat/example",
+          fileToUpload,
+          () => {}
+        );
+
+        expect(uploadRequest.isDone()).toEqual(true);
+      });
     });
   });
 
@@ -127,9 +171,7 @@ describe("TestApi", () => {
     });
 
     it("Returns the response from the update endpoint", async () => {
-      nock(apiBase)
-        .post("/interpret")
-        .reply(200, { an: "example" });
+      nock(apiBase).post("/interpret").reply(200, { an: "example" });
 
       const response = await testApi({
         apiBase: apiBase,
@@ -139,10 +181,8 @@ describe("TestApi", () => {
     });
 
     testErrors({
-      stubRequest: () =>
-        nock(apiBase).post("/interpret").reply(404),
-      callApi: () =>
-        testApi({ apiBase: apiBase }).interpretResult(),
+      stubRequest: () => nock(apiBase).post("/interpret").reply(404),
+      callApi: () => testApi({ apiBase: apiBase }).interpretResult(),
       expectedErrorCode: 404,
     });
   });
