@@ -44,23 +44,23 @@ describe("TestApi", () => {
 
   describe("/generate", () => {
     it("Passes the cookie to the generate endpoint", async () => {
-      const updateRequest = nock("https://meow.cat/dev")
+      const generateRequest = nock(apiBase)
         .post("/generate")
         .matchHeader("Authorization", "stubCookie")
         .reply(200, {});
 
-      await testApi({ apiBase: "https://meow.cat/dev" }).generateTest();
+      await testApi({ apiBase: apiBase }).generateTest();
 
-      expect(updateRequest.isDone()).toBe(true);
+      expect(generateRequest.isDone()).toBe(true);
     });
 
     it("Returns the response from the update endpoint", async () => {
-      nock("https://meow.cat/dev")
+      nock(apiBase)
         .post("/generate")
         .reply(200, { an: "example" });
 
       const response = await testApi({
-        apiBase: "https://meow.cat/dev",
+        apiBase: apiBase,
       }).generateTest();
 
       expect(response).toEqual({ an: "example" });
@@ -68,23 +68,21 @@ describe("TestApi", () => {
 
     testErrors({
       stubRequest: () =>
-        nock("https://meow.cat/dev")
-          .post("/generate")
-          .reply(404),
+        nock(apiBase).post("/generate").reply(404),
       callApi: () =>
-        testApi({ apiBase: "https://meow.cat/dev" }).generateTest(),
+        testApi({ apiBase: apiBase }).generateTest(),
       expectedErrorCode: 404,
     });
   });
 
   describe("/update", () => {
     it("Passes the parameters & cookie to the update endpoint", async () => {
-      const updateRequest = nock("https://meow.cat/dev")
+      const updateRequest = nock(apiBase)
         .post("/update", { dog: "woof" })
         .matchHeader("Authorization", "stubCookie")
         .reply(200, {});
 
-      await testApi({ apiBase: "https://meow.cat/dev" }).updateTest({
+      await testApi({ apiBase: apiBase }).updateTest({
         dog: "woof",
       });
 
@@ -92,12 +90,12 @@ describe("TestApi", () => {
     });
 
     it("Returns the response from the update endpoint", async () => {
-      nock("https://meow.cat/dev")
+      nock(apiBase)
         .post("/update", { dog: "woof" })
         .reply(200, { an: "example" });
 
       const response = await testApi({
-        apiBase: "https://meow.cat/dev",
+        apiBase: apiBase,
       }).updateTest({ dog: "woof" });
 
       expect(response).toEqual({ an: "example" });
@@ -105,14 +103,47 @@ describe("TestApi", () => {
 
     testErrors({
       stubRequest: () =>
-        nock("https://meow.cat/dev")
+        nock(apiBase)
           .post("/update", { dog: "woof" })
           .reply(403),
       callApi: () =>
-        testApi({ apiBase: "https://meow.cat/dev" }).updateTest({
+        testApi({ apiBase: apiBase }).updateTest({
           dog: "woof",
         }),
       expectedErrorCode: 403,
+    });
+  });
+
+  describe("/interpret", () => {
+    it("Passes the cookie to the generate endpoint", async () => {
+      const interpretRequest = nock(apiBase)
+        .post("/interpret")
+        .matchHeader("Authorization", "stubCookie")
+        .reply(200, {});
+
+      await testApi({ apiBase: apiBase }).interpretResult();
+
+      expect(interpretRequest.isDone()).toBe(true);
+    });
+
+    it("Returns the response from the update endpoint", async () => {
+      nock(apiBase)
+        .post("/interpret")
+        .reply(200, { an: "example" });
+
+      const response = await testApi({
+        apiBase: apiBase,
+      }).interpretResult();
+
+      expect(response).toEqual({ an: "example" });
+    });
+
+    testErrors({
+      stubRequest: () =>
+        nock(apiBase).post("/interpret").reply(404),
+      callApi: () =>
+        testApi({ apiBase: apiBase }).interpretResult(),
+      expectedErrorCode: 404,
     });
   });
 });
