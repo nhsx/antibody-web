@@ -28,7 +28,7 @@ export const defaultRecord: TestRecord = {
 /* Renduces boilerplate in tests by passing partial properties to the stub context to overwrite the defaults */
 export const renderWithStubTestContext = (component: JSX.Element, api = {}, recordProperties: Partial<TestRecord>): [RenderResult, AppContextType, TestContextType] => {
 
-  const testContext : TestContextType = {
+  const testContext: TestContextType = {
     state: {
       testRecord: { ...defaultRecord, ...recordProperties }
     },
@@ -56,7 +56,7 @@ export const renderWithStubAppContext = (component, api = {}): [RenderResult, Ap
 
 
 
-  const appContext = {
+  const appContext: AppContextType = {
     state: { locale: "en-gb" },
     setLocale: () => { },
     setAppError: () => { },
