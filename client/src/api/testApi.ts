@@ -1,8 +1,6 @@
-import config from './config';
 import { GenerateTestResponse } from 'abt-lib/requests/GenerateTest';
 import { UpdateTestRequest, UpdateTestResponse } from 'abt-lib/requests/UpdateTest';
 import cookies from 'js-cookie';
-const { apiBase } = config;
 
 export interface TestApi {
   generateTest(): Promise<GenerateTestResponse>;
@@ -36,7 +34,7 @@ function handleErrors(response: Response): Response {
   return response;
 }
 
-const testApi: TestApi = {
+const testApi = ({ apiBase }: { apiBase: string}): TestApi => ({
   generateTest: async (): Promise<GenerateTestResponse> => {
     const response = await fetch(`${apiBase}/generate`, {
       method: "POST",
@@ -103,6 +101,6 @@ const testApi: TestApi = {
     }).then(handleErrors);
     return response.json();
   }
-};
+});
 
 export default testApi;
