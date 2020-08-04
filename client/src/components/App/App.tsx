@@ -9,7 +9,7 @@ import { appReducer, initialState } from "./reducer";
 import messages from "i18n/index";
 import ErrorBoundary from 'components/ErrorBoundary/ErrorBoundary';
 import flatten from 'flat';
-import { AppContainer } from "./container";
+import AppContainer from "./container";
 import LoginProvider from "../LoginProvider/LoginProvider";
 import Layout from "components/ui/Layout";
 import Home from "components/Home/Home";
