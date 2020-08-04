@@ -2,6 +2,7 @@ import React from "react";
 import { Route, Switch } from "react-router-dom";
 import TestContainer from "components/TestContainer/TestContainer";
 import { RouteProps } from 'react-router-dom';
+import { useBeforeunload } from 'react-beforeunload';
 import { getAppConfig } from 'utils/AppConfig';
 import { AppConfig } from "utils/ConfigTypes";
 
@@ -22,15 +23,25 @@ export interface TestRouteProps extends RouteProps {
   step?: string | string[] | undefined;
   next?: string;
   canPreview?: boolean;
+  canCloseWithoutWarning?: boolean
 }
 
 /* Set our page title using portals, so we don't have to pass huge amounts of callbacks down the tree */
 const TestRoute = (props: TestRouteProps) => {
-  const { component: Component, ...other } = props;
-  return (<>
-    <Component {...other} />
-  </>
-  );
+  const { component: Component, canCloseWithoutWarning, ...other } = props;
+  if (canCloseWithoutWarning) {
+    return (
+      <>
+        <Component {...other} />
+      </>
+    );
+  } else {
+    return (
+      <PreventPageClosing>
+        <Component {...other} />
+      </PreventPageClosing>
+    );
+  }
 };
 
 const testRoutes = ({ config }: { config: AppConfig }) => ([
@@ -90,13 +101,19 @@ const testRoutes = ({ config }: { config: AppConfig }) => ([
   },
   {
     component: TestComplete,
-    path: "testComplete"
+    path: "testComplete",
+    canCloseWithoutWarning: true
   }
 ]);
 
 const previewRoutes = () => (
   testRoutes({ config: getAppConfig() }).filter(({ canPreview }) => canPreview)
 );
+
+const PreventPageClosing = ({ children }) => {
+  useBeforeunload(() => "Please do not close this page until you have submitted your test.");
+  return children;
+};
 
 export const TestRoutes = () => (
   <Switch>
