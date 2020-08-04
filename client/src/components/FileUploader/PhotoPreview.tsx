@@ -6,11 +6,8 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { inputCaptureSupported } from "style/utils";
 
-import Box from "@material-ui/core/Box";
 import { BodyText, Button, Label, Row, Col, InsetText } from "nhsuk-react-components";
 import ImageSelectorInput from "./ImageSelectorInput";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import PhotoUploadProgressOverlay from "./PhotoUploadProgressOverlay";
 import RDTImagePreview from "./RDTImagePreview";
 import appContext, { AppContext } from "../App/context";
 import useTestData from "hooks/useTestData";
@@ -44,7 +41,7 @@ export interface PhotoPreviewProps {
   handleImageAsFile: (image: File) => void;
   imageAsURI: string;
   imageAsFile: File | null;
-  
+
   usedCamera: boolean;
   onInterpret: () => void
 }
@@ -62,21 +59,21 @@ export default (props: PhotoPreviewProps) => {
   const {
     setAppError,
     container: { getTestApi },
-  } : AppContext = useContext(appContext) as AppContext;
+  }: AppContext = useContext(appContext) as AppContext;
 
   const {
     dispatch: testDispatch
   } = useContext(testContext) as TestContext;
 
   const testApi = getTestApi();
-  const [testRecord ]  = useTestData();
+  const [testRecord] = useTestData();
 
   // Monitors the upload state
   const [uploadingState, setUploadingState] = useState<UPLOADING_STATES>(
     UPLOADING_STATES.OFF
   );
 
-  const [ predictionData, setPredictionData ] = useState<PredictionData | null>(null);
+  const [predictionData, setPredictionData] = useState<PredictionData | null>(null);
 
   // Upload progress percentage
   const [progress, setProgress] = useState(0);
@@ -115,12 +112,12 @@ export default (props: PhotoPreviewProps) => {
             return;
           }
           setUploadingState(UPLOADING_STATES.OFF);
-          
+
           setAppError({
             code: "UPL2",
             onFix: handleRetry,
           });
-          
+
         }
       } catch (error) {
         if (isCancelled) {
@@ -162,18 +159,18 @@ export default (props: PhotoPreviewProps) => {
       }
 
       setUploadingState(UPLOADING_STATES.OFF);
- 
+
     } catch (error) {
       setUploadingState(UPLOADING_STATES.OFF);
       setAppError({
         code: "INT1"
-      }); 
+      });
     }
-    
+
   }, [testApi, testDispatch, onInterpret, setAppError]);
 
-  const getErrorMessages = useCallback(() : ErrorMessage[] => {
-    
+  const getErrorMessages = useCallback((): ErrorMessage[] => {
+
     const msgs: ErrorMessage[] = [];
     if (predictionData?.quality?.blur === 'blurred') {
       msgs.push({ message: "was not in focus (clear enough)", key: "blurred" });
@@ -233,11 +230,11 @@ export default (props: PhotoPreviewProps) => {
             role="alert"
             tabIndex={-1}>
             <ErrorSummary.Title id="error-summary-title">
-            There is a problem
+              There is a problem
             </ErrorSummary.Title>
             <ErrorSummary.Body>
               <p>
-              You need to take another photo of your test kit because it did not pass our quality checks. Your photo:
+                You need to take another photo of your test kit because it did not pass our quality checks. Your photo:
               </p>
               <ul data-testid="image-error-messages">
                 {getErrorMessages().map(({ message, key }) => (
@@ -254,33 +251,18 @@ export default (props: PhotoPreviewProps) => {
           <div className={(predictionData?.success === false ? "nhsuk-form-group--error" : "")}>
             {imageAsURI && <RDTImagePreview dataURI={imageAsURI} />}
           </div>
-          {(isUploadBlocking(uploadingState) ||
-          (uploadingState === UPLOADING_STATES.DONE && uploadUserRequest)) && (
-            <PhotoUploadProgressOverlay
-              data-testid="upload-progress"
-              progress={progress}
-              interpreting={uploadingState === UPLOADING_STATES.INTERPRETING}/>
-          )}
-          {(uploadingState === UPLOADING_STATES.BACKGROUND ||
-          uploadingState === UPLOADING_STATES.DONE) && (
-            <Box
-              position="absolute"
-              top={0}
-              left={0}
-              right={0}>
-              <LinearProgress
-                variant="determinate"
-                value={progress} />
-            </Box>
-          )}
+          {(isUploadBlocking(uploadingState) || (uploadingState === UPLOADING_STATES.DONE && uploadUserRequest)) &&
+            (<Label size="s">Upload progress: {progress}%</Label>)}
+          {(uploadingState === UPLOADING_STATES.BACKGROUND || uploadingState === UPLOADING_STATES.DONE) &&
+            (<Label size="s">Upload progress: {progress}%</Label>)}
         </div>
       </Col>
       <Col width="full">
         <InsetText>
-          <BodyText data-testid="picture-timer"> 
+          <BodyText data-testid="picture-timer">
             You have <b>{time}</b> minutes left to submit your photograph.
           </BodyText>
-        </InsetText> 
+        </InsetText>
         <BodyText>
           {predictionData?.success === false ? "Your photo did not pass our quality checks. " : "Check to make sure you are happy with the photograph before sending it. "}
           Make sure that the photo:
@@ -298,7 +280,7 @@ export default (props: PhotoPreviewProps) => {
             disabled={isUploadBlocking(uploadingState)}
             onClick={handleAcceptPhoto}
           >
-          Submit photo
+            Submit photo
           </Button>)}
         <Button
           secondary={predictionData?.success !== false}
