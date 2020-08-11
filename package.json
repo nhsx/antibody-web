@@ -1,5 +1,5 @@
 {
-  "name": "antibody-web-client",
+  "name": "antibody-web-take-test-app",
   "version": "0.1.0",
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^2.33.0",
@@ -20,11 +20,11 @@
     "typescript": "^3.9.2"
   },
   "scripts": {
-    "dev": "concurrently --kill-others \"npm --prefix client run start\" \"npm --prefix serverless run dev\"",
-    "test": "npm --prefix lib run test && npm --prefix client run test -- --watch-all=false && npm --prefix serverless run test",
+    "dev": "concurrently --kill-others \"npm --prefix take-test-app run start\" \"npm --prefix api run dev\"  \"npm --prefix reviewer-app run start\" ",
+    "test": "npm --prefix lib run test && npm --prefix take-test-app run test -- --watch-all=false && npm --prefix api run test && npm --prefix reviewer-app run test",
     "lint": "./node_modules/.bin/eslint --ext .js,.ts,.tsx .",
-    "postinstall": "(cd client && yarn install); (cd lib && yarn install); (cd serverless && yarn install)",
-    "lib": "(npm --prefix lib run build); (cd client && yarn upgrade abt-lib); (cd serverless && yarn upgrade abt-lib)"
+    "postinstall": "(cd take-test-app && yarn install);  (cd reviewer-app && yarn install); (cd lib && yarn install); (cd api && yarn install)",
+    "lib": "(npm --prefix lib run build); (cd take-test-app && yarn upgrade abt-lib); (cd api && yarn upgrade abt-lib)"
   },
   "husky": {
     "hooks": {
