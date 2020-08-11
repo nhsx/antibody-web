@@ -14,12 +14,12 @@ jobs:
       - name: Yarn install - Root
         run: |
           yarn install
-      - name: Yarn install - take-test-app
+      - name: Yarn install - Take Test App
         working-directory: take-test-app
         run: |
           yarn install
-      - name: Yarn install - Serverless
-        working-directory: reviewer-app
+      - name: Yarn install - API
+        working-directory: api
         run: |
           yarn install
       - name: Tests
@@ -51,7 +51,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: reviewer-app
+        working-directory: api
     steps:
       - uses: actions/checkout@master
       - name: Use Node.js
@@ -100,7 +100,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: reviewer-app
+        working-directory: api
     steps:
       - uses: actions/checkout@master
       - name: Use Node.js
