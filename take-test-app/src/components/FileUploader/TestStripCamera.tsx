@@ -6,53 +6,9 @@ import 'react-html5-camera-photo/build/css/index.css';
 
 import { FACING_MODES, IMAGE_TYPES } from 'react-html5-camera-photo';
 import React, { useCallback, useRef } from 'react';
-import { createStyles, makeStyles } from '@material-ui/core';
-
 import Camera from 'react-html5-camera-photo';
 import { getAppConfig } from 'utils/AppConfig';
 import useFullscreenStatus from './useFullscreenStatus';
-
-const useStyle = makeStyles(() =>
-  createStyles({
-    wrapper: {
-      display: 'inline-block',
-      position: 'relative',
-    },
-
-    overlay: {
-      bottom: 0,
-      left: 0,
-      position: 'absolute',
-      right: 0,
-      top: 0,
-    },
-
-    overlayTestStrip: {
-      backgroundColor: '#000',
-      opacity: 0.3,
-    },
-
-    borderColumn: {
-      backgroundColor: '#000',
-    },
-
-    overlayStripImage: {
-      height: '100%',
-      maxWidth: 'inherit',
-      width: 'initial',
-    },
-
-    root: {
-      position: 'relative',
-      textAlign: 'center',
-
-      '& .react-html5-camera-photo': {
-        textAlign: 'initial',
-        lineHeight: 0,
-      },
-    },
-  })
-);
 
 // NOTE 1: We have to work around some bugs in react-html5-camera-photo.
 //
@@ -78,7 +34,6 @@ const TestStripCamera = (props: {
   onError: (error: any) => void;
 }) => {
   const { onPhotoTaken, onError } = props;
-  const classes = useStyle();
   const refCamera = useRef<HTMLDivElement>(null);
   const [isFullscreen, setFullscreen] = useFullscreenStatus(refCamera);
 
@@ -104,9 +59,8 @@ const TestStripCamera = (props: {
   }, [setFullscreen]);
 
   return (
-    <div className={classes.root}>
+    <div>
       <div
-        className={classes.wrapper}
         ref={refCamera}>
         <Camera
           onTakePhotoAnimationDone={handleTakePhotoAnimationDone}
