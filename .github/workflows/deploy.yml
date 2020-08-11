@@ -116,7 +116,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.SERVERLESS_AWS_SECRET_ACCESS_KEY }}
         run: |
           npx serverless deploy --stage prod
-  deploy-frontend:
+  deploy-take-a-test:
     needs: [deploy-prod-backend]
     runs-on: ubuntu-latest
     defaults:
@@ -147,3 +147,35 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_S3_SECRET_ACCESS_KEY }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
           SOURCE_DIR: 'take-test-app/build'
+  deploy-review-app:
+    needs: [deploy-prod-backend]
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: reviewer-app
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.3.1'
+      - name: Yarn install
+        run: |
+          yarn install
+      - name: Build
+        run: |
+          yarn run build
+        env:
+          REACT_APP_STAGE: prod
+          REACT_APP_API_BASE: https://iy3gq5bmlg.execute-api.eu-west-2.amazonaws.com
+      - name: Deploy to S3
+        uses: jakejarvis/s3-sync-action@master
+        with:
+          args: --acl public-read --delete
+        env:
+          AWS_S3_BUCKET: ${{ secrets.AWS_REVIEWER_PRODUCTION_BUCKET_NAME }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_S3_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_S3_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          SOURCE_DIR: 'reviewer-app/build'
+
