@@ -5,6 +5,7 @@ export default interface TestRecord {
     downloadUrl: string;
     step: string;
     timerStartedAt: number;
+    photoUploadedAt?: number;
     predictionData?: PredictionData;
     testCompleted: boolean;
     result?: PredictionResult;

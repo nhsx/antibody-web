@@ -127,6 +127,17 @@ describe("<PhotoPreview>", () => {
     expect(api.interpretResult).toHaveBeenCalled();
   });
 
+  it("updates the test with the time uploaded if uploaded successfully", async () => {
+    const api = {
+      interpretResult: jest.fn(),
+      uploadImage: jest.fn(() => Promise.resolve()),
+      updateTest: jest.fn(() => Promise.resolve())
+    };
+    await renderPhotoPreview({ api });
+    await submitPhoto();
+    expect(api.updateTest).toHaveBeenCalled();
+  });
+
   it("attempts to interpret the image if uploaded successfully", async () => {
     const api = {
       interpretResult: jest.fn(),
