@@ -17,9 +17,12 @@ export const reviewIfRequired = async (testRecord : TestRecord) : Promise<Boolea
 
 const review = async (testRecord: TestRecord) => {
   const SQS = new AWS.SQS();
-  const queueUrl = "https://sqs.eu-west-2.amazonaws.com/877130379437/results";
+  const queueUrl = await SQS.getQueueUrl({
+    QueueName: process.env.REVIEW_QUEUE_NAME!
+  }).promise();
+    
   return await SQS.sendMessage({
-    QueueUrl: queueUrl,
+    QueueUrl: queueUrl.QueueUrl!,
     MessageBody: testRecord.guid
   }).promise();
 };
