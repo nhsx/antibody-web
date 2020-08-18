@@ -11,7 +11,7 @@ describe("TestResult", () => {
 
   it("Gets the next result from the testApi", async () => {
     await act(async () => {
-      await render(<TestResult container={{ testApi: () => ({ nextResultToReview: nextResultToReviewSpy }) }} />);
+      await render(<TestResult container={{ testApi: { nextResultToReview: nextResultToReviewSpy } }} />);
     });
 
     expect(nextResultToReviewSpy).toHaveBeenCalled();
@@ -21,7 +21,7 @@ describe("TestResult", () => {
     let testResult;
 
     await act(async () => {
-      testResult = await render(<TestResult container={{ testApi: () => ({ nextResultToReview: nextResultToReviewSpy }) }} />);
+      testResult = await render(<TestResult container={{ testApi: { nextResultToReview: nextResultToReviewSpy } }} />);
     });
 
     const testImage = await testResult.findByTestId('test-result-image');

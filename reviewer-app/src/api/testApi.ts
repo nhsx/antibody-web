@@ -1,13 +1,38 @@
 export interface TestApi {
-  (): { nextResultToReview: () => Promise<{ url: string }> };
+  nextResultToReview: () => Promise<any>;
 }
 
-export default () => ({
-  nextResultToReview: async (): Promise<{ url: string }> => {
-    return new Promise((resolve) =>
-      resolve({
-        url: "https://cataas.com/cat",
-      })
-    );
+export class HTTPError extends Error {
+  public message: string;
+  public statusCode: number;
+
+  constructor({ message, statusCode }) {
+    super();
+    this.message = message;
+    this.statusCode = statusCode;
+  }
+}
+
+// We throw on HTTP failures
+function handleErrors(response: Response): Response {
+  if (!response.ok) {
+    throw new HTTPError({
+      message: response.statusText,
+      statusCode: response.status || 500,
+    });
+  }
+  return response;
+}
+
+export default ({ apiBase }: { apiBase: string }): TestApi => ({
+  nextResultToReview: async (): Promise<any> => {
+    const response = await fetch(`${apiBase}/results/next`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then(handleErrors);
+
+    return response.json();
   },
 });
