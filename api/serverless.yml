@@ -68,6 +68,12 @@ functions:
           path: interpret
           cors: true
           authorizer: authorizer
+  nextResult:
+    handler: handlers/results/next.handler
+    events:
+      - http:
+          method: GET
+          path: /results/next
   notify:
     handler: handlers/notify/handler.handler # Note - this handler is not exposed via http - it is only accessible by the state machine
     events:
