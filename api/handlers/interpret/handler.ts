@@ -9,6 +9,7 @@ import { PredictionData } from 'abt-lib/models/Prediction';
 import nock from 'nock';
 import got from 'got/dist/source';
 import { Readable } from 'stream';
+import { reviewIfRequired } from '../../api/review';
 
 export const baseHandler = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
 
@@ -66,6 +67,7 @@ export const baseHandler = async (event: APIGatewayEvent): Promise<APIGatewayPro
     logger.info("Sending image to prediction endpoint" + predictionEndpoint);
 
     const mockPrediction : PredictionData = {
+      predictedAt: Date.now(),
       success: true,
       result: 'positive',
       confidence: { positive: 0.983, negative: 0.017 },
@@ -127,7 +129,7 @@ export const baseHandler = async (event: APIGatewayEvent): Promise<APIGatewayPro
     // Get our users record to update with the prediction
     const oldRecord = await getTestRecord(DYNAMO_TABLE, guid) as TestRecord;
 
-    const newRecord: TestRecord = {
+    let newRecord: TestRecord = {
       ...oldRecord,
       predictionData: prediction,
       testCompleted: prediction.success,
@@ -137,6 +139,15 @@ export const baseHandler = async (event: APIGatewayEvent): Promise<APIGatewayPro
     logger.debug(newRecord);
     await putTestRecord(DYNAMO_TABLE, newRecord);
     logger.info("User record updated, interpreting complete");
+
+    if (newRecord.predictionData?.success) {
+      const isAwaitingReview = await reviewIfRequired(newRecord);
+      logger.info(`${isAwaitingReview ? "Result flagged for review" : "Result not flagged for review"}`);
+      newRecord.review = {
+        status: isAwaitingReview ? "awaiting_review" : "not_reviewed",
+        originalResult: newRecord.result!
+      };
+    }
 
     return {
       statusCode: 200,

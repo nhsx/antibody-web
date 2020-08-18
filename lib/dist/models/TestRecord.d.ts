@@ -1,4 +1,5 @@
 import { PredictionData, PredictionResult } from "./Prediction";
+import { Review } from "./Review";
 export default interface TestRecord {
     guid: string;
     uploadUrl: string;
@@ -10,4 +11,5 @@ export default interface TestRecord {
     testCompleted: boolean;
     result?: PredictionResult;
     notificationSubscription?: PushSubscription;
+    review?: Review;
 }

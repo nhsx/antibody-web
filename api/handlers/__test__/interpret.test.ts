@@ -66,6 +66,21 @@ describe('interpret', () => {
     expect(response.statusCode).toEqual(404);
   });
 
+  // it('should send a test record to the queue if our random number is below the supplied threshold', async () => {
+  //     const mockMath = Object.create(global.Math);
+  //     mockMath.random = () => 0.005;
+  //     global.Math = mockMath;
+
+
+  //   })
+  // });
+
+  // it('should send a test record to the queue if our random number is above the supplied threshold', async () => {
+  //   const mockMath = Object.create(global.Math);
+  //   mockMath.random = () => 0.5;
+  //   global.Math = mockMath;
+  // });
+
   // it('should return an error to the user if the model fails to interpret the image', async () => {
   //   const scope = nock(process.env.ML_API_BASE as string).post(`/${config.modelPath}`).reply(503);
   //   const response = await handler(interpretEvent);

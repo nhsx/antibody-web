@@ -7,5 +7,6 @@ export default {
   apiBase: `${process.env.REACT_APP_API_BASE}/${process.env.REACT_APP_STAGE}`,
   localFilePath: '/tmp/',
   rdtImagePath: 'rdt-images/',
-  modelPath: 'predictions/fastrcnn'
+  modelPath: 'predictions/fastrcnn',
+  reviewChance: 1 // Always flags for review at the moment, set to 0.01 for 1%
 };
