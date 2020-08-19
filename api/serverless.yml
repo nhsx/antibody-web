@@ -42,44 +42,8 @@ plugins:
   - serverless-sentry
   - serverless-step-functions
 functions:
-  generate:
-    handler: handlers/generate/handler.handler
-    events:
-      - http:
-          method: POST
-          path: generate
-          cors: true
-          authorizer: authorizer
-  update:
-    handler: handlers/update/handler.handler
-    events:
-      - http:
-          method: POST
-          path: update
-          cors: true
-          authorizer: authorizer
-    environment:
-      STATE_MACHINE_ARN: ${self:resources.Outputs.StateMachine.Value} # This function initialises our wait state machine
-  interpret:
-    handler: handlers/interpret/handler.handler
-    events:
-      - http:
-          method: POST
-          path: interpret
-          cors: true
-          authorizer: authorizer
-    environment:
-      REVIEW_QUEUE_NAME: ${self:resources.Outputs.ReviewQueue.Value} 
-  notify:
-    handler: handlers/notify/handler.handler # Note - this handler is not exposed via http - it is only accessible by the state machine
-    events:
-      - http:
-          method: POST
-          path: notify
-          cors: true
-  authorizer:
-    type: TOKEN
-    handler: handlers/authorizer/handler.handler
+  - ${file(./take-test-app.yml)}
+  - ${file(./reviewer-app.yml)}
 stepFunctions:
   stateMachines:
     delayedNotification:
@@ -107,7 +71,7 @@ custom:
     excludeFiles: '**/*.test.ts' # Provide a glob for files to ignore
   sentry:
     dsn: https://93e4dddc1090408da8b861c3a6e57cd8@o406048.ingest.sentry.io/5272813
-    filterLocal: false
+    filterLocal: true
 resources:
   Outputs:
     ReviewQueue:

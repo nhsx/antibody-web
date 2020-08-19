@@ -1,6 +1,7 @@
 import { GenerateTestResponse } from 'abt-lib/requests/GenerateTest';
 import { UpdateTestRequest, UpdateTestResponse } from 'abt-lib/requests/UpdateTest';
 import cookies from 'js-cookie';
+import { dataURIToBlob } from 'utils/file';
 
 export interface TestApi {
   generateTest(): Promise<GenerateTestResponse>;
@@ -50,10 +51,18 @@ const testApi = ({ apiBase }: { apiBase: string}): TestApi => ({
     let type;
     // If this is a file upload
     if ((file as File).type) {
-      type = (file as File).type;
+      type = (file as File).type || "image/png";
     } else {
     // Otherwise they've used the camera
       type = 'image/png';
+      if (typeof file === 'string') {
+        if (file.indexOf("data:") !== 0) {
+          throw new Error("Non data-URI string passed to upload function");
+        }
+        file = new File([dataURIToBlob(file)], 'file', {
+          type: 'image/png'
+        });
+      }
     }
 
     return new Promise((resolve, reject) => {

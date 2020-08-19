@@ -1,5 +1,4 @@
 import TestRecord from "abt-lib/models/TestRecord";
-
 import config from '../config';
 import AWS from 'aws-sdk';
 
@@ -25,4 +24,20 @@ const review = async (testRecord: TestRecord) => {
     QueueUrl: queueUrl.QueueUrl!,
     MessageBody: testRecord.guid
   }).promise();
+};
+
+export const getNextResultId = async () : Promise<string | null> => {
+  const SQS = new AWS.SQS();
+
+  const queueUrl = await SQS.getQueueUrl({
+    QueueName: process.env.REVIEW_QUEUE_NAME!
+  }).promise();
+
+  const sqsResponse = await SQS.receiveMessage({
+    QueueUrl: queueUrl.QueueUrl!
+  }).promise();
+
+  const messages = sqsResponse.Messages;
+
+  return messages?.length ? messages[0].Body! : null;
 };

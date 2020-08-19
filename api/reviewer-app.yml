@@ -1,0 +1,8 @@
+nextResult:
+  handler: handlers/results/next/handler.handler
+  events:
+    - http:
+        method: GET
+        path: /results/next
+  environment:
+    REVIEW_QUEUE_NAME: ${self:resources.Outputs.ReviewQueue.Value} 

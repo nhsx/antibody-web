@@ -12,16 +12,19 @@ export interface FileResponse {
 }
 
 interface UrlResponse {
-  uploadUrl: string;
-  downloadUrl: string;
+  uploadUrl?: string;
+  downloadUrl?: string;
 }
 
-export async function getUrls(bucket: string, guid: string): Promise<UrlResponse> {
+
+// Function for retrieving presigned urls for S3 for either uploading or downloading a user's test image
+export async function getUrls(bucket: string, guid: string, requestedUrls: {download: boolean, upload: boolean} = { download: true, upload: true }): Promise<UrlResponse> {
 
   const s3 = new AWS.S3();
   const params = { Bucket: bucket, Key: `rdt-images/${guid}` };
 
   const getUrl = async (method: string): Promise<string> => await new Promise((resolve, reject) => {
+    
     s3.getSignedUrl(method, params, (err, url: string) => {
       if (err) {
         reject(err);
@@ -31,12 +34,30 @@ export async function getUrls(bucket: string, guid: string): Promise<UrlResponse
     });
   });
 
-  const [uploadUrl, downloadUrl] = await Promise.all([getUrl("putObject"), getUrl("getObject")]);
-  
-  return {
-    uploadUrl,
-    downloadUrl
-  };
+  const promises = [];
+
+  if (requestedUrls.upload) {
+    promises.push(getUrl("putObject"));
+  } else  {
+    promises.push(null);
+  }
+  if (requestedUrls.download) {
+    promises.push(getUrl("getObject"));
+  } else {
+    promises.push(null);
+  }
+
+  const [uploadUrl, downloadUrl] = await Promise.all(promises);
+
+  const urlResponse: UrlResponse = {};
+  if (uploadUrl) {
+    urlResponse.uploadUrl = uploadUrl;
+  }
+  if (downloadUrl) {
+    urlResponse.downloadUrl = downloadUrl;
+  }
+
+  return urlResponse;
 }
 
 export function getFileStream(bucket: string, guid: string): Readable {

@@ -1,5 +1,4 @@
 import * as AWSMock from 'aws-sdk-mock';
-import { AWS } from '../../api/storage';
 import { baseHandler as handler } from '../interpret/handler';
 import { getAuthorisedEvent } from './utils';
 import nock from 'nock';
@@ -26,20 +25,14 @@ let mockInterpretResponse = [
   }
 ];  
 describe('interpret', () => {
-  beforeAll(() => {
-    AWSMock.setSDKInstance(AWS);
+
+  beforeEach(() => {
     AWSMock.mock('S3', 'getObject', Buffer.alloc(4, 'body'));
     AWSMock.mock("DynamoDB.DocumentClient", 'get', jest.fn(() => Promise.resolve({})));
     AWSMock.mock("DynamoDB.DocumentClient", 'put', jest.fn(() => Promise.resolve()));
   });
 
-  beforeEach(() => {
-    AWSMock.remock('S3', 'getObject', Buffer.alloc(4, 'body'));
-    AWSMock.remock("DynamoDB.DocumentClient", 'get', jest.fn(() => Promise.resolve({})));
-    AWSMock.remock("DynamoDB.DocumentClient", 'put', jest.fn(() => Promise.resolve()));
-  });
-
-  afterAll(() => {
+  afterEach(() => {
     AWSMock.restore();
   });
 

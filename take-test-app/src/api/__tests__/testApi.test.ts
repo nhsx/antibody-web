@@ -1,12 +1,17 @@
 import testApi, { HTTPError } from "../testApi";
 import nock from "nock";
+import _ from 'lodash';
+import * as file from 'utils/file';
 
 jest.mock("js-cookie", () => ({
   get: () => "stubCookie",
 }));
 
+const uriSpy = jest.spyOn(file, 'dataURIToBlob').mockImplementation(string => new Blob());
+
 describe("TestApi", () => {
   const apiBase = "https://meow.cat/dev";
+  const uriFile = "data:image/png;base64,File";
 
   const testErrors = ({ stubRequest, callApi, expectedErrorCode }) => {
     describe("returning errors", () => {
@@ -109,14 +114,30 @@ describe("TestApi", () => {
   });
 
   describe("uploadImage", () => {
-    it("puts the given file on the URL", async () => {
+
+    it("converts the URI to a Blob", async () => {
+      nock("https://meow.cat")
+        .put("/example")
+        .reply(200);
+
+      uriSpy.mockClear();
+      await testApi({ apiBase }).uploadImage(
+        "https://meow.cat/example",
+        uriFile,
+        () => {}
+      );
+      expect(uriSpy).toHaveBeenCalledWith(uriFile);
+    });
+
+
+    it("puts the data URI file on the URL", async () => {
       const uploadRequest = nock("https://meow.cat")
-        .put("/example", "File")
+        .put("/example", _.matches(new Blob()))
         .reply(200);
 
       await testApi({ apiBase }).uploadImage(
         "https://meow.cat/example",
-        "File",
+        uriFile,
         () => {}
       );
 
