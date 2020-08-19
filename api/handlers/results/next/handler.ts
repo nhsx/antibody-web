@@ -20,8 +20,6 @@ export const baseHandler = async (event: APIGatewayEvent) : Promise<APIGatewayPr
       body: ""
     };
   }
-
-  console.log("getting url with", nextResultId);
   
   const { downloadUrl } = await getUrls(UPLOAD_BUCKET, nextResultId, { download: true, upload: false });
 

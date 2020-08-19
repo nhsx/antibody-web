@@ -81,7 +81,6 @@ const testApi = ({ apiBase }: { apiBase: string}): TestApi => ({
         }
       };
 
-      console.log('sending file');
       xhr.open("PUT", url);
       xhr.setRequestHeader("Content-Type", type);
       xhr.send(file);
