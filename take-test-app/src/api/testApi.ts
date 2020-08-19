@@ -48,17 +48,21 @@ const testApi = ({ apiBase }: { apiBase: string}): TestApi => ({
   },
 
   uploadImage: async (url, file, onUploadProgress) => {
-    console.log(file);
     let type;
     // If this is a file upload
     if ((file as File).type) {
-      type = (file as File).type;
+      type = (file as File).type || "image/png";
     } else {
     // Otherwise they've used the camera
       type = 'image/png';
-      file = new File([dataURIToBlob(file)], 'file', {
-        type: 'image/png'
-      });
+      if (typeof file === 'string') {
+        if (file.indexOf("data:") !== 0) {
+          throw new Error("Non data-URI string passed to upload function");
+        }
+        file = new File([dataURIToBlob(file)], 'file', {
+          type: 'image/png'
+        });
+      }
     }
 
     return new Promise((resolve, reject) => {
@@ -77,6 +81,7 @@ const testApi = ({ apiBase }: { apiBase: string}): TestApi => ({
         }
       };
 
+      console.log('sending file');
       xhr.open("PUT", url);
       xhr.setRequestHeader("Content-Type", type);
       xhr.send(file);
