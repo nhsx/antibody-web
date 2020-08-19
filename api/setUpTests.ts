@@ -3,3 +3,4 @@
 import { resolve } from 'path';
 
 require('dotenv').config({ path: resolve(__dirname,"./test.env") });
+console.warn = () => {};

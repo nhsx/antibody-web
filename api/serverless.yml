@@ -42,48 +42,8 @@ plugins:
   - serverless-sentry
   - serverless-step-functions
 functions:
-  generate:
-    handler: handlers/generate/handler.handler
-    events:
-      - http:
-          method: POST
-          path: generate
-          cors: true
-          authorizer: authorizer
-  update:
-    handler: handlers/update/handler.handler
-    events:
-      - http:
-          method: POST
-          path: update
-          cors: true
-          authorizer: authorizer
-    environment:
-      STATE_MACHINE_ARN: ${self:resources.Outputs.StateMachine.Value} # This function initialises our wait state machine
-  interpret:
-    handler: handlers/interpret/handler.handler
-    events:
-      - http:
-          method: POST
-          path: interpret
-          cors: true
-          authorizer: authorizer
-  nextResult:
-    handler: handlers/results/next.handler
-    events:
-      - http:
-          method: GET
-          path: /results/next
-  notify:
-    handler: handlers/notify/handler.handler # Note - this handler is not exposed via http - it is only accessible by the state machine
-    events:
-      - http:
-          method: POST
-          path: notify
-          cors: true
-  authorizer:
-    type: TOKEN
-    handler: handlers/authorizer/handler.handler
+  - ${file(./take-test-app.yml)}
+  - ${file(./reviewer-app.yml)}
 stepFunctions:
   stateMachines:
     delayedNotification:
@@ -111,14 +71,45 @@ custom:
     excludeFiles: '**/*.test.ts' # Provide a glob for files to ignore
   sentry:
     dsn: https://93e4dddc1090408da8b861c3a6e57cd8@o406048.ingest.sentry.io/5272813
-    filterLocal: false
+    filterLocal: true
 resources:
   Outputs:
+    ReviewQueue:
+      Description: The ARN of the review queue
+      Value: ${opt:stage, 'dev'}-covid19-antibody-uk-results
     StateMachine:
       Description: The ARN of the provisioning state machine
       Value:
         Ref: DelayedNotificationDash${opt:stage, 'dev'}  # Capital letter at start for some reason #https://medium.com/@iamNoah_/invoke-aws-step-function-from-aws-lambda-using-the-serverless-framework-21b7fde38a42
   Resources:
+    ReviewQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: ${opt:stage, 'dev'}-covid19-antibody-uk-results
+        RedrivePolicy:
+          maxReceiveCount: 5
+          deadLetterTargetArn:
+            Fn::GetAtt: 
+              - ReviewDLQueue
+              - Arn
+    ReviewDLQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: ${opt:stage, 'dev'}-covid19-antibody-uk-results-dlq
+    SecondaryReviewQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: ${opt:stage, 'dev'}-covid19-antibody-uk-results-secondary
+        RedrivePolicy:
+          maxReceiveCount: 5
+          deadLetterTargetArn:
+            Fn::GetAtt: 
+              - SecondaryReviewDLQueue
+              - Arn
+    SecondaryReviewDLQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: ${opt:stage, 'dev'}-covid19-antibody-uk-results-secondary-dlq
     S3:
       Type: AWS::S3::Bucket
       Properties:
@@ -149,7 +140,6 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 2
           WriteCapacityUnits: 2
-          
     GatewayResponseDefault4XX:
       Type: 'AWS::ApiGateway::GatewayResponse'
       Properties:

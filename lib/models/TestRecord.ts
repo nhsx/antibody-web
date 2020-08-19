@@ -1,4 +1,5 @@
 import { PredictionData, PredictionResult } from "./Prediction";
+import { Review } from "./Review";
 
 export default interface TestRecord {
   guid: string; // unique id for this test
@@ -10,5 +11,6 @@ export default interface TestRecord {
   predictionData?: PredictionData, // data returned from the ml model
   testCompleted: boolean, // Has the user successfully uploaded an image that met the criteria
   result?: PredictionResult, // Pull our result from prediction data to top level
-  notificationSubscription?: PushSubscription
+  notificationSubscription?: PushSubscription,
+  review?: Review
 }

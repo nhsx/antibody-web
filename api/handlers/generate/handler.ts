@@ -8,8 +8,6 @@ import logger from '../../utils/logger';
 
 export const baseHandler = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
 
-
-  console.log(event.requestContext);
   const guid = event.requestContext.authorizer?.principalId;
 
   logger.info(`Obtaining test session for user: ${guid}`);
@@ -65,7 +63,7 @@ export const baseHandler = async (event: APIGatewayEvent): Promise<APIGatewayPro
   try {
     const { uploadUrl, downloadUrl } = await getUrls(UPLOAD_BUCKET, guid);
     logger.info("S3 URLs generated");
-    logger.debug(uploadUrl, downloadUrl);
+    logger.debug(uploadUrl!, downloadUrl);
   
 
     // Save the new urls if this is an existing user
@@ -74,8 +72,8 @@ export const baseHandler = async (event: APIGatewayEvent): Promise<APIGatewayPro
   
       record = {
         ...record as TestRecord,
-        uploadUrl,
-        downloadUrl
+        uploadUrl: uploadUrl as string,
+        downloadUrl: downloadUrl as string
       };
       // Or create the record entirely
     } else {

@@ -29,5 +29,6 @@ export interface PredictionData {
   confidence: Confidence | null,
   quality: Quality | null,
   extracts : Extracts,
-  success: boolean
+  success: boolean,
+  predictedAt: number
 }

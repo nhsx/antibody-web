@@ -8,7 +8,7 @@ const logger : winston.Logger = winston.createLogger({
         format.json(),
         format.colorize()
       ), 
-      level: "debug" 
+      level: process.env.TEST ? 'silent' : "debug" 
     })
   ]
 });
