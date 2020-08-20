@@ -1,5 +1,7 @@
+import { NextResultResponse } from "abt-lib/requests/NextResult";
+
 export interface TestApi {
-  nextResultToReview: () => Promise<any>;
+  nextResultToReview: () => Promise<NextResultResponse>;
 }
 
 export class HTTPError extends Error {
@@ -25,7 +27,7 @@ function handleErrors(response: Response): Response {
 }
 
 export default ({ apiBase }: { apiBase: string }): TestApi => ({
-  nextResultToReview: async (): Promise<any> => {
+  nextResultToReview: async () => {
     const response = await fetch(`${apiBase}/results/next`, {
       method: "GET",
       headers: {
