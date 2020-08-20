@@ -1,5 +1,5 @@
 // Make our test.env variables available
-const resolve = require('path').resolve
+const resolve = require('path').resolve;
 
 require('dotenv').config({ path: resolve(__dirname,"../.env") });
 
