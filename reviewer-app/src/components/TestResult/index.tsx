@@ -6,7 +6,7 @@ export default ({ container }: { container: AppContainer }) => {
 
   useEffect(() => {
     const getNextResult = async () => {
-      let nextResult = await container.testApi().nextResultToReview();
+      let nextResult = await container.testApi.nextResultToReview();
       setTestResult(nextResult);
     };
 
