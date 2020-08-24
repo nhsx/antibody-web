@@ -168,6 +168,9 @@ jobs:
         env:
           REACT_APP_STAGE: prod
           REACT_APP_API_BASE: https://iy3gq5bmlg.execute-api.eu-west-2.amazonaws.com
+          REACT_APP_AWS_REGION: %{{ secrets.AWS_REGION }}
+          REACT_APP_USER_POOL_ID: %{{ secrets.AWS_COGNITO_USER_POOL_ID }}
+          REACT_APP_USER_POOL_WEB_CLIENT_ID: %{{ secrets.AWS_COGNITO_USER_POOL_WEB_CLIENT_ID }}
       - name: Deploy to S3
         uses: jakejarvis/s3-sync-action@master
         with:
