@@ -33,7 +33,7 @@ export default (handler: Function, allowedRoles: Role[]) => {
     // Check if our allowed roles match our supplied roles
     if (_.intersection(userRoles, allowedRoles).length) {
       logger.info(`Route authorised for role ${userRoles.join(", ")}`);
-      return handler(event, context);
+      return handler;
     } else return async () : Promise<APIGatewayProxyResult> => {
       logger.error(`User attempted to access unauthorised resource`);
       return {
