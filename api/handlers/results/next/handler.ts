@@ -14,7 +14,8 @@ export const baseHandler = async (event: APIGatewayEvent) : Promise<APIGatewayPr
   if (!nextResultId) {
     return {
       statusCode: 204,
-      body: ""
+      body: "",
+      headers: config.defaultHeaders
     };
   }
   

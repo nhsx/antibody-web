@@ -2,6 +2,7 @@ import { APIGatewayEvent, APIGatewayProxyResult, Context } from "aws-lambda";
 import { Role } from "models/Role";
 import logger from "../../../utils/logger";
 import _ from 'lodash';
+import config from '../../../config';
 
 type Claims = {
   'cognito:groups': Role | Role[]
@@ -39,7 +40,8 @@ export default (handler: Function, allowedRoles: Role[]) => {
         statusCode: 401,
         body: JSON.stringify({
           message: "You do not have the necessary permissions to access this resource"
-        })
+        }),
+        headers: config.defaultHeaders
       };
     };
   };
