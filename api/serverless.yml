@@ -35,6 +35,13 @@ provider:
       Action:
         - secretsmanager:GetSecretValue
       Resource: "*"
+    - Effect: Allow
+      Action:
+        - sqs:ReceiveMessage
+        - sqs:DeleteMessage
+        - sqs:GetQueueAttributes
+        - sqs:GetQueueUrl
+      Resource: "*"
 plugins:
   - serverless-webpack
   - serverless-offline
@@ -149,6 +156,17 @@ resources:
         ResponseType: DEFAULT_4XX
         RestApiId:
           Ref: 'ApiGatewayRestApi'
+    ApiGatewayCognitoAuthorizer:
+      Type: AWS::ApiGateway::Authorizer
+      Properties:
+        AuthorizerResultTtlInSeconds: 300
+        IdentitySource: method.request.header.Authorization
+        Name: Cognito
+        RestApiId:
+          Ref: ApiGatewayRestApi
+        Type: COGNITO_USER_POOLS
+        ProviderARNs:
+          - arn:aws:cognito-idp:eu-west-2:877130379437:userpool/eu-west-2_En3UNP0Yw
     ClientS3:
       Type: AWS::S3::Bucket
       Properties:

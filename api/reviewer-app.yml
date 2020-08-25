@@ -4,5 +4,13 @@ nextResult:
     - http:
         method: GET
         path: /results/next
+        authorizer:
+          name: ${opt:stage, 'dev'}-reviewerAuthorizer 
+          type: COGNITO_USER_POOLS
+          authorizerId:
+            Ref: ApiGatewayCognitoAuthorizer    
+          localAuthorizer:
+              name: localCognitoProxy
+              type: request
   environment:
     REVIEW_QUEUE_NAME: ${self:resources.Outputs.ReviewQueue.Value} 

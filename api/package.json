@@ -1,7 +1,8 @@
 {
   "scripts": {
     "test": "node_modules/.bin/jest --detectOpenHandles",
-    "dev": "node_modules/.bin/serverless offline"
+    "dev": "node_modules/.bin/serverless offline",
+    "dev:auth": "node_modules/.bin/serverless offline local-authorizers"
   },
   "dependencies": {
     "@babel/preset-typescript": "^7.10.1",
@@ -19,6 +20,7 @@
     "mime-types": "^2.1.27",
     "mock-fs": "^4.12.0",
     "nock": "^12.0.3",
+    "serverless-offline-local-authorizers-plugin": "^1.0.2",
     "serverless-sentry": "^2.0.2",
     "serverless-sentry-lib": "^2.0.1",
     "serverless-step-functions": "^2.21.1",
