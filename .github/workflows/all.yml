@@ -1,4 +1,4 @@
-name: Production build
+name: Pull request build
 
 on:
   pull_request:
@@ -27,12 +27,30 @@ jobs:
       - name: Tests
         run: |
           yarn test
-  build-frontend:
+  build-test-taking-app:
     needs: [run-tests]
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: take-test-app
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.3.1'
+      - name: Yarn install
+        run: |
+          yarn install
+      - name: Build
+        run: |
+          yarn build
+  build-reviewer-app:
+    needs: [run-tests]
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: reviewer-app
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js
