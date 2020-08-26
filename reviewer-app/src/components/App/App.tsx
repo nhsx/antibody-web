@@ -8,7 +8,7 @@ import { Row, Col } from 'nhsuk-react-components';
 function App() {
   return (
     <Layout>
-      <CognitoLogin>
+      <CognitoLogin container={appContainer}>
         <Row>
           <Col width="two-thirds">
             <TestResult container={appContainer} />
