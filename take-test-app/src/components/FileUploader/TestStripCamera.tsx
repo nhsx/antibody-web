@@ -29,6 +29,7 @@ const IDEAL_RESOLUTION = { width: 2240 };
 
 const config = getAppConfig();
 
+
 const TestStripCamera = (props: {
   onPhotoTaken: (dataURI: string) => void;
   onError: (error: any) => void;
@@ -59,10 +60,14 @@ const TestStripCamera = (props: {
   }, [setFullscreen]);
 
   return (
-    <div>
+    <div
+      style={{
+        position: "relative"
+      }}>
       <div
         ref={refCamera}>
         <Camera
+          style={{ width:"100%" }}
           onTakePhotoAnimationDone={handleTakePhotoAnimationDone}
           onCameraError={onError}
           idealFacingMode={FACING_MODES.ENVIRONMENT}
@@ -77,7 +82,21 @@ const TestStripCamera = (props: {
           onCameraStart={onCameraStart}
           onCameraStop={onCameraStop}
         />
+        <div
+          style={{
+            position: "absolute",
+            background: "url('/assets/images/overlay.png')",
+            bottom: 0,
+            top: 0,
+            left: 0,
+            right: 0,
+            zIndex: 2,
+            backgroundSize: 'cover'
+          }}>
+        
+        </div>
       </div>
+      
     </div>
   );
 };

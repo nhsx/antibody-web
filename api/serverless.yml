@@ -86,8 +86,10 @@ resources:
       Value: ${opt:stage, 'dev'}-covid19-antibody-uk-results
     StateMachine:
       Description: The ARN of the provisioning state machine
-      Value:
-        Ref: DelayedNotificationDash${opt:stage, 'dev'}  # Capital letter at start for some reason #https://medium.com/@iamNoah_/invoke-aws-step-function-from-aws-lambda-using-the-serverless-framework-21b7fde38a42
+      Value: 
+          Fn::GetAtt:
+            - DelayedNotificationDash${opt:stage, 'dev'}  # Capital letter at start for some reason #https://medium.com/@iamNoah_/invoke-aws-step-function-from-aws-lambda-using-the-serverless-framework-21b7fde38a42
+            - Arn
   Resources:
     ReviewQueue:
       Type: AWS::SQS::Queue

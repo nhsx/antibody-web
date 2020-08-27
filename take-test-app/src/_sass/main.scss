@@ -1,2 +1,19 @@
 // NHS.UK frontend
 @import '~nhsuk-frontend/packages/nhsuk';
+
+
+// Camera hack fix to stop it going OoB
+
+.react-html5-camera-photo>img, .react-html5-camera-photo>video {
+    width: 100% !important;
+}
+
+#container-circles {
+    bottom: 0px;
+    transform: scale(0.6);
+    z-index: 10;
+    #outer-circle {
+        bottom: -130px;
+        left: -30px;
+    }
+}
