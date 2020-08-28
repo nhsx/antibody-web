@@ -8,7 +8,7 @@ type CognitoLoginProps = {
   children: React.ReactNode
 };
 
-const New = ({ container, children }: CognitoLoginProps) => {
+export default ({ container, children }: CognitoLoginProps) => {
   const [loading, setLoading] = React.useState<boolean>(true);
   const [authState, setAuthState] = React.useState<string>("login");
   const [user, setUser] = React.useState<any>(undefined);
@@ -115,5 +115,3 @@ const New = ({ container, children }: CognitoLoginProps) => {
     </Row>
   </>;
 };
-
-export default New;
