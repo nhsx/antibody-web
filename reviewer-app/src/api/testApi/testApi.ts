@@ -1,4 +1,5 @@
 import { NextResultResponse } from "abt-lib/requests/NextResult";
+import { Auth } from "aws-amplify";
 
 export interface TestApi {
   nextResultToReview: () => Promise<NextResultResponse>;
@@ -28,10 +29,12 @@ function handleErrors(response: Response): Response {
 
 export default ({ apiBase }: { apiBase: string }): TestApi => ({
   nextResultToReview: async () => {
+    const session = await Auth.currentSession();
     const response = await fetch(`${apiBase}/results/next`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        "Authorization": `Bearer ${session.getIdToken().getJwtToken()}`
       },
     }).then(handleErrors);
 
