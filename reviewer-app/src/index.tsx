@@ -15,12 +15,6 @@ Amplify.configure({
 
     // OPTIONAL - Amazon Cognito Web Client ID (26-char alphanumeric string)
     userPoolWebClientId: process.env.REACT_APP_USER_POOL_WEB_CLIENT_ID,
-
-    // OPTIONAL - Enforce user authentication prior to accessing AWS resources or not
-    mandatorySignIn: true,
-
-    // OPTIONAL - Manually set the authentication flow type. Default is 'USER_SRP_AUTH'
-    authenticationFlowType: 'USER_PASSWORD_AUTH',
   }
 });
 
