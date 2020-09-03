@@ -34,5 +34,6 @@ notify:
         path: notify
         cors: true
 authorizer:
+  name: ${opt:stage, 'dev'}-takeTestAuthorizer 
   type: TOKEN
   handler: handlers/authorizer/handler.handler

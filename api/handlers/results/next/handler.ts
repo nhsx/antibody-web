@@ -3,21 +3,19 @@ import config from '../../../config';
 import withSentry from 'serverless-sentry-lib';
 import { getNextResultId } from '../../../api/review';
 import { getUrls } from '../../../api/storage';
-
+import roleChecker from '../roleChecker/roleChecker';
 
 export const baseHandler = async (event: APIGatewayEvent) : Promise<APIGatewayProxyResult> => {
 
-
   const UPLOAD_BUCKET: string = process.env.UPLOAD_BUCKET as string;
-
   const nextResultId = await getNextResultId();
 
-
-  // Return empty success if no 
+  // Return empty success if no images in queue
   if (!nextResultId) {
     return {
       statusCode: 204,
-      body: ""
+      body: "",
+      headers: config.defaultHeaders
     };
   }
   
@@ -32,6 +30,7 @@ export const baseHandler = async (event: APIGatewayEvent) : Promise<APIGatewayPr
   };
 };
 
-
-
-export const handler = withSentry(baseHandler);
+export const handler = roleChecker(
+  withSentry(baseHandler),
+  ['reviewer']
+);

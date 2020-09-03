@@ -10104,6 +10104,11 @@ serverless-jest-plugin@^0.3.0:
     lambda-wrapper "^0.3.0"
     yaml-edit "^0.1.3"
 
+serverless-offline-local-authorizers-plugin@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/serverless-offline-local-authorizers-plugin/-/serverless-offline-local-authorizers-plugin-1.0.2.tgz#5f37d1002fade7c3b2eedaa6a92a3ae0eb63a623"
+  integrity sha512-g+8U0sPmd0XlyroPP9bCAMjICmN/wG9lCCw2v6iMZfYjLEdNDgpgYmSHUY+j7F9aDp8A+EkdPsRz8BPgfw+f0w==
+
 serverless-offline@^6.1.5:
   version "6.4.0"
   resolved "https://registry.yarnpkg.com/serverless-offline/-/serverless-offline-6.4.0.tgz#45d685ed1fce88bcfcaff93f876c17316be99d80"
