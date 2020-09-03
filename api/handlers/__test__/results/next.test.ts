@@ -8,11 +8,13 @@ describe('generate', () => {
 
   const testGuid = 'test-guid';
   const testQueueUrl = 'test-url';
+  const testId = 'test-id';
   const testDownloadUrl = 'test-download-url';
   const messageList : ReceiveMessageResult = {
     Messages: [
       {
-        Body: testGuid
+        Body: testGuid,
+        MessageId: testId
       }
     ]
   };
@@ -74,11 +76,13 @@ describe('generate', () => {
     );
   });
 
-  it('should return the generated url as a successful response', async () => {
+  it('should return the generated url and queue message ID as a successful response', async () => {
     const response = await handler({ requestContext: {} } as any);
     expect(response.statusCode).toEqual(200);
     expect(JSON.parse(response.body)).toMatchObject({
-      url: testDownloadUrl
+      url: testDownloadUrl,
+      messageId: testId,
+      guid: testGuid
     });
   });
 });

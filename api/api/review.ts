@@ -26,7 +26,12 @@ const review = async (testRecord: TestRecord) => {
   }).promise();
 };
 
-export const getNextResultId = async () : Promise<string | null> => {
+export interface NextResultResponse {
+  messageId: string,
+  nextResultId: string
+}
+
+export const getNextResult = async () : Promise<NextResultResponse | null> => {
   const SQS = new AWS.SQS();
 
   const queueUrl = await SQS.getQueueUrl({
@@ -39,5 +44,13 @@ export const getNextResultId = async () : Promise<string | null> => {
 
   const messages = sqsResponse.Messages;
 
-  return messages?.length ? messages[0].Body! : null;
+  if (messages?.[0]?.Body) {
+    const message = messages[0];
+    return {
+      messageId: message.MessageId as string,
+      nextResultId: message.Body as string
+    };
+  } else {
+    return null;
+  }
 };
