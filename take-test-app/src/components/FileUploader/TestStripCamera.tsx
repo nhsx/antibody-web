@@ -9,6 +9,7 @@ import React, { useCallback, useRef } from 'react';
 import Camera from 'react-html5-camera-photo';
 import { getAppConfig } from 'utils/AppConfig';
 import useFullscreenStatus from './useFullscreenStatus';
+import GuideOverlay from './GuideOverlay';
 
 // NOTE 1: We have to work around some bugs in react-html5-camera-photo.
 //
@@ -81,30 +82,8 @@ const TestStripCamera = (props: {
           onCameraStart={onCameraStart}
           onCameraStop={onCameraStop}
         />
-        <div
-          style={{
-            position: "absolute",
-            display: "flex",
-            left: 0,
-            right: 0,
-            top: 0,
-            bottom: 0,
-            justifyContent: "center"
-          }}>
-          <div style={{ opacity: 0.532, flex: "1 1 auto", background: 'black' }} />
-          <div
-            style={{
-              background: "url('/assets/images/overlay.png') center",
-              position: "relative",
-              zIndex: 2,
-              maxWidth: 1920,
-              backgroundSize: 'cover',
-              width: "100%"
-            }}>
-          </div>
-          <div style={{ opacity: 0.532, flex: "1 1 auto", background: 'black' }} />
-        </div>
         
+        <GuideOverlay />        
       </div>
       
     </div>

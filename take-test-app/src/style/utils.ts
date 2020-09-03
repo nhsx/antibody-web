@@ -15,3 +15,7 @@ export const inputCaptureSupported = () => {
   testElement.remove();
   return isInputCaptureSupported;
 };
+
+export interface StylesDictionary{
+  [Key: string]: React.CSSProperties;
+}
