@@ -10,6 +10,7 @@ import Camera from 'react-html5-camera-photo';
 import { getAppConfig } from 'utils/AppConfig';
 import useFullscreenStatus from './useFullscreenStatus';
 import GuideOverlay from './GuideOverlay';
+import { StylesDictionary } from 'style/utils';
 
 // NOTE 1: We have to work around some bugs in react-html5-camera-photo.
 //
@@ -29,6 +30,13 @@ import GuideOverlay from './GuideOverlay';
 const IDEAL_RESOLUTION = { width: 2240 };
 
 const config = getAppConfig();
+
+const styles: StylesDictionary = {
+  container: {
+    position: "relative",
+    lineHeight: 0
+  }
+};
 
 const TestStripCamera = (props: {
   onPhotoTaken: (dataURI: string) => void;
@@ -61,9 +69,7 @@ const TestStripCamera = (props: {
 
   return (
     <div
-      style={{
-        position: "relative"
-      }}>
+      style={styles.container}>
       <div
         ref={refCamera}>
         <Camera
