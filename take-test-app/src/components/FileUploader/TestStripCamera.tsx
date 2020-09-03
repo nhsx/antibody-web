@@ -29,7 +29,6 @@ const IDEAL_RESOLUTION = { width: 2240 };
 
 const config = getAppConfig();
 
-
 const TestStripCamera = (props: {
   onPhotoTaken: (dataURI: string) => void;
   onError: (error: any) => void;
@@ -85,16 +84,27 @@ const TestStripCamera = (props: {
         <div
           style={{
             position: "absolute",
-            background: "url('/assets/images/overlay.png')",
-            bottom: 0,
-            top: 0,
+            display: "flex",
             left: 0,
             right: 0,
-            zIndex: 2,
-            backgroundSize: 'cover'
+            top: 0,
+            bottom: 0,
+            justifyContent: "center"
           }}>
-        
+          <div style={{ opacity: 0.532, flex: "1 1 auto", background: 'black' }} />
+          <div
+            style={{
+              background: "url('/assets/images/overlay.png') center",
+              position: "relative",
+              zIndex: 2,
+              maxWidth: 1920,
+              backgroundSize: 'cover',
+              width: "100%"
+            }}>
+          </div>
+          <div style={{ opacity: 0.532, flex: "1 1 auto", background: 'black' }} />
         </div>
+        
       </div>
       
     </div>
