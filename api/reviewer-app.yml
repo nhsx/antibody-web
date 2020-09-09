@@ -4,6 +4,7 @@ nextResult:
     - http:
         method: GET
         path: /results/next
+        cors: true
         authorizer:
           name: ${opt:stage, 'dev'}-reviewerAuthorizer 
           type: COGNITO_USER_POOLS
@@ -17,6 +18,7 @@ reviewResult:
     - http:
         method: POST
         path: /results/{guid}
+        cors: true
         authorizer:
           name: ${opt:stage, 'dev'}-reviewerAuthorizer 
           type: COGNITO_USER_POOLS
