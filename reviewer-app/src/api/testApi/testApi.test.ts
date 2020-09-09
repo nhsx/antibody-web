@@ -1,6 +1,12 @@
 import testApi, { HTTPError } from "./testApi";
 import nock from "nock";
 
+jest.mock("aws-amplify", () => ({
+  Auth: {
+    currentSession: () => ({ getIdToken: () => ({ getJwtToken: () => "FakeTokenHere" }) }),
+  },
+}));
+
 describe("testApi", () => {
   const apiBase = "http://baseurl.com";
   const corsHeaders = {
@@ -23,8 +29,20 @@ describe("testApi", () => {
       expect(request.isDone()).toEqual(true);
     });
 
+    it("Sends the session token to the API for authorisation", async () => {
+      const request = nock(apiBase)
+        .get("/results/next")
+        .matchHeader("Authorization", "Bearer FakeTokenHere")
+        .reply(200, { cat: "meow" }, corsHeaders);
+
+      await testApi({ apiBase }).nextResultToReview();
+      expect(request.isDone()).toEqual(true);
+    });
+
     it("Returns the response from the api", async () => {
-      nock(apiBase).get("/results/next").reply(200, { cat: "meow" }, corsHeaders);
+      nock(apiBase)
+        .get("/results/next")
+        .reply(200, { cat: "meow" }, corsHeaders);
 
       const response = await testApi({ apiBase }).nextResultToReview();
       expect(response).toEqual({ cat: "meow" });

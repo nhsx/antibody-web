@@ -1,4 +1,4 @@
-import testApi, { TestApi } from "../../api/testApi";
+import testApi, { TestApi } from "../../api/testApi/testApi";
 import cognitoAuthenticationApi from "../../api/authenticationApi/cognitoAuthenticationApi";
 import config from "../../api/config";
 import { Auth } from "aws-amplify";
