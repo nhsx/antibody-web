@@ -6,15 +6,16 @@ import { GetQueueUrlResult, ReceiveMessageResult } from 'aws-sdk/clients/sqs';
 
 describe('generate', () => {
 
+  const defaultEvent: any =  { requestContext: {} };
   const testGuid = 'test-guid';
   const testQueueUrl = 'test-url';
-  const testId = 'test-id';
+  const testHandle = 'test-handle';
   const testDownloadUrl = 'test-download-url';
   const messageList : ReceiveMessageResult = {
     Messages: [
       {
         Body: testGuid,
-        MessageId: testId
+        ReceiptHandle: testHandle,
       }
     ]
   };
@@ -42,7 +43,7 @@ describe('generate', () => {
 
   it('should return a 204 if no messages are found in the queue', async () => {
     AWSMock.remock("SQS", "receiveMessage", jest.fn().mockResolvedValue({ Messages: [] }));
-    const response = await handler({ requestContext: {} } as any);
+    const response = await handler(defaultEvent);
     expect(response.statusCode).toEqual(204);
   });
 
@@ -50,7 +51,7 @@ describe('generate', () => {
     const receiveMessageSpy = jest.fn().mockResolvedValue(messageList);
     AWSMock.remock('SQS', 'receiveMessage', receiveMessageSpy);
       
-    await handler({ requestContext: {} } as any);
+    await handler(defaultEvent);
 
     expect(receiveMessageSpy).toHaveBeenCalledWith(expect.objectContaining({
       QueueUrl: 'test-url'
@@ -63,9 +64,8 @@ describe('generate', () => {
     });
     AWSMock.remock('S3', 'getSignedUrl', newMockSigned);
 
-    await handler({ requestContext: {} } as any);
+    await handler(defaultEvent);
 
-    //expect(mockSigned).toHaveBeenCalledTimes(1);
     expect(mockSigned).toHaveBeenCalledWith(
       'getObject',
       expect.objectContaining({
@@ -77,11 +77,11 @@ describe('generate', () => {
   });
 
   it('should return the generated url and queue message ID as a successful response', async () => {
-    const response = await handler({ requestContext: {} } as any);
+    const response = await handler(defaultEvent);
     expect(response.statusCode).toEqual(200);
     expect(JSON.parse(response.body)).toMatchObject({
       url: testDownloadUrl,
-      messageId: testId,
+      receiptHandle: testHandle,
       guid: testGuid
     });
   });

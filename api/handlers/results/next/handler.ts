@@ -17,16 +17,16 @@ export const baseHandler = async (event: APIGatewayEvent) : Promise<APIGatewayPr
       headers: config.defaultHeaders
     };
   }
-  let { nextResultId, messageId } = response as NextResultResponse;
+  let { nextResultId, receiptHandle } = response as NextResultResponse;
 
   const { downloadUrl } = await getUrls(UPLOAD_BUCKET, nextResultId, { download: true, upload: false });
 
   return {
     statusCode: 200,
-    body: JSON.stringify({ 
+    body: JSON.stringify({
       url: downloadUrl,
       guid: nextResultId,
-      messageId
+      receiptHandle
     }),
     headers: config.defaultHeaders
   };

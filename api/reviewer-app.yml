@@ -11,3 +11,16 @@ nextResult:
             Ref: ApiGatewayCognitoAuthorizer    
   environment:
     REVIEW_QUEUE_NAME: ${self:resources.Outputs.ReviewQueue.Value} 
+reviewResult:
+  handler: handlers/results/review/handler.handler
+  events:
+    - http:
+        method: POST
+        path: /results/{guid}
+        authorizer:
+          name: ${opt:stage, 'dev'}-reviewerAuthorizer 
+          type: COGNITO_USER_POOLS
+          authorizerId:
+            Ref: ApiGatewayCognitoAuthorizer
+  environment:
+    REVIEW_QUEUE_NAME: ${self:resources.Outputs.ReviewQueue.Value} 

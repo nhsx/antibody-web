@@ -1,4 +1,3 @@
-
 export type PredictionResult = 'positive' | 'negative' | 'invalid'| 'failed_checks'| 'rdt_not_found' | 'diagnostic_not_found';
 
 export type BlurStatus = 'blurred' | 'ok';
