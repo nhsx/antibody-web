@@ -166,7 +166,7 @@ resources:
           Ref: ApiGatewayRestApi
         Type: COGNITO_USER_POOLS
         ProviderARNs:
-          - arn:aws:cognito-idp:eu-west-2:877130379437:userpool/eu-west-2_En3UNP0Yw
+          - arn:aws:cognito-idp:eu-west-2:877130379437:userpool/eu-west-2_14WRfl09I
     ClientS3:
       Type: AWS::S3::Bucket
       Properties:
