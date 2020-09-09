@@ -17,7 +17,6 @@ export class HTTPError extends Error {
 
 // We throw on HTTP failures
 function handleErrors(response: Response): Response {
-  console.log(response);
   if (!response.ok) {
     throw new HTTPError({
       message: response.statusText,

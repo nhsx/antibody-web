@@ -15,29 +15,56 @@ export const reviewIfRequired = async (testRecord : TestRecord) : Promise<Boolea
 };
 
 const review = async (testRecord: TestRecord) => {
-  const SQS = new AWS.SQS();
-  const queueUrl = await SQS.getQueueUrl({
+  const sqs = new AWS.SQS();
+  const queueUrl = await sqs.getQueueUrl({
     QueueName: process.env.REVIEW_QUEUE_NAME!
   }).promise();
     
-  return await SQS.sendMessage({
+  return await sqs.sendMessage({
     QueueUrl: queueUrl.QueueUrl!,
     MessageBody: testRecord.guid
   }).promise();
 };
 
-export const getNextResultId = async () : Promise<string | null> => {
-  const SQS = new AWS.SQS();
+export interface NextResultResponse {
+  receiptHandle: string,
+  nextResultId: string
+}
 
-  const queueUrl = await SQS.getQueueUrl({
+export const getNextResult = async () : Promise<NextResultResponse | null> => {
+  const sqs = new AWS.SQS();
+
+  const queueUrl = await sqs.getQueueUrl({
     QueueName: process.env.REVIEW_QUEUE_NAME!
   }).promise();
 
-  const sqsResponse = await SQS.receiveMessage({
+  const sqsResponse = await sqs.receiveMessage({
     QueueUrl: queueUrl.QueueUrl!
   }).promise();
 
   const messages = sqsResponse.Messages;
 
-  return messages?.length ? messages[0].Body! : null;
+  if (messages?.[0]?.Body) {
+    const message = messages[0];
+    return {
+      receiptHandle: message.ReceiptHandle as string,
+      nextResultId: message.Body as string
+    };
+  } else {
+    return null;
+  }
+};
+
+// We seem to be missing type info for the DeleteMessageResponse type
+export const deleteMessage = async(queueName: string, receiptHandle: string): Promise<any> => {
+  const sqs = new AWS.SQS();
+
+  const queueUrl = await sqs.getQueueUrl({
+    QueueName: process.env.REVIEW_QUEUE_NAME!
+  }).promise();
+
+  return await sqs.deleteMessage({
+    QueueUrl: queueUrl.QueueUrl!,
+    ReceiptHandle: receiptHandle
+  }).promise();
 };

@@ -17,6 +17,15 @@ export const validateUpdateRequest = (body: any) => {
   return schema.validate(body);
 };
 
+export const validateReviewRequest = (body: any) => {
+  const schema: ObjectSchema = Joi.object({
+    receiptHandle: Joi.string().required(),
+    reviewedResult: Joi.string().valid("positive", "negative", "invalid", "rdt_not_found", "diagnostic_not_found", "failed_checks")
+  });
+
+  return schema.validate(body);
+};
+
 
 export const validateGenerateEnvironment = (environment: any) => {
     
