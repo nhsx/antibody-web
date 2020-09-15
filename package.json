@@ -24,7 +24,7 @@
     "test": "npm --prefix lib run test && npm --prefix take-test-app run test -- --watch-all=false && npm --prefix api run test && npm --prefix reviewer-app run test",
     "lint": "./node_modules/.bin/eslint --ext .js,.ts,.tsx .",
     "postinstall": "(cd take-test-app && yarn install);  (cd reviewer-app && yarn install); (cd lib && yarn install); (cd api && yarn install)",
-    "lib": "(npm --prefix lib run build); (cd take-test-app && yarn upgrade abt-lib); (cd api && yarn upgrade abt-lib)"
+    "lib": "(npm --prefix lib run build); (cd take-test-app && yarn upgrade abt-lib); (cd reviewer-app && yarn upgrade abt-lib); (cd api && yarn upgrade abt-lib)"
   },
   "husky": {
     "hooks": {
