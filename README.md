@@ -2,7 +2,7 @@
 
 **This is a currently a Trial Service NOT a Live Service**
 
-> Covid-19 Antibody Test at Home Web Service is a wep based service that will allow registered users to take an at home Covid-19 Antibody test and get a result of whether they test positive or negative for Covid-19 antibodies.
+> Covid-19 Antibody Test at Home Web Service is a web based service that will allow registered users to take an at home Covid-19 Antibody test and get a result of whether they test positive or negative for Covid-19 antibodies.
 
 ## Dependencies
 
