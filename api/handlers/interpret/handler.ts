@@ -1,18 +1,117 @@
-import { APIGatewayProxyResult, APIGatewayEvent } from 'aws-lambda';
-import { getFileStream, getTestRecord, putTestRecord } from '../../api/storage';
-import { validateInterpretEnvironment } from '../../api/validate';
-import config from '../../config';
-import TestRecord from 'abt-lib/models/TestRecord';
-import withSentry from 'serverless-sentry-lib';
-import logger from '../../utils/logger';
-import { PredictionData } from 'abt-lib/models/Prediction';
-import nock from 'nock';
-import got from 'got/dist/source';
-import { Readable } from 'stream';
-import { reviewIfRequired } from '../../api/review';
+import { APIGatewayProxyResult, APIGatewayEvent } from "aws-lambda";
+import { getFileStream, getTestRecord, putTestRecord } from "../../api/storage";
+import { validateInterpretEnvironment } from "../../api/validate";
+import config from "../../config";
+import TestRecord from "abt-lib/models/TestRecord";
+import withSentry from "serverless-sentry-lib";
+import logger from "../../utils/logger";
+import { PredictionData } from "abt-lib/models/Prediction";
+import nock from "nock";
+import got from "got/dist/source";
+import { Readable } from "stream";
+import { reviewIfRequired } from "../../api/review";
 
-export const baseHandler = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
+/*
+  The machine learning API isn't finished yet so this is a mocked implementation for now
 
+  As well as taking the file to send, it also takes the GUID of the user, this allows for us
+  to control the response from the mock API via the login token. These options are:
+
+  - blur - Blurry image
+  - over - Over exposed image
+  - under - Under exposed image
+  - overunder - Both over & under exposed image
+  - nordt - No RDT in the image
+  - nodiagnostic - No diganostic zone found
+*/
+const mlApi = {
+  interpretResult: async ({
+    guid,
+    fileStream,
+  }: {
+    guid: string;
+    fileStream: Readable;
+  }): Promise<PredictionData> => {
+    const mockPrediction: PredictionData = {
+      predictedAt: Date.now(),
+      success: true,
+      result: "positive",
+      confidence: { positive: 0.983, negative: 0.017 },
+      quality: {
+        blur: "ok",
+        exposure: "ok",
+      },
+      extracts: {
+        rdt:
+          "data:image/gif;base64,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",
+        diagnostic: [
+          [121.58730799, 227.88811523],
+          [896.83360694, 484.49481445],
+        ],
+      },
+    };
+
+    if (guid.includes("blur")) {
+      mockPrediction.quality && (mockPrediction.quality.blur = "blurred");
+      mockPrediction.result = "failed_checks";
+      mockPrediction.success = false;
+    }
+    if (guid.includes("over")) {
+      mockPrediction.quality &&
+        (mockPrediction.quality.exposure = "overexposed");
+      mockPrediction.result = "failed_checks";
+      mockPrediction.success = false;
+    }
+    if (guid.includes("under")) {
+      mockPrediction.quality &&
+        (mockPrediction.quality.exposure = "underexposed");
+
+      mockPrediction.result = "failed_checks";
+      mockPrediction.success = false;
+    }
+    if (guid.includes("overunder")) {
+      mockPrediction.quality &&
+        (mockPrediction.quality.exposure = "over_and_underexposed");
+      mockPrediction.result = "failed_checks";
+      mockPrediction.success = false;
+    }
+    if (guid.includes("nordt")) {
+      mockPrediction.quality = null;
+      mockPrediction.result = "rdt_not_found";
+      mockPrediction.confidence = null;
+      mockPrediction.extracts = { rdt: null, diagnostic: null };
+      mockPrediction.success = false;
+    }
+    if (guid.includes("nodiagnostic")) {
+      mockPrediction.quality = null;
+      mockPrediction.result = "diagnostic_not_found";
+      mockPrediction.confidence = null;
+      mockPrediction.extracts.diagnostic = null;
+      mockPrediction.success = false;
+    }
+
+    const ML_API_BASE: string = process.env.ML_API_BASE as string;
+    const predictionEndpoint = `${ML_API_BASE}/${config.modelPath}`;
+
+    nock(ML_API_BASE as string)
+      .post(`/${config.modelPath}`)
+      .reply(200, mockPrediction);
+
+    const { body: prediction }: { body: PredictionData } = await got.post(
+      predictionEndpoint,
+      {
+        body: fileStream,
+        responseType: "json",
+      }
+    );
+
+    return prediction;
+  },
+};
+
+export const baseHandler = async (
+  event: APIGatewayEvent
+): Promise<APIGatewayProxyResult> => {
   const UPLOAD_BUCKET: string = process.env.UPLOAD_BUCKET as string;
   const ML_API_BASE: string = process.env.ML_API_BASE as string;
   const DYNAMO_TABLE: string = process.env.DYNAMO_TABLE as string;
@@ -27,9 +126,9 @@ export const baseHandler = async (event: APIGatewayEvent): Promise<APIGatewayPro
     return {
       statusCode: 400,
       body: JSON.stringify({
-        error: "Missing user id"
+        error: "Missing user id",
       }),
-      headers: config.defaultHeaders
+      headers: config.defaultHeaders,
     };
   }
 
@@ -40,13 +139,12 @@ export const baseHandler = async (event: APIGatewayEvent): Promise<APIGatewayPro
     return {
       statusCode: 400,
       body: JSON.stringify({
-        error: "Environment configuration error"
+        error: "Environment configuration error",
       }),
-      headers: config.defaultHeaders
+      headers: config.defaultHeaders,
     };
-  }  
+  }
 
-  
   let fileStream: Readable;
 
   logger.info("Retrieving user's image from S3");
@@ -57,83 +155,27 @@ export const baseHandler = async (event: APIGatewayEvent): Promise<APIGatewayPro
     return {
       statusCode: 404,
       body: JSON.stringify({
-        error: "Could not retrieve user image"
+        error: "Could not retrieve user image",
       }),
-      headers: config.defaultHeaders
+      headers: config.defaultHeaders,
     };
   }
 
   try {
     logger.info("Sending image to prediction endpoint" + predictionEndpoint);
 
-    const mockPrediction : PredictionData = {
-      predictedAt: Date.now(),
-      success: true,
-      result: 'positive',
-      confidence: { positive: 0.983, negative: 0.017 },
-      quality: {
-        blur: 'ok',
-        exposure: 'ok'
-      },
-      extracts: {
-        rdt: "data:image/gif;base64,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",
-        diagnostic: [[121.58730799, 227.88811523], [896.83360694, 484.49481445]]
-      }
-    };
-    
-    if (guid.includes('blur')) {
-      mockPrediction.quality && (mockPrediction.quality.blur = 'blurred');
-      mockPrediction.result = 'failed_checks';
-      mockPrediction.success = false;
-    }
-    if (guid.includes('over')) {
-      mockPrediction.quality && (mockPrediction.quality.exposure = 'overexposed');
-      mockPrediction.result = 'failed_checks';
-      mockPrediction.success = false;         
-    }
-    if (guid.includes('under')) {
-      mockPrediction.quality && (mockPrediction.quality.exposure = 'underexposed');
+    const prediction = await mlApi.interpretResult({ guid, fileStream });
 
-      mockPrediction.result = 'failed_checks';
-      mockPrediction.success = false;          
-    }
-    if (guid.includes('overunder')) {
-      mockPrediction.quality && (mockPrediction.quality.exposure = 'over_and_underexposed');
-      mockPrediction.result = 'failed_checks';
-      mockPrediction.success = false;      
-    }
-    if (guid.includes('nordt')) {
-      mockPrediction.quality = null;
-      mockPrediction.result = 'rdt_not_found';
-      mockPrediction.confidence = null;
-      mockPrediction.extracts = { rdt: null, diagnostic: null };
-      mockPrediction.success = false;   
-    }
-    if (guid.includes('nodiagnostic')) {
-      mockPrediction.quality = null;
-      mockPrediction.result = 'diagnostic_not_found';
-      mockPrediction.confidence = null;
-      mockPrediction.extracts.diagnostic = null;
-      mockPrediction.success = false;   
-    }
-
-    // Temporarily mock the ml api instead of firing real requests
-    nock(ML_API_BASE as string).post(`/${config.modelPath}`).reply(200, mockPrediction);
-
-    const { body: prediction } : { body: PredictionData } = await got.post(predictionEndpoint, {
-      body: fileStream,
-      responseType: 'json'
-    });
     logger.info("Received prediction - updating user's info.");
 
     // Get our users record to update with the prediction
-    const oldRecord = await getTestRecord(DYNAMO_TABLE, guid) as TestRecord;
+    const oldRecord = (await getTestRecord(DYNAMO_TABLE, guid)) as TestRecord;
 
     let newRecord: TestRecord = {
       ...oldRecord,
       predictionData: prediction,
       testCompleted: prediction.success,
-      result: prediction.result
+      result: prediction.result,
     };
 
     logger.debug(newRecord);
@@ -142,20 +184,26 @@ export const baseHandler = async (event: APIGatewayEvent): Promise<APIGatewayPro
 
     if (newRecord.predictionData?.success) {
       const isAwaitingReview = await reviewIfRequired(newRecord);
-      logger.info(`${isAwaitingReview ? "Result flagged for review" : "Result not flagged for review"}`);
+      logger.info(
+        `${
+          isAwaitingReview
+            ? "Result flagged for review"
+            : "Result not flagged for review"
+        }`
+      );
       newRecord.review = {
         status: isAwaitingReview ? "awaiting_review" : "not_reviewed",
-        originalResult: newRecord.result!
+        originalResult: newRecord.result!,
       };
     }
 
     return {
       statusCode: 200,
       body: JSON.stringify({
-        testRecord: newRecord
+        testRecord: newRecord,
       }),
-      headers: config.defaultHeaders
-    };  
+      headers: config.defaultHeaders,
+    };
   } catch (error) {
     logger.error("Prediction failed", error);
     throw error;
