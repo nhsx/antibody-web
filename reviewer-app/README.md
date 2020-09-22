@@ -1,44 +1,74 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# NHSx Covid-19 Antibody Test at Home Web Service: Review test results
 
-## Available Scripts
+**This is a currently a Trial Service NOT a Live Service**
 
-In the project directory, you can run:
+## Purpose
 
-### `yarn start`
+This application is to allow trained users to ensure the quality of the machine learning algorithm by performing quality assurance checks against random results.
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+It currently has the following functionality:
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+- Login as a particular user role (currently using Cognito)
+- Fetch the next relevant result from the API for the user
+- Submit the review of the result
 
-### `yarn test`
+All of this is integrated with the [api](../api/README.md) which handles the storing/updating of this data.
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Technical Documentation
 
-### `yarn build`
+The application is bootstrapped with Create React App [(https://github.com/facebook/create-react-app)](https://github.com/facebook/create-react-app) and deployed to an Amazon S3 bucket (using Cloudfront to serve it).
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+It is written in Typescript, and uses Yarn for dependency management.
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+### Environment variables
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Environment variables are managed through `.env` files - to begin, copy the `example.env` file to `.env`, and replace the values with the values you wish to use.
 
-### `yarn eject`
+| Environment variable              | Purpose                                                     | Example               |
+| --------------------------------- | ----------------------------------------------------------- | --------------------- |
+| REACT_APP_API_BASE                | The base URL for the API                                    | http://localhost:4000 |
+| REACT_APP_STAGE                   | The stage for the API in the URL                            | dev                   |
+| REACT_APP_USER_POOL_ID            | The ID of the user pool on cognito                          | some-user-pool-id     |
+| REACT_APP_USER_POOL_WEB_CLIENT_ID | The client ID for a client that has access to the user pool | some-web-client-id    |
+| REACT_APP_AWS_REGION              | The AWS Region that the user pool is hosted in              | eu-west-1             |
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### Quick start
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Ensure the environment variables are set and run the following to get the application running on `localhost:3000`:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+```bash
+yarn install
+yarn start
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### Installing dependencies
 
-## Learn More
+`yarn install`
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Running the application locally
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+To run the application:
+
+`yarn start`
+
+This runs by default on port 3000, if you wish to change the port you can run:
+
+`PORT=<port> yarn start`
+
+This will auto reload whenever a file is changed.
+
+### Running the tests
+
+To run the tests:
+
+`yarn test`
+
+By default this will run all the tests for the application. However when developing you may wish to run the tests in `watch` mode, which runs only the changed files and re-runs whenever the file is saved. To do this run:
+
+`yarn run react-scripts test --watch`
+
+### Building for deploy
+
+To build a production version of this application:
+
+`yarn build`
