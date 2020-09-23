@@ -34,11 +34,11 @@ Sets up a Cognito user pool, user groups, and web client for login for the revie
 - `user-pool-id` - ID of the created user pool
 - `user-pool-client-id` - Client ID for the created Cognito client
 
-## `take-test-app`
+## `take-test-app` (Currently unused)
 
 Infrastructure for hosting a build version of the reviewer app - which is hosted as a static website on S3.
 
-Currently this only exists as the `dev` environment, as the `prod` environment is controlled via the Serverless configuration, with the intent to migrate to Terraform in the future.
+Currently this only exists as an unused `dev` environment, as the `prod` environment is controlled via the Serverless configuration, with the intent to migrate to Terraform in the future when we have the need for multiple environments.
 
 **Outputs**
 

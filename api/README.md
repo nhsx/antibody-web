@@ -60,3 +60,7 @@ The application can be deployed in multiple stages, if one isn't provided the de
 To deploy an application to a stage you can run the following:
 
 `serverless deploy -s <stage>`
+
+**Note: Take the test app client infrastructure**
+
+As it stands, the `serverless.yml` also defines infrastructure for the `take-test-app` client, the intent long term is to move this to Terraform.
