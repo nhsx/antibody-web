@@ -14,6 +14,28 @@ It currently has the following functionality:
 
 All of this is integrated with the [api](../api/README.md) which handles the storing/updating of this data.
 
+## User guide
+
+### Roles
+
+There are two roles in the application, `reviewer`, and `super-reviewer`, with separate image queues for each.
+
+Images go through a multi-stage review, firstly they get passed to the _reviewers_, if they disagree with the inital result, it will be sent to a _super-reviewer_ to validate.
+
+In order to run this locally and test this - it is worthwhile making 2 accounts on Cognito, one for each role.
+
+### Password requirements
+
+Cognito default password requirements are as follows:
+
+- At least 8 characters
+- At least one upper case letter
+- At least one lower case letter
+- At least one special symbol
+- At least one number
+
+For example `Password2!`
+
 ## Technical Documentation
 
 The application is bootstrapped with Create React App [(https://github.com/facebook/create-react-app)](https://github.com/facebook/create-react-app) and deployed to an Amazon S3 bucket (using Cloudfront to serve it).
