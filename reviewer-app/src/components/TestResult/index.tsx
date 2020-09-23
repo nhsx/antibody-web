@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { AppContainer } from '../App/container';
+import ResultSelector from 'components/ResultSelector';
 
 export default ({ container }: { container: AppContainer }) => {
   let [testResult, setTestResult] = useState<any>({});
@@ -14,13 +15,19 @@ export default ({ container }: { container: AppContainer }) => {
   }, [container]);
 
   if (!testResult) {
-    return <div>Test Result</div>;
+    return <div>No test result found</div>;
   } else {
-    return <img
-      data-testid="test-result-image"
-      src={testResult.url}
-      alt=""
-      width="200px"
-    />;
+    return <div>
+      <img
+        data-testid="test-result-image"
+        src={testResult.url}
+        alt=""
+        width="200px"
+      />
+      <ResultSelector
+        container={container}
+        testResult={testResult}
+      />
+    </div>;
   }
 };

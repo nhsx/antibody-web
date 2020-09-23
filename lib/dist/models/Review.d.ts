@@ -8,6 +8,6 @@ export interface Review {
     originalResultCorrect?: Boolean;
     reviewedAt?: number;
     secondaryReviewedAt?: number;
-    reviewerId?: string;
-    secondaryReviewerId?: string;
+    reviewerId?: string | undefined;
+    secondaryReviewerId?: string | undefined;
 }
