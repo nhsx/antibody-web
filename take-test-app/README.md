@@ -1,16 +1,16 @@
-# NHSx Covid-19 Antibody Test at Home Web Service: Review test results
+# NHSx Covid-19 Antibody Test at Home Web Service: Take the test
 
 **This is a currently a Trial Service NOT a Live Service**
 
 ## Purpose
 
-This application is to allow trained users to ensure the quality of the machine learning algorithm by performing quality assurance checks against random results.
+This application is for the end user who wishes to take an at home antibody test. As it stands, the application contains:
 
-It currently has the following functionality:
-
-- Login as a particular user role (currently using Cognito)
-- Fetch the next relevant result from the API for the user
-- Submit the review of the result
+- A login to idenfity the user (currently placeholder)
+- Some instructions to guide the user through the process
+- A timer to ensure the user waits for the necessary time for the test kit to work
+- A camera page to capture the image of the completed test kit
+- A results screen for displaying the results to the user
 
 All of this is integrated with the [api](../api/README.md) which handles the storing/updating of this data.
 
@@ -24,13 +24,10 @@ It is written in Typescript, and uses Yarn for dependency management.
 
 Environment variables are managed through `.env` files - to begin, copy the `example.env` file to `.env`, and replace the values with the values you wish to use.
 
-| Environment variable              | Purpose                                                     | Example               |
-| --------------------------------- | ----------------------------------------------------------- | --------------------- |
-| REACT_APP_API_BASE                | The base URL for the API                                    | http://localhost:4000 |
-| REACT_APP_STAGE                   | The stage for the API in the URL                            | dev                   |
-| REACT_APP_USER_POOL_ID            | The ID of the user pool on cognito                          | some-user-pool-id     |
-| REACT_APP_USER_POOL_WEB_CLIENT_ID | The client ID for a client that has access to the user pool | some-web-client-id    |
-| REACT_APP_AWS_REGION              | The AWS Region that the user pool is hosted in              | eu-west-1             |
+| Environment variable | Purpose                          | Example               |
+| -------------------- | -------------------------------- | --------------------- |
+| REACT_APP_API_BASE   | The base URL for the API         | http://localhost:4000 |
+| REACT_APP_STAGE      | The stage for the API in the URL | dev                   |
 
 ### Quick start
 
