@@ -6,6 +6,11 @@
 
 ## Quick start
 
+Prerequisites:
+- Node
+- Yarn
+- Serverless
+
 Run the following:
 
 ```bash
@@ -33,6 +38,11 @@ It will start 3 applications:
 
 **Note: Ensure the whole stack is running with the correct environment variables**
 
+**Prerequisites**
+
+- `reviewer-app`
+  - Cognito user with `reviewer` role in the user pool
+
 **Take the test app**
 
 - Login to the application with a valid user ID (E.g. valid_yourname_thetime)
@@ -44,6 +54,7 @@ It will start 3 applications:
 **Reviewer app**
 
 - Login as a `reviewer`
+  - If this is your first time logging in, set a password that conforms to the password policy (for example `Password1!`)
 - See the image you submitted from the test taking app
 - Submit a review of the image
   - **Note:** There is no confirmation message at the moment, to check this has worked check the `network` tab in your browser
