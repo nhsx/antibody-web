@@ -46,6 +46,7 @@ It will start 3 applications:
 - Login as a `reviewer`
 - See the image you submitted from the test taking app
 - Submit a review of the image
+  - **Note:** There is no confirmation message at the moment, to check this has worked check the `network` tab in your browser
 
 ## Technical documentation
 
