@@ -7,6 +7,7 @@
 ## Quick start
 
 Prerequisites:
+- AWS cli (with a configured user)
 - Node
 - Yarn
 - Serverless (**Note**: must be globally installed)
