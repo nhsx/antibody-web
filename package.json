@@ -20,6 +20,7 @@
     "typescript": "^3.9.2"
   },
   "scripts": {
+    "setup-env": "cp take-test-app/example.env take-test-app/.env; cp reviewer-app/example.env reviewer-app/.env",
     "dev": "concurrently --kill-others \"PORT=3000 npm --prefix take-test-app run start\" \"npm --prefix api run dev\"  \"PORT=3001 npm --prefix reviewer-app run start\" ",
     "test": "npm --prefix lib run test && npm --prefix take-test-app run test -- --watch-all=false && npm --prefix api run test && npm --prefix reviewer-app run test",
     "lint": "./node_modules/.bin/eslint --ext .js,.ts,.tsx .",
