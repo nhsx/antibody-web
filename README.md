@@ -4,6 +4,41 @@
 
 > Covid-19 Antibody Test at Home Web Service is a wep based service that will allow registered users to take an at home Covid-19 Antibody test and get a result of whether they test positive or negative for Covid-19 antibodies.
 
+## Quick start
+
+Run the following:
+
+```bash
+yarn install
+yarn run dev
+```
+
+It will start 3 applications:
+
+- `api` in offline mode on [`http://localhost:4000`](http://localhost:4000)
+- `take-test-app` on [`http://localhost:3000`](http://localhost:3000)
+- `reviewer-app` on [`http://localhost:3001`](http://localhost:3001)
+
+## User guide
+
+### Running through the application (as of 23/09/2020)
+
+**Note: Ensure the whole stack is running with the correct environment variables**
+
+**Take the test app**
+
+- Login to the application with a valid user ID (E.g. valid_yourname_thetime)
+- Progress through the user flow up to the timer step
+- Skip the timer by clicking on it 3 times
+- Open your webcam and submit a photo
+  - Additionally you can refuse permissions and upload a photo
+
+**Reviewer app**
+
+- Login as a `reviewer`
+- See the image you submitted from the test taking app
+- Submit a review of the image
+
 ## Technical documentation
 
 Each folder of the project has its own specific README describing its intended purpose, technical documenation, and any relevant information:
