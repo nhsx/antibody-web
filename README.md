@@ -10,6 +10,14 @@ Run the following:
 
 ```bash
 yarn install
+yarn setup-env
+```
+
+After this, replace the environment variables inside `reviewer-app/.env` and `take-test-app/.env` with the correct values.
+
+Once this is done, run the following:
+
+```bash
 yarn run dev
 ```
 
