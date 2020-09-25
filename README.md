@@ -7,6 +7,8 @@
 ## Quick start
 
 Prerequisites:
+- Bash
+  - If attempting to run on windows it is advised you use the Windows Subsystem for Linux
 - AWS cli (with a configured user)
 - Node
 - Yarn
